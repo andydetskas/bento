@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andy Detskas</title>
+  <meta name="description" content="Andy Detskas — Product Design Leadership and Execution">
+
+  <!-- Favicon: globe runner (globe = body, legs below) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 195' fill='none'%3E%3Crect width='200' height='195' rx='32' fill='%232D2D2D'/%3E%3CclipPath id='gc'%3E%3Ccircle cx='100' cy='82' r='66'/%3E%3C/clipPath%3E%3Cg clip-path='url(%23gc)'%3E%3Cellipse cx='100' cy='82' rx='25' ry='66' stroke='white' stroke-width='10'/%3E%3Cline x1='34' y1='52' x2='166' y2='52' stroke='white' stroke-width='9'/%3E%3Cline x1='34' y1='82' x2='166' y2='82' stroke='white' stroke-width='9'/%3E%3Cline x1='34' y1='112' x2='166' y2='112' stroke='white' stroke-width='9'/%3E%3C/g%3E%3Ccircle cx='100' cy='82' r='66' stroke='white' stroke-width='12'/%3E%3Cpolyline points='80,145 50,166 24,156 14,174' stroke='white' stroke-width='14' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpolyline points='118,148 152,170 178,158 190,178' stroke='white' stroke-width='14' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --header-height: 64px;
+      --font: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: #111111;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: var(--header-height);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #111111;
+    }
+
+    .header-logo {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      filter: invert(1);
+    }
+
+    .header-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── SCROLL CONTAINER ───────────────────────────────── */
+
+    .scroll-container {
+      padding-top: var(--header-height);
+    }
+
+    /* ─── BAND ───────────────────────────────────────────── */
+
+    .band {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      padding: 18px 24px 22px;
+      transition: filter 0.12s ease;
+    }
+
+    .band:hover {
+      filter: brightness(0.92);
+    }
+
+    .band:active {
+      filter: brightness(0.82);
+    }
+
+    /* Accent strip at top of each band */
+    .band::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(0,0,0,0.15);
+    }
+
+    .band-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .band-platform {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.55;
+    }
+
+    .band-arrow {
+      font-size: 10px;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      margin-left: auto;
+      padding-right: 4px;
+    }
+
+    .band:hover .band-arrow {
+      opacity: 0.5;
+      transform: translateX(0);
+    }
+
+    .band-word {
+      font-size: clamp(68px, 20vw, 116px);
+      font-weight: 700;
+      line-height: 0.88;
+      letter-spacing: -0.035em;
+    }
+
+    /* ─── COLOR THEMES ───────────────────────────────────── */
+
+    .band--charcoal  { background: #3535F5; color: #FFFFFF; }
+    .band--orange    { background: #E84B2A; color: #000000; }
+    .band--lavender  { background: #CBC5F5; color: #000000; }
+    .band--coral     { background: #F2857A; color: #000000; }
+    .band--amber     { background: #FFBB00; color: #000000; }
+    .band--blue      { background: #000000; color: #FFFFFF; }
+    .band--mint      { background: #B8F5CE; color: #000000; }
+    .band--cream     { background: #F0EBE0; color: #000000; }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+
+    .footer {
+      padding: 28px 24px;
+      background: #111111;
+      color: rgba(255,255,255,0.25);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    /* ─── MOBILE TWEAKS ──────────────────────────────────── */
+
+    @media (max-width: 480px) {
+      .band {
+        padding: 14px 18px 18px;
+      }
+      .header {
+        padding: 0 18px;
+      }
+    }
+
+    /* ─── REDUCED MOTION ─────────────────────────────────── */
+
+    @media (prefers-reduced-motion: reduce) {
+      .band { transition: none; }
+      .band-arrow { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── HEADER ──────────────────────────────────────────── -->
+  <header class="header">
+    <img src="ad.gif" class="header-logo" alt="Globe Runner">
+    <span class="header-name">Andy Detskas</span>
+  </header>
+
+  <!-- ─── BANDS ────────────────────────────────────────────── -->
+  <main class="scroll-container">
+
+    <a href="https://www.linkedin.com/in/andydetskas/"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--charcoal">
+      <div class="band-meta">
+        <span class="band-platform">Head of Design @ SuppCo</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">LinkedIn</div>
+    </a>
+
+    <a href="https://www.andydetskas.com/"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--orange">
+      <div class="band-meta">
+        <span class="band-platform">Case Studies</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Portfolio</div>
+    </a>
+
+    <a href="https://www.figma.com/@andydetskas"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--lavender">
+      <div class="band-meta">
+        <span class="band-platform">Resources</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Figma</div>
+    </a>
+
+    <a href="https://instagram.com/andydetskas"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--coral">
+      <div class="band-meta">
+        <span class="band-platform">Photography</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Instagram</div>
+    </a>
+
+    <a href="https://www.strava.com/athletes/4883986"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--amber">
+      <div class="band-meta">
+        <span class="band-platform">Move</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Strava</div>
+    </a>
+
+    <a href="https://www.etsy.com/shop/TheChicagoZodiac/"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--blue">
+      <div class="band-meta">
+        <span class="band-platform">The Chicago Zodiac</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Etsy</div>
+    </a>
+
+    <a href="https://open.spotify.com/playlist/3zZXIB9D3N0utoECL2E6OK?si=57a07302ad8b4558"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--mint">
+      <div class="band-meta">
+        <span class="band-platform">Listen</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Spotify</div>
+    </a>
+
+    <a href="https://www.etsy.com/shop/sundwellerstudio"
+       target="_blank" rel="noopener noreferrer"
+       class="band band--cream">
+      <div class="band-meta">
+        <span class="band-platform">Sundweller</span>
+        <span class="band-arrow">↗</span>
+      </div>
+      <div class="band-word">Etsy</div>
+    </a>
+
+  </main>
+
+  <footer class="footer">
+    © 2026 Andy Detskas
+  </footer>
+
+</body>
+</html>
