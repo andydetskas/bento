@@ -1,0 +1,34 @@
+---
+import '../styles/global.css';
+import type { Preset } from '../lib/presets';
+
+interface Props {
+  title: string;
+  description: string;
+  preset: Preset;
+  noindex?: boolean;
+}
+const { title, description, preset, noindex = false } = Astro.props;
+---
+
+<!doctype html>
+<html
+  lang="en"
+  data-mode={preset.card.mode}
+  data-preset={preset.id}
+  style={`--card-radius:${preset.card.radius}px;--scene-bg:${preset.palette.bg}`}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content={preset.palette.bg} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

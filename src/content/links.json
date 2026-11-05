@@ -1,0 +1,57 @@
+{
+  "profile": {
+    "name": "Andy Detskas",
+    "role": "Product Design Leadership and Execution",
+    "mark": "globe-runner"
+  },
+  "links": [
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "eyebrow": "Product Design",
+      "url": "https://www.linkedin.com/in/andydetskas/",
+      "icon": "ladder",
+      "tooltip": "Career, roles and recommendations"
+    },
+    {
+      "id": "portfolio",
+      "label": "Portfolio",
+      "eyebrow": "Case Studies",
+      "url": "https://www.andydetskas.com/",
+      "icon": "eye",
+      "tooltip": "Case studies and process"
+    },
+    {
+      "id": "figma",
+      "label": "Figma",
+      "eyebrow": "Resources",
+      "url": "https://www.figma.com/@andydetskas",
+      "icon": "hand",
+      "tooltip": "Community files and kits"
+    },
+    {
+      "id": "instagram",
+      "label": "Instagram",
+      "eyebrow": "Photography",
+      "url": "https://instagram.com/andydetskas",
+      "icon": "sun",
+      "tooltip": "Photos from the road"
+    },
+    {
+      "id": "strava",
+      "label": "Strava",
+      "eyebrow": "Move",
+      "url": "https://www.strava.com/athletes/4883986",
+      "icon": "hazel",
+      "tooltip": "Rides, runs and routes"
+    },
+    {
+      "id": "spotify",
+      "label": "Spotify",
+      "eyebrow": "Listen",
+      "url": "https://open.spotify.com/playlist/3zZXIB9D3N0utoECL2E6OK?si=57a07302ad8b4558",
+      "icon": "mirage",
+      "tooltip": "What's on the playlist"
+    }
+  ]
+}

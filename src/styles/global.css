@@ -1,0 +1,105 @@
+@import '@fontsource-variable/dm-sans/opsz.css';
+@import '@fontsource/dm-mono/latin-400.css';
+@import '@fontsource/dm-mono/latin-500.css';
+@import './tokens.css';
+
+/*
+  Fonts: DM Sans (variable, with optical sizes) + DM Mono, both by Colophon Foundry under the
+  SIL Open Font License, self-hosted through Fontsource. They stand in for Apercu (also Colophon)
+  until a web license exists. [data-font="apercu"] switches to a locally installed Apercu for
+  side-by-side comparison in the lab; no Apercu files ship with the site.
+*/
+
+:root {
+  --gutter: var(--space-gutter);
+  --card-w: clamp(440px, 44vw, 640px);
+  --card-radius: var(--radius-lg);
+  --scene-bg: var(--color-page);
+  --bl: var(--baseline-unit);
+}
+
+[data-font='apercu'] {
+  --font-sans: var(--font-apercu-sans);
+  --font-mono: var(--font-apercu-mono);
+  --tracking-display: var(--tracking-display-apercu);
+  --cap-sans: var(--cap-apercu-sans);
+  --cap-mono: var(--cap-apercu-mono);
+  --trim-sans-over: var(--trim-apercu-sans-over);
+  --trim-sans-under: var(--trim-apercu-sans-under);
+  --trim-mono-over: var(--trim-apercu-mono-over);
+  --trim-mono-under: var(--trim-apercu-mono-under);
+}
+
+/*
+  Leading trim (Capsize method). The element's box runs from cap height to baseline, so
+  spacing tokens measure real type-to-type distances. Set on the element:
+    --cap  cap height, a multiple of the 4px unit. font-size is derived from it, so baselines land on the grid.
+    --lh   line-height (matters only for multi-line text).
+    --trim-pad  optional room kept inside the box for overflow masks (reveal animation).
+*/
+.trim-sans,
+.trim-mono {
+  --lh: round(up, 1.2em, var(--bl));
+  --trim-pad: 0px;
+  line-height: var(--lh);
+  padding-block: var(--trim-pad);
+}
+.trim-sans {
+  font-size: calc(var(--cap) / var(--cap-sans));
+  margin-block: calc(var(--trim-sans-over) * 1em - var(--lh) / 2 - var(--trim-pad))
+    calc(var(--trim-sans-under) * 1em - var(--lh) / 2 - var(--trim-pad));
+}
+.trim-mono {
+  font-size: calc(var(--cap) / var(--cap-mono));
+  margin-block: calc(var(--trim-mono-over) * 1em - var(--lh) / 2 - var(--trim-pad))
+    calc(var(--trim-mono-under) * 1em - var(--lh) / 2 - var(--trim-pad));
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--scene-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--motion-settle) var(--motion-ease-standard);
+}
+
+/* Baseline grid overlay (lab toggle, or press G there). Lines every 4px, stronger every 8px. */
+html[data-grid] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgb(255 0 90 / 0.28) 0 1px, transparent 1px calc(var(--bl) * 2)),
+    repeating-linear-gradient(to bottom, rgb(0 160 255 / 0.16) 0 1px, transparent 1px var(--bl));
+}
+
+/* Static capture mode (?settle=N): no transitions, everything in its final state. */
+html.is-static *,
+html.is-static *::before,
+html.is-static *::after {
+  transition: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
