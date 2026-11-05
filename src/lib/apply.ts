@@ -11,10 +11,10 @@ export function applyCardStyle(preset: Preset, root: HTMLElement = document.docu
 
 /**
  * Composition shift. Wide screens: the card sits left, so push the scene right.
- * Phones: the card fills the lower 70%, so lift the scene into the top band.
+ * Phones: the card is centered, so the scene stays centered around it.
  */
 export function focusForViewport(): { x: number; y: number } {
   const w = window.innerWidth;
-  if (w < 760) return { x: 0, y: 0.3 };
+  if (w < 760) return { x: 0, y: 0 };
   return { x: w >= 1200 ? 0.24 : 0.18, y: 0 };
 }
