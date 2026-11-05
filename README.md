@@ -14,6 +14,7 @@ npm run dev        # http://localhost:4321  (tokens rebuild first)
   - Click any swatch to pick a Taos color.
   - Tweaks persist on reload. **H** hides the panel, **G** toggles the baseline grid.
 - `?settle=6` on either page renders a finished frame immediately (for captures and share images).
+- `/og`: the share-image template (1200×630). With the dev server running, `npm run og` captures it at 2x to `public/og.png`. Re-run it when the default preset, the profile or the links change, then commit the PNG. The Open Graph tags in `src/layouts/Base.astro` add a content hash to the image URL, so LinkedIn and others fetch the new one.
 
 Node 22.14 is installed, so this uses Astro 6. Astro 7 needs Node ≥ 22.23.
 
