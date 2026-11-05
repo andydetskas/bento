@@ -1,0 +1,142 @@
+{
+  "$description": "Taos design tokens. Source of truth for code (CSS variables + TS), and later Figma variables and Framer styles. Palette sampled from the Taos Style Guide (Figma JrqclJqDkOD0I4oc22cnVx, Colors page). Format: W3C Design Tokens (DTCG).",
+  "taos": {
+    "$type": "color",
+    "light": {
+      "verde":     { "600": { "$value": "#1B8D73" }, "500": { "$value": "#48A28D" }, "400": { "$value": "#73B7A6" }, "300": { "$value": "#A0CBC0" }, "200": { "$value": "#CBE0D9" } },
+      "indigo":    { "600": { "$value": "#5897C8" }, "500": { "$value": "#78AAD1" }, "400": { "$value": "#98BDD9" }, "300": { "$value": "#B8CFE2" }, "200": { "$value": "#D8E2EA" } },
+      "lavender":  { "600": { "$value": "#A99AFB" }, "500": { "$value": "#B9ACFA" }, "400": { "$value": "#C8BEF8" }, "300": { "$value": "#D9D1F6" }, "200": { "$value": "#E8E3F4" } },
+      "coral":     { "600": { "$value": "#FECDCA" }, "500": { "$value": "#FED5D2" }, "400": { "$value": "#FCDDDA" }, "300": { "$value": "#FBE5E3" }, "200": { "$value": "#F9EDEA" } },
+      "fire":      { "600": { "$value": "#D74C07" }, "500": { "$value": "#DE6E37" }, "400": { "$value": "#E49065" }, "300": { "$value": "#EBB195" }, "200": { "$value": "#F1D3C3" } },
+      "alpenglow": { "600": { "$value": "#FAA446" }, "500": { "$value": "#FAB469" }, "400": { "$value": "#F9C48B" }, "300": { "$value": "#F9D5AE" }, "200": { "$value": "#F8E5D0" } },
+      "sun":       { "600": { "$value": "#FEDF89" }, "500": { "$value": "#FEE39E" }, "400": { "$value": "#FCE8B3" }, "300": { "$value": "#FBECC9" }, "200": { "$value": "#F9F1DD" } },
+      "shadow":    { "600": { "$value": "#343840" }, "500": { "$value": "#5B5E64" }, "400": { "$value": "#828488" }, "300": { "$value": "#AAA9AB" }, "200": { "$value": "#D1CFCF" } },
+      "black":     { "600": { "$value": "#000000" }, "500": { "$value": "#323131" }, "400": { "$value": "#636261" }, "300": { "$value": "#959392" }, "200": { "$value": "#C6C4C2" } },
+      "saddle":    { "600": { "$value": "#9D7F6B" }, "500": { "$value": "#C0AE9E" }, "400": { "$value": "#DDD0C6" }, "300": { "$value": "#EFE8E3" }, "200": { "$value": "#F8F5F3" } }
+    },
+    "dark": {
+      "$description": "Dark ramps step toward the dark panel. 'alpenglow' is labelled 'Leather' on the dark side of the Figma guide.",
+      "verde":     { "600": { "$value": "#1B8D73" }, "500": { "$value": "#207C69" }, "400": { "$value": "#256B5F" }, "300": { "$value": "#2A5A54" }, "200": { "$value": "#2F494A" } },
+      "indigo":    { "600": { "$value": "#5897C8" }, "500": { "$value": "#5084AD" }, "400": { "$value": "#4A7192" }, "300": { "$value": "#425E76" }, "200": { "$value": "#3C4B5B" } },
+      "lavender":  { "600": { "$value": "#A99AFB" }, "500": { "$value": "#9186D6" }, "400": { "$value": "#7A72B1" }, "300": { "$value": "#63608A" }, "200": { "$value": "#4C4C65" } },
+      "coral":     { "600": { "$value": "#FECDCA" }, "500": { "$value": "#D6AFAE" }, "400": { "$value": "#AE9193" }, "300": { "$value": "#857477" }, "200": { "$value": "#5D565B" } },
+      "fire":      { "600": { "$value": "#D74C07" }, "500": { "$value": "#B64813" }, "400": { "$value": "#96441E" }, "300": { "$value": "#754029" }, "200": { "$value": "#553C34" } },
+      "alpenglow": { "600": { "$value": "#FAA446" }, "500": { "$value": "#D28E45" }, "400": { "$value": "#AB7844" }, "300": { "$value": "#836442" }, "200": { "$value": "#5C4E41" } },
+      "sun":       { "600": { "$value": "#FEDF89" }, "500": { "$value": "#D6BD7A" }, "400": { "$value": "#AE9C6C" }, "300": { "$value": "#857B5D" }, "200": { "$value": "#5D5A4E" } },
+      "shadow":    { "600": { "$value": "#343840" }, "500": { "$value": "#5D6066" }, "400": { "$value": "#85888C" }, "300": { "$value": "#AEAFB3" }, "200": { "$value": "#D6D7D9" } },
+      "black":     { "600": { "$value": "#000000" }, "500": { "$value": "#0A0B0D" }, "400": { "$value": "#15161A" }, "300": { "$value": "#1F2226" }, "200": { "$value": "#2A2D33" } },
+      "saddle":    { "600": { "$value": "#9D7F6B" }, "500": { "$value": "#98887A" }, "400": { "$value": "#8F847F" }, "300": { "$value": "#797777" }, "200": { "$value": "#F8F5F3" } }
+    }
+  },
+  "semantic": {
+    "$type": "color",
+    "$description": "Role tokens. Components use these, never raw palette values.",
+    "light": {
+      "page":          { "$value": "{taos.light.saddle.200}" },
+      "card":          { "$value": "#FFFFFF" },
+      "text-primary":  { "$value": "{taos.light.shadow.600}" },
+      "text-muted":    { "$value": "{taos.light.shadow.500}" },
+      "line":          { "$value": "#34384021" },
+      "focus":         { "$value": "{taos.light.indigo.600}" },
+      "pill-text":     { "$value": "{taos.light.shadow.600}" }
+    },
+    "dark": {
+      "page":          { "$value": "{taos.dark.black.300}" },
+      "card":          { "$value": "{taos.dark.black.300}" },
+      "text-primary":  { "$value": "{taos.light.saddle.200}" },
+      "text-muted":    { "$value": "{taos.dark.shadow.300}" },
+      "line":          { "$value": "#F8F5F31F" },
+      "focus":         { "$value": "{taos.light.lavender.600}" },
+      "pill-text":     { "$value": "{taos.light.shadow.600}" }
+    }
+  },
+  "accent": {
+    "$type": "color",
+    "$description": "One accent per destination. Used for the hover pill and the scene accent shift.",
+    "linkedin":  { "$value": "{taos.light.indigo.600}" },
+    "portfolio": { "$value": "{taos.light.fire.600}" },
+    "figma":     { "$value": "{taos.light.lavender.600}" },
+    "instagram": { "$value": "{taos.light.coral.600}" },
+    "strava":    { "$value": "{taos.light.alpenglow.600}" },
+    "spotify":   { "$value": "{taos.light.verde.400}" }
+  },
+  "font": {
+    "$type": "fontFamily",
+    "$description": "DM Sans + DM Mono (Colophon Foundry, SIL OFL, self-hosted via Fontsource) stand in for Apercu until a web license exists. The apercu-* families are kept for that switch.",
+    "sans": { "$value": ["DM Sans Variable", "DM Sans", "ui-sans-serif", "system-ui", "-apple-system", "Helvetica Neue", "Arial", "sans-serif"] },
+    "mono": { "$value": ["DM Mono", "ui-monospace", "SF Mono", "Menlo", "monospace"] },
+    "apercu-sans": { "$value": ["Apercu", "Apercu Pro", "ui-sans-serif", "system-ui", "sans-serif"] },
+    "apercu-mono": { "$value": ["Apercu Mono", "Apercu Mono Pro", "ui-monospace", "monospace"] }
+  },
+  "metrics": {
+    "$description": "Vertical font metrics per em, for leading trim. DM values match @capsizecss/metrics; all four were measured in the browser (canvas measureText). The token script turns them into --trim-*-over/under and --cap-* variables.",
+    "sans":        { "cap": { "$type": "number", "$value": 0.7 },   "ascent": { "$type": "number", "$value": 0.992 }, "descent": { "$type": "number", "$value": 0.31 } },
+    "mono":        { "cap": { "$type": "number", "$value": 0.7 },   "ascent": { "$type": "number", "$value": 0.992 }, "descent": { "$type": "number", "$value": 0.31 } },
+    "apercu-sans": { "cap": { "$type": "number", "$value": 0.7 },   "ascent": { "$type": "number", "$value": 0.949 }, "descent": { "$type": "number", "$value": 0.244 } },
+    "apercu-mono": { "cap": { "$type": "number", "$value": 0.662 }, "ascent": { "$type": "number", "$value": 0.9 },   "descent": { "$type": "number", "$value": 0.25 } }
+  },
+  "baseline": {
+    "$type": "dimension",
+    "$description": "Every line-height, padding and gap is a multiple of this unit.",
+    "unit": { "$value": "4px" }
+  },
+  "scale": {
+    "$description": "Fluid type scale (Utopia method): each step interpolates from min to max between the two viewport widths. Built into --step-* variables.",
+    "min-width": { "$type": "number", "$value": 360 },
+    "max-width": { "$type": "number", "$value": 1440 },
+    "min-base":  { "$type": "number", "$value": 15 },
+    "max-base":  { "$type": "number", "$value": 17 },
+    "min-ratio": { "$type": "number", "$value": 1.2 },
+    "max-ratio": { "$type": "number", "$value": 1.3 },
+    "steps":     { "$type": "number", "$value": [-2, -1, 0, 1, 2, 3, 4, 5] }
+  },
+  "type": {
+    "$type": "dimension",
+    "display":  { "$value": "var(--step-5)" },
+    "title":    { "$value": "var(--step-1)" },
+    "body":     { "$value": "var(--step-0)" },
+    "eyebrow":  { "$value": "0.6875rem" }
+  },
+  "leading": {
+    "$type": "dimension",
+    "$description": "Line-heights snap up to the baseline unit at whatever size the text renders.",
+    "display": { "$value": "round(up, 1em, 4px)" },
+    "title":   { "$value": "round(up, 1.3em, 4px)" },
+    "body":    { "$value": "round(up, 1.5em, 4px)" },
+    "eyebrow": { "$value": "16px" }
+  },
+  "weight": {
+    "$type": "fontWeight",
+    "regular": { "$value": 400 },
+    "medium":  { "$value": 500 },
+    "bold":    { "$value": 700 },
+    "mono":    { "$value": 500, "$description": "DM Mono runs one step heavier (Medium) so small eyebrows hold up next to the display type." }
+  },
+  "tracking": {
+    "$type": "dimension",
+    "display": { "$value": "-0.02em" },
+    "display-apercu": { "$value": "-0.035em" },
+    "title":   { "$value": "-0.01em" },
+    "eyebrow": { "$value": "0.08em" }
+  },
+  "space": {
+    "$type": "dimension",
+    "1": { "$value": "4px" }, "2": { "$value": "8px" }, "3": { "$value": "12px" }, "4": { "$value": "16px" },
+    "5": { "$value": "20px" }, "6": { "$value": "24px" }, "8": { "$value": "32px" }, "10": { "$value": "40px" },
+    "12": { "$value": "48px" }, "16": { "$value": "64px" },
+    "gutter": { "$value": "clamp(12px, round(4vw, 4px), 56px)", "$description": "Viewport inset around the card; the scene shows through it. Snapped to the baseline unit." }
+  },
+  "radius": {
+    "$type": "dimension",
+    "none": { "$value": "0px" }, "sm": { "$value": "8px" }, "md": { "$value": "14px" }, "lg": { "$value": "22px" }, "pill": { "$value": "999px" }
+  },
+  "motion": {
+    "ease-settle":   { "$type": "cubicBezier", "$value": [0.16, 1, 0.3, 1], "$description": "Fast in, long settle." },
+    "ease-standard": { "$type": "cubicBezier", "$value": [0.2, 0, 0, 1] },
+    "ease-exit":     { "$type": "cubicBezier", "$value": [0.4, 0, 1, 1] },
+    "quick":   { "$type": "duration", "$value": "160ms" },
+    "base":    { "$type": "duration", "$value": "320ms" },
+    "settle":  { "$type": "duration", "$value": "900ms" },
+    "stagger": { "$type": "duration", "$value": "60ms", "$description": "Lines land 60ms apart." }
+  }
+}

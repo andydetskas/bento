@@ -1,0 +1,84 @@
+---
+// Full-viewport 3D background. Three.js loads after first paint; until then (or with no WebGL)
+// the page shows the preset's flat background color.
+import type { Preset } from '../lib/presets';
+
+interface Props {
+  preset: Preset;
+}
+const { preset } = Astro.props;
+---
+
+<canvas class="scene" data-preset={JSON.stringify(preset)} aria-hidden="true"></canvas>
+
+<style>
+  .scene {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100lvh;
+    display: block;
+    opacity: 0;
+    transition: opacity 700ms var(--motion-ease-standard);
+  }
+  .scene.is-live {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scene {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import type { ShapeField } from '../lib/shape-field';
+  import type { Preset } from '../lib/presets';
+  import { focusForViewport } from '../lib/apply';
+
+  declare global {
+    interface Window {
+      shapeField?: ShapeField | null;
+    }
+    interface DocumentEventMap {
+      'bento:accent': CustomEvent<{ hex: string | null }>;
+      'bento:preset': CustomEvent<{ preset: Preset }>;
+      'shapefield:ready': CustomEvent<{ field: ShapeField }>;
+    }
+  }
+
+  const canvas = document.querySelector<HTMLCanvasElement>('canvas.scene');
+  if (canvas) {
+    let preset: Preset = JSON.parse(canvas.dataset.preset!);
+    // A preset requested before the engine loads (e.g. ?preset= on the index) wins.
+    document.addEventListener('bento:preset', (e) => (preset = e.detail.preset));
+
+    const boot = async () => {
+      const { createShapeField } = await import('../lib/shape-field');
+      const field = createShapeField(canvas, preset, {
+        onFirstFrame: () => canvas.classList.add('is-live'),
+      });
+      window.shapeField = field;
+      if (!field) return;
+      const refocus = () => {
+        const f = focusForViewport();
+        field.setFocus(f.x, f.y);
+      };
+      refocus();
+      window.addEventListener('resize', refocus, { passive: true });
+      // ?settle=6 renders a finished frame immediately (posters, share images, review captures).
+      const settleFor = Number(new URLSearchParams(location.search).get('settle'));
+      if (settleFor > 0) {
+        document.documentElement.classList.add('is-static');
+        field.advance(settleFor);
+        canvas.classList.add('is-live');
+      }
+      document.addEventListener('bento:accent', (e) => field.setAccent(e.detail.hex));
+      document.addEventListener('bento:preset', (e) => field.setPreset(e.detail.preset));
+      document.dispatchEvent(new CustomEvent('shapefield:ready', { detail: { field } }));
+    };
+
+    if ('requestIdleCallback' in window) requestIdleCallback(() => boot(), { timeout: 500 });
+    else setTimeout(boot, 120);
+  }
+</script>

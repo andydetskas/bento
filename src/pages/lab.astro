@@ -1,0 +1,1000 @@
+---
+// Concept lab: the real card over the live scene, with controls to explore presets.
+// Local review tool; noindex and not linked from the site.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import LinkCard from '../components/LinkCard.astro';
+import ShapeField from '../components/ShapeField.astro';
+import { iconNames } from '../lib/icons';
+import { defaultPreset, glyphPalettes, presets } from '../lib/presets';
+import { tokens } from '../lib/tokens';
+
+const families = [
+  { id: 'glyphs', label: 'Glyphs' },
+  { id: 'pueblo', label: 'Pueblo' },
+  { id: 'ridgeline', label: 'Ridgeline' },
+  { id: 'petal', label: 'Petal' },
+];
+
+type Slider = { key: string; label: string; min: number; max: number; step: number; unit?: string; only?: string; rebuild?: boolean };
+const shapeSliders: Slider[] = [
+  { key: 'density', label: 'Count', min: 0, max: 1, step: 0.01, rebuild: true },
+  { key: 'size', label: 'Size', min: 0.5, max: 2, step: 0.01, only: 'glyphs' },
+  { key: 'depth', label: 'Extrusion depth', min: 0.3, max: 3, step: 0.05, only: 'glyphs', rebuild: true },
+  { key: 'spread', label: 'Depth spread', min: 0, max: 3, step: 0.05, only: 'glyphs', rebuild: true },
+  { key: 'tumble', label: 'Tumble', min: 0, max: 2, step: 0.01, only: 'glyphs' },
+  { key: 'contrast', label: 'Side contrast', min: 0, max: 1, step: 0.01, only: 'glyphs' },
+];
+const motionSliders: Slider[] = [
+  { key: 'speed', label: 'Speed', min: 0, max: 2, step: 0.05 },
+  { key: 'tint', label: 'Hover tint', min: 0, max: 1, step: 0.01 },
+  { key: 'light', label: 'Light angle', min: 0, max: 360, step: 1, unit: '°' },
+  { key: 'tilt', label: 'Tilt', min: -45, max: 45, step: 1, unit: '°' },
+  { key: 'scale', label: 'Scale', min: 0.5, max: 2, step: 0.01 },
+];
+
+// Swatch picker: every Taos color, light and dark ramps.
+const hues = Object.keys(tokens.taos.light) as (keyof typeof tokens.taos.light)[];
+const steps = ['600', '500', '400', '300', '200'] as const;
+---
+
+<Base title="Lab · Andy Detskas" description="Concept lab" preset={defaultPreset} noindex>
+  <ShapeField preset={defaultPreset} />
+  <LinkCard />
+
+  <aside
+    class="lab"
+    aria-label="Concept lab controls"
+    data-presets={JSON.stringify(presets)}
+    data-palettes={JSON.stringify(glyphPalettes)}
+  >
+    <div class="lab-head">
+      <strong>Lab</strong>
+      <span class="lab-name" data-out="name"></span>
+      <button class="icon-btn" type="button" data-act="collapse" aria-expanded="true" title="Collapse panel">–</button>
+    </div>
+
+    <div class="lab-body">
+      <details open>
+        <summary>Scene</summary>
+        <div class="seg seg-4" role="group" aria-label="Scene family">
+          {families.map((f) => <button type="button" data-family={f.id}>{f.label}</button>)}
+        </div>
+        <div class="seg" role="group" aria-label="Tone" data-hide-for="glyphs">
+          <button type="button" data-tone="color">Color</button>
+          <button type="button" data-tone="neutral">Neutral</button>
+        </div>
+      </details>
+
+      <details open data-only="glyphs">
+        <summary>Palette</summary>
+        <div class="seg seg-4 seg-sm" role="group" aria-label="Palette type">
+          <button type="button" data-kind="all" aria-pressed="true">All</button>
+          <button type="button" data-kind="color">Color</button>
+          <button type="button" data-kind="earth">Earth</button>
+          <button type="button" data-kind="mono">Mono</button>
+        </div>
+        <div class="palettes" data-out="palettes">
+          {
+            glyphPalettes.map((p) => (
+              <button type="button" class="pal" data-palette={p.id} data-kind={p.kind} title={p.name}>
+                <span class="pal-art" style={`background:${p.palette.bg}`}>
+                  {p.palette.colors.slice(0, 6).map((c) => (
+                    <i style={`background:${c};box-shadow:2px 2px 0 ${p.palette.extrusion}`} />
+                  ))}
+                </span>
+                <span class="pal-name">{p.name}</span>
+              </button>
+            ))
+          }
+        </div>
+        <p class="label">Edit colors <span class="muted">(click a swatch)</span></p>
+        <div class="edit-row">
+          <span class="edit-group"><span class="tiny">Bg</span><span data-out="bg-swatch"></span></span>
+          <span class="edit-group grow"><span class="tiny">Faces</span><span class="faces" data-out="faces"></span></span>
+          <span class="edit-group"><span class="tiny">Sides</span><span data-out="ext-swatch"></span></span>
+        </div>
+        <div class="row3">
+          <button type="button" class="btn" data-act="add-face" title="Add a face color">+ Face</button>
+          <button type="button" class="btn" data-act="remove-face" title="Remove the last face color">− Face</button>
+          <button type="button" class="btn" data-act="shuffle">Shuffle</button>
+        </div>
+        <div class="row2">
+          <button type="button" class="btn" data-act="random-colors">Random colors</button>
+          <button type="button" class="btn" data-act="sides-black" title="Set sides to True Black 80%">Sides: black 80%</button>
+        </div>
+      </details>
+
+      <details open data-only="glyphs">
+        <summary>Glyphs <span class="muted" data-out="glyph-count"></span></summary>
+        <div class="glyph-grid">
+          {
+            iconNames.map((name) => (
+              <button type="button" class="glyph" data-glyph={name} aria-pressed="true" title={name}>
+                <Icon name={name} />
+              </button>
+            ))
+          }
+        </div>
+        <div class="row2">
+          <button type="button" class="btn" data-act="glyphs-all">All</button>
+          <button type="button" class="btn" data-act="glyphs-none">None</button>
+        </div>
+      </details>
+
+      <details open>
+        <summary>Shape</summary>
+        {
+          shapeSliders.map((s) => (
+            <label class="slider" data-only={s.only}>
+              <span class="slider-top">
+                <span>{s.label}</span>
+                <output data-out={s.key} />
+              </span>
+              <input type="range" min={s.min} max={s.max} step={s.step} data-param={s.key} data-unit={s.unit ?? ''} data-rebuild={s.rebuild ? '' : undefined} />
+            </label>
+          ))
+        }
+        <button type="button" class="btn btn-wide" data-act="reseed">New layout</button>
+      </details>
+
+      <details>
+        <summary>Motion &amp; light</summary>
+        {
+          motionSliders.map((s) => (
+            <label class="slider">
+              <span class="slider-top">
+                <span>{s.label}</span>
+                <output data-out={s.key} />
+              </span>
+              <input type="range" min={s.min} max={s.max} step={s.step} data-param={s.key} data-unit={s.unit ?? ''} />
+            </label>
+          ))
+        }
+      </details>
+
+      <details>
+        <summary>Card &amp; type</summary>
+        <div class="row2">
+          <div class="seg" role="group" aria-label="Card mode">
+            <button type="button" data-mode-btn="light">Light</button>
+            <button type="button" data-mode-btn="dark">Dark</button>
+          </div>
+          <div class="seg" role="group" aria-label="Font">
+            <button type="button" data-font-btn="dm">DM Sans</button>
+            <button type="button" data-font-btn="apercu" title="Uses Apercu installed on this computer">Apercu</button>
+          </div>
+        </div>
+        <label class="slider">
+          <span class="slider-top"><span>Gutter</span><output data-out="gutter"></output></span>
+          <input type="range" min="0" max="96" step="4" data-css="gutter" />
+        </label>
+        <label class="slider">
+          <span class="slider-top"><span>Card radius</span><output data-out="radius"></output></span>
+          <input type="range" min="0" max="40" step="2" data-css="radius" />
+        </label>
+        <div class="row2">
+          <label class="check"><input type="checkbox" data-icons checked /> Row icons</label>
+          <label class="check"><input type="checkbox" data-grid /> Baseline grid</label>
+        </div>
+      </details>
+
+      <div class="actions">
+        <div class="row2">
+          <label class="check"><input type="checkbox" data-lock /> Lock palette</label>
+          <button type="button" class="btn" data-act="randomize">Randomize all</button>
+        </div>
+        <div class="row2">
+          <button type="button" class="btn btn-primary" data-act="snapshot">Snapshot</button>
+          <button type="button" class="btn" data-act="copy">Copy preset</button>
+        </div>
+        <button type="button" class="btn btn-wide" data-act="reset">Reset to default</button>
+        <p class="hint">H hides the panel · G toggles the grid · your tweaks persist on reload</p>
+      </div>
+    </div>
+
+    <div class="picker" hidden role="dialog" aria-label="Pick a Taos color">
+      <div class="seg seg-sm" role="group" aria-label="Ramp">
+        <button type="button" data-ramp="light" aria-pressed="true">Light ramps</button>
+        <button type="button" data-ramp="dark">Dark ramps</button>
+      </div>
+      {
+        (['light', 'dark'] as const).map((mode) => (
+          <div class="ramp" data-ramp-grid={mode} hidden={mode === 'dark'}>
+            {hues.map((hue) => (
+              <div class="ramp-row">
+                <span class="ramp-name">{hue}</span>
+                {steps.map((step) => (
+                  <button
+                    type="button"
+                    class="chip"
+                    data-hex={tokens.taos[mode][hue][step]}
+                    title={`${hue} ${step} (${mode}) ${tokens.taos[mode][hue][step]}`}
+                    style={`background:${tokens.taos[mode][hue][step]}`}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        ))
+      }
+      <div class="picker-foot">
+        <button type="button" class="chip" data-hex="#FFFFFF" title="White" style="background:#FFFFFF"></button>
+        <label class="custom">Custom <input type="color" data-custom /></label>
+        <button type="button" class="btn" data-act="picker-close">Done</button>
+      </div>
+    </div>
+  </aside>
+</Base>
+
+<style>
+  .lab {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 20;
+    width: 328px;
+    max-height: calc(100svh - 32px);
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    background: rgb(22 23 26 / 0.94);
+    backdrop-filter: blur(12px);
+    color: #f2f2f2;
+    font: 12px/16px var(--font-sans);
+    box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.6);
+    accent-color: var(--taos-light-fire-600);
+  }
+  .lab.is-hidden {
+    display: none;
+  }
+  .lab.is-collapsed .lab-body {
+    display: none;
+  }
+  .lab-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid #2c2d31;
+  }
+  .lab-name {
+    flex: 1;
+    color: #9a9ba0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .icon-btn {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 6px;
+    background: #2c2d31;
+    color: inherit;
+    cursor: pointer;
+  }
+  .lab-body {
+    overflow: auto;
+    padding: 4px 14px 14px;
+  }
+  details {
+    border-bottom: 1px solid #2c2d31;
+    padding: 8px 0 12px;
+    display: grid;
+    gap: 10px;
+  }
+  details:not([open]) {
+    padding-bottom: 8px;
+  }
+  details > :not(summary) + :not(summary) {
+    margin-top: 10px;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 500;
+    padding: 4px 0;
+    list-style-position: inside;
+  }
+  summary + * {
+    margin-top: 8px;
+  }
+  .muted {
+    color: #75767b;
+    font-weight: 400;
+  }
+  .label {
+    margin: 12px 0 6px;
+    color: #9a9ba0;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tiny {
+    display: block;
+    color: #75767b;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .seg {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 9px;
+    background: #2c2d31;
+  }
+  .seg + .seg {
+    margin-top: 8px;
+  }
+  .seg button {
+    padding: 6px 4px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #c9cacd;
+    font: inherit;
+    cursor: pointer;
+  }
+  .seg-sm button {
+    padding: 4px;
+    font-size: 11px;
+  }
+  .seg button[aria-pressed='true'] {
+    background: #f2f2f2;
+    color: #16171a;
+  }
+  .row2,
+  .row3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .row3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .btn {
+    padding: 7px 8px;
+    border: 1px solid #3a3b40;
+    border-radius: 8px;
+    background: #232428;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background: #2c2d31;
+  }
+  .btn-primary {
+    background: #f2f2f2;
+    color: #16171a;
+    border-color: #f2f2f2;
+  }
+  .btn-wide {
+    width: 100%;
+    margin-top: 8px;
+  }
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  /* Palette chips */
+  .palettes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .pal {
+    display: grid;
+    gap: 4px;
+    padding: 4px;
+    border: 1px solid #2c2d31;
+    border-radius: 9px;
+    background: #1c1d20;
+    color: #c9cacd;
+    font: inherit;
+    font-size: 11px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .pal[hidden] {
+    display: none;
+  }
+  .pal[aria-pressed='true'] {
+    border-color: #f2f2f2;
+    color: #f2f2f2;
+  }
+  .pal-art {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    padding: 6px;
+    border-radius: 6px;
+    min-height: 40px;
+    align-content: center;
+  }
+  .pal-art i {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  .pal-name {
+    padding: 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Editable swatches */
+  .edit-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .edit-group.grow {
+    flex: 1;
+  }
+  .faces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  /* Swatches are created by script, so they need :global() to escape Astro's scoping. */
+  .lab :global(.swatch) {
+    width: 24px;
+    height: 24px;
+    border: 0;
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+    cursor: pointer;
+    padding: 0;
+  }
+  .lab :global(.swatch.is-editing) {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 2px;
+  }
+
+  /* Glyph chips */
+  .glyph-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .glyph {
+    aspect-ratio: 1;
+    padding: 5px;
+    border: 1px solid #2c2d31;
+    border-radius: 7px;
+    background: #1c1d20;
+    color: #5a5b60;
+    cursor: pointer;
+  }
+  .glyph[aria-pressed='true'] {
+    background: #f2f2f2;
+    color: #16171a;
+    border-color: #f2f2f2;
+  }
+  .glyph :global(.icon) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .slider {
+    display: grid;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .slider[hidden] {
+    display: none;
+  }
+  .slider-top {
+    display: flex;
+    justify-content: space-between;
+    color: #9a9ba0;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10px;
+  }
+  .slider output {
+    font-family: var(--font-mono);
+    color: #f2f2f2;
+  }
+  .slider input {
+    width: 100%;
+  }
+  .actions {
+    padding-top: 6px;
+  }
+  .hint {
+    margin: 10px 0 0;
+    color: #75767b;
+    font-size: 10px;
+  }
+  [data-only][hidden],
+  [data-hide-for][hidden] {
+    display: none;
+  }
+
+  /* Color picker popover */
+  .picker {
+    position: absolute;
+    right: calc(100% + 8px);
+    bottom: 0;
+    width: 260px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgb(22 23 26 / 0.97);
+    box-shadow: 0 20px 60px -20px rgb(0 0 0 / 0.7);
+  }
+  .picker[hidden],
+  .ramp[hidden] {
+    display: none;
+  }
+  .ramp {
+    display: grid;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .ramp-row {
+    display: grid;
+    grid-template-columns: 64px repeat(5, 1fr);
+    gap: 4px;
+    align-items: center;
+  }
+  .ramp-name {
+    color: #9a9ba0;
+    font-size: 10px;
+    text-transform: capitalize;
+  }
+  .chip {
+    height: 22px;
+    border: 0;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.15);
+    cursor: pointer;
+  }
+  .chip:hover {
+    outline: 2px solid #f2f2f2;
+    outline-offset: 1px;
+  }
+  .picker-foot {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .custom {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #9a9ba0;
+  }
+  .custom input {
+    width: 32px;
+    height: 24px;
+    border: 0;
+    padding: 0;
+    background: none;
+  }
+
+  @media (max-width: 759px) {
+    .lab {
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      width: auto;
+      max-height: 52svh;
+    }
+    .picker {
+      right: 0;
+      left: 0;
+      bottom: calc(100% + 8px);
+      width: auto;
+    }
+  }
+</style>
+
+<script>
+  import type { NamedPalette, Preset, ScenePalette, SceneParams } from '../lib/presets';
+  import { GLYPH_DEFAULTS, swatchPool, TRUE_BLACK_80 } from '../lib/presets';
+  import { applyCardStyle } from '../lib/apply';
+
+  const STORE = 'bento-lab-v2';
+  const panel = document.querySelector<HTMLElement>('.lab')!;
+  const all: Preset[] = JSON.parse(panel.dataset.presets!);
+  const palettes: NamedPalette[] = JSON.parse(panel.dataset.palettes!);
+  const byId = (id: string) => all.find((p) => p.id === id) ?? all.find((p) => p.family === 'glyphs')!;
+  const q = <T extends Element = HTMLElement>(sel: string) => panel.querySelector<T>(sel)!;
+  const qa = <T extends Element = HTMLElement>(sel: string) => Array.from(panel.querySelectorAll<T>(sel));
+  const html = document.documentElement;
+
+  interface LabState {
+    preset: Preset;
+    gutter: number | null;
+    font: 'dm' | 'apercu';
+    grid: boolean;
+    icons: boolean;
+  }
+
+  // ── State: explicit ?preset= wins, then the last session's tweaks, then the default ──
+  const fromUrl = new URLSearchParams(location.search).get('preset');
+  let saved: Partial<LabState> = {};
+  try {
+    saved = JSON.parse(localStorage.getItem(STORE) ?? '{}');
+  } catch {
+    saved = {};
+  }
+  const withDefaults = (p: Preset): Preset =>
+    structuredClone({ ...p, params: p.family === 'glyphs' ? { ...GLYPH_DEFAULTS, ...p.params } : { tint: 0.85, ...p.params } });
+  const state: LabState = {
+    preset: withDefaults(fromUrl ? byId(fromUrl) : (saved.preset ?? byId('glyphs-color'))),
+    gutter: saved.gutter ?? null,
+    font: saved.font ?? 'dm',
+    grid: saved.grid ?? false,
+    icons: saved.icons ?? true,
+  };
+  const cur = () => state.preset;
+
+  const save = () => {
+    try {
+      localStorage.setItem(STORE, JSON.stringify(state));
+    } catch {
+      /* private mode: tweaks just won't persist */
+    }
+  };
+  const push = () => {
+    applyCardStyle(cur());
+    document.dispatchEvent(new CustomEvent('bento:preset', { detail: { preset: structuredClone(cur()) } }));
+    save();
+    render();
+  };
+  document.addEventListener('shapefield:ready', () => push());
+
+  // ── Rendering the panel from state ──────────────────────────────────────────────
+  let kindFilter = 'all';
+  let editing: { el: HTMLElement; set: (hex: string) => void } | null = null;
+
+  const swatch = (hex: string, label: string, set: (hex: string) => void) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'swatch';
+    b.style.background = hex;
+    b.title = `${label} ${hex}`;
+    b.addEventListener('click', () => openPicker(b, hex, set));
+    return b;
+  };
+
+  function render() {
+    const p = cur();
+    const isGlyphs = p.family === 'glyphs';
+    q('[data-out="name"]').textContent = p.name;
+    qa<HTMLButtonElement>('[data-family]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.family === p.family)));
+    qa<HTMLButtonElement>('[data-tone]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tone === p.tone)));
+    qa<HTMLElement>('[data-only]').forEach((el) => (el.hidden = el.dataset.only !== p.family));
+    qa<HTMLElement>('[data-hide-for]').forEach((el) => (el.hidden = el.dataset.hideFor === p.family));
+    qa<HTMLButtonElement>('[data-mode-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modeBtn === p.card.mode)));
+    qa<HTMLButtonElement>('[data-font-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.fontBtn === state.font)));
+
+    if (isGlyphs) {
+      qa<HTMLButtonElement>('[data-kind]').forEach((b) => {
+        if (b.classList.contains('pal')) b.hidden = kindFilter !== 'all' && b.dataset.kind !== kindFilter;
+        else b.setAttribute('aria-pressed', String(b.dataset.kind === kindFilter));
+      });
+      qa<HTMLButtonElement>('[data-palette]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.palette === p.paletteId)));
+      const pal = p.palette;
+      q('[data-out="bg-swatch"]').replaceChildren(swatch(pal.bg, 'Background', (hex) => editPalette({ bg: hex })));
+      q('[data-out="faces"]').replaceChildren(
+        ...pal.colors.map((c, i) =>
+          swatch(c, `Face ${i + 1}`, (hex) => editPalette({ colors: pal.colors.map((x, j) => (j === i ? hex : x)) })),
+        ),
+      );
+      q('[data-out="ext-swatch"]').replaceChildren(swatch(pal.extrusion ?? TRUE_BLACK_80, 'Sides', (hex) => editPalette({ extrusion: hex })));
+      const on = p.glyphs?.length ? new Set(p.glyphs) : null;
+      const chips = qa<HTMLButtonElement>('[data-glyph]');
+      chips.forEach((b) => b.setAttribute('aria-pressed', String(!on || on.has(b.dataset.glyph!))));
+      q('[data-out="glyph-count"]').textContent = `${on ? on.size : chips.length} of ${chips.length}`;
+    }
+
+    qa<HTMLInputElement>('[data-param]').forEach((input) => {
+      const key = input.dataset.param as keyof SceneParams;
+      const v = Number(p.params[key] ?? input.min);
+      input.value = String(v);
+      let text = `${v.toFixed(input.step.includes('.') ? 2 : 0)}${input.dataset.unit}`;
+      if (key === 'density' && isGlyphs) text = `${Math.round(14 + (48 - 14) * v)} glyphs`;
+      q(`[data-out="${key}"]`).textContent = text;
+    });
+    const gv = state.gutter ?? Math.round(parseFloat(getComputedStyle(document.querySelector('.frame')!).paddingLeft));
+    q<HTMLInputElement>('[data-css="gutter"]').value = String(gv);
+    q('[data-out="gutter"]').textContent = state.gutter === null ? `auto (${gv}px)` : `${gv}px`;
+    q<HTMLInputElement>('[data-css="radius"]').value = String(p.card.radius);
+    q('[data-out="radius"]').textContent = `${p.card.radius}px`;
+    q<HTMLInputElement>('[data-icons]').checked = state.icons;
+    q<HTMLInputElement>('[data-grid]').checked = state.grid;
+  }
+
+  function applyPageState() {
+    if (state.gutter === null) html.style.removeProperty('--gutter');
+    else html.style.setProperty('--gutter', `${state.gutter}px`);
+    if (state.font === 'apercu') html.dataset.font = 'apercu';
+    else delete html.dataset.font;
+    if (state.grid) html.dataset.grid = '';
+    else delete html.dataset.grid;
+    document.querySelectorAll<HTMLElement>('.row-icon').forEach((el) => (el.style.display = state.icons ? '' : 'none'));
+  }
+
+  // ── Palette editing ─────────────────────────────────────────────────────────────
+  function editPalette(patch: Partial<ScenePalette>) {
+    const name = `${cur().name.replace(/ \(edited\)$/, '')} (edited)`;
+    state.preset = { ...cur(), name, paletteId: undefined, palette: { ...cur().palette, ...patch } };
+    push();
+  }
+  function usePalette(np: NamedPalette) {
+    state.preset = {
+      ...cur(),
+      paletteId: np.id,
+      name: `Glyphs · ${np.name}`,
+      palette: structuredClone(np.palette),
+      card: { ...cur().card, mode: np.mode },
+    };
+    push();
+  }
+
+  const picker = q<HTMLElement>('.picker');
+  function openPicker(el: HTMLElement, hex: string, set: (hex: string) => void) {
+    editing?.el.classList.remove('is-editing');
+    editing = { el, set };
+    el.classList.add('is-editing');
+    q<HTMLInputElement>('[data-custom]').value = hex.slice(0, 7);
+    picker.hidden = false;
+  }
+  function closePicker() {
+    editing?.el.classList.remove('is-editing');
+    editing = null;
+    picker.hidden = true;
+  }
+  picker.addEventListener('click', (e) => {
+    const chip = (e.target as HTMLElement).closest<HTMLElement>('[data-hex]');
+    if (chip && editing) {
+      const set = editing.set;
+      closePicker();
+      set(chip.dataset.hex!);
+    }
+  });
+  q<HTMLInputElement>('[data-custom]').addEventListener('change', (e) => {
+    if (!editing) return;
+    const set = editing.set;
+    closePicker();
+    set((e.target as HTMLInputElement).value.toUpperCase());
+  });
+  q('[data-act="picker-close"]').addEventListener('click', closePicker);
+  qa<HTMLButtonElement>('[data-ramp]').forEach((b) =>
+    b.addEventListener('click', () => {
+      qa<HTMLButtonElement>('[data-ramp]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      qa<HTMLElement>('[data-ramp-grid]').forEach((g) => (g.hidden = g.dataset.rampGrid !== b.dataset.ramp));
+    }),
+  );
+
+  qa<HTMLButtonElement>('.seg [data-kind]').forEach((b) =>
+    b.addEventListener('click', () => {
+      kindFilter = b.dataset.kind!;
+      render();
+    }),
+  );
+  qa<HTMLButtonElement>('[data-palette]').forEach((b) =>
+    b.addEventListener('click', () => usePalette(palettes.find((p) => p.id === b.dataset.palette)!)),
+  );
+
+  const pick = <T,>(arr: T[]) => arr[Math.floor(Math.random() * arr.length)];
+  function shuffle<T>(arr: T[]) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  q('[data-act="add-face"]').addEventListener('click', () => {
+    const colors = cur().palette.colors;
+    if (colors.length >= 8) return;
+    const fresh = swatchPool.color.filter((c) => !colors.includes(c));
+    editPalette({ colors: [...colors, pick(fresh.length ? fresh : swatchPool.color)] });
+  });
+  q('[data-act="remove-face"]').addEventListener('click', () => {
+    const colors = cur().palette.colors;
+    if (colors.length > 1) editPalette({ colors: colors.slice(0, -1) });
+  });
+  q('[data-act="shuffle"]').addEventListener('click', () => editPalette({ colors: shuffle(cur().palette.colors) }));
+  q('[data-act="sides-black"]').addEventListener('click', () => editPalette({ extrusion: TRUE_BLACK_80 }));
+  q('[data-act="random-colors"]').addEventListener('click', () => {
+    const faces = shuffle(swatchPool.color).slice(0, 3 + Math.floor(Math.random() * 4));
+    editPalette({ bg: pick(swatchPool.neutral.filter((c) => !faces.includes(c))), colors: faces, extrusion: TRUE_BLACK_80 });
+  });
+
+  // ── Glyph picks ─────────────────────────────────────────────────────────────────
+  const allGlyphs = qa<HTMLButtonElement>('[data-glyph]').map((b) => b.dataset.glyph!);
+  qa<HTMLButtonElement>('[data-glyph]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const on = new Set(cur().glyphs?.length ? cur().glyphs : allGlyphs);
+      if (on.has(b.dataset.glyph!)) on.delete(b.dataset.glyph!);
+      else on.add(b.dataset.glyph!);
+      if (on.size === 0) return; // keep at least one
+      state.preset = { ...cur(), glyphs: on.size === allGlyphs.length ? undefined : allGlyphs.filter((g) => on.has(g)) };
+      push();
+    }),
+  );
+  q('[data-act="glyphs-all"]').addEventListener('click', () => {
+    state.preset = { ...cur(), glyphs: undefined };
+    push();
+  });
+  q('[data-act="glyphs-none"]').addEventListener('click', () => {
+    // "None" keeps one so the scene isn't empty; pick from there.
+    state.preset = { ...cur(), glyphs: [allGlyphs.includes('globe-runner') ? 'globe-runner' : allGlyphs[0]] };
+    push();
+  });
+
+  // ── Scene / tone / mode / font ──────────────────────────────────────────────────
+  qa<HTMLButtonElement>('[data-family]').forEach((b) =>
+    b.addEventListener('click', () => {
+      if (b.dataset.family === cur().family) return;
+      const next = b.dataset.family === 'glyphs' ? byId('glyphs-color') : byId(`${b.dataset.family}-${cur().tone}`);
+      state.preset = withDefaults(next);
+      push();
+    }),
+  );
+  qa<HTMLButtonElement>('[data-tone]').forEach((b) =>
+    b.addEventListener('click', () => {
+      state.preset = withDefaults(byId(`${cur().family}-${b.dataset.tone}`));
+      push();
+    }),
+  );
+  qa<HTMLButtonElement>('[data-mode-btn]').forEach((b) =>
+    b.addEventListener('click', () => {
+      state.preset = { ...cur(), card: { ...cur().card, mode: b.dataset.modeBtn as Preset['card']['mode'] } };
+      push();
+    }),
+  );
+  qa<HTMLButtonElement>('[data-font-btn]').forEach((b) =>
+    b.addEventListener('click', () => {
+      state.font = b.dataset.fontBtn as LabState['font'];
+      applyPageState();
+      save();
+      render();
+    }),
+  );
+
+  // ── Sliders: live keys on input; rebuild keys (count, depth, spread) on release ─
+  qa<HTMLInputElement>('[data-param]').forEach((input) => {
+    const key = input.dataset.param as keyof SceneParams;
+    const commit = () => {
+      state.preset = { ...cur(), params: { ...cur().params, [key]: Number(input.value) } };
+      push();
+    };
+    if ('rebuild' in input.dataset) {
+      input.addEventListener('input', () => (q(`[data-out="${key}"]`).textContent = '…'));
+      input.addEventListener('change', commit);
+    } else {
+      input.addEventListener('input', commit);
+    }
+  });
+  q('[data-act="reseed"]').addEventListener('click', () => {
+    state.preset = { ...cur(), params: { ...cur().params, seed: Math.floor(Math.random() * 10000) } };
+    push();
+  });
+  q<HTMLInputElement>('[data-css="gutter"]').addEventListener('input', (e) => {
+    state.gutter = Number((e.target as HTMLInputElement).value);
+    applyPageState();
+    save();
+    render();
+  });
+  q<HTMLInputElement>('[data-css="radius"]').addEventListener('input', (e) => {
+    state.preset = { ...cur(), card: { ...cur().card, radius: Number((e.target as HTMLInputElement).value) } };
+    push();
+  });
+  q<HTMLInputElement>('[data-icons]').addEventListener('change', (e) => {
+    state.icons = (e.target as HTMLInputElement).checked;
+    applyPageState();
+    save();
+  });
+  q<HTMLInputElement>('[data-grid]').addEventListener('change', (e) => {
+    state.grid = (e.target as HTMLInputElement).checked;
+    applyPageState();
+    save();
+  });
+
+  // ── Actions ─────────────────────────────────────────────────────────────────────
+  q('[data-act="randomize"]').addEventListener('click', () => {
+    const locked = q<HTMLInputElement>('[data-lock]').checked;
+    const p = cur();
+    const np = pick(palettes);
+    const r = (lo: number, hi: number) => +(lo + Math.random() * (hi - lo)).toFixed(2);
+    state.preset = {
+      ...p,
+      paletteId: locked ? p.paletteId : np.id,
+      name: locked ? p.name : `Glyphs · ${np.name}`,
+      palette: locked ? p.palette : structuredClone(np.palette),
+      card: locked ? p.card : { ...p.card, mode: np.mode },
+      params: {
+        ...p.params,
+        density: r(0.25, 0.85),
+        size: r(0.7, 1.5),
+        depth: r(0.6, 2),
+        spread: r(0.5, 2),
+        tumble: r(0.4, 1.4),
+        tilt: Math.round(-25 + Math.random() * 50),
+        light: Math.round(Math.random() * 360),
+        seed: Math.floor(Math.random() * 10000),
+      },
+    };
+    push();
+  });
+
+  q('[data-act="snapshot"]').addEventListener('click', async () => {
+    const blob = await window.shapeField?.snapshot(2);
+    if (!blob) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `bento-${cur().paletteId ?? cur().id}-${cur().params.seed}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+
+  q('[data-act="copy"]').addEventListener('click', async (e) => {
+    const btn = e.currentTarget as HTMLButtonElement;
+    await navigator.clipboard.writeText(JSON.stringify(cur(), null, 2));
+    btn.textContent = 'Copied';
+    setTimeout(() => (btn.textContent = 'Copy preset'), 1200);
+  });
+
+  q('[data-act="reset"]').addEventListener('click', () => {
+    try {
+      localStorage.removeItem(STORE);
+    } catch {
+      /* ignore */
+    }
+    state.preset = withDefaults(byId('glyphs-color'));
+    state.gutter = null;
+    state.font = 'dm';
+    state.grid = false;
+    state.icons = true;
+    q<HTMLInputElement>('[data-lock]').checked = false;
+    applyPageState();
+    push();
+  });
+
+  // ── Panel visibility ────────────────────────────────────────────────────────────
+  const collapse = q<HTMLButtonElement>('[data-act="collapse"]');
+  collapse.addEventListener('click', () => {
+    const collapsed = panel.classList.toggle('is-collapsed');
+    collapse.setAttribute('aria-expanded', String(!collapsed));
+    collapse.textContent = collapsed ? '+' : '–';
+    if (collapsed) closePicker();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.target instanceof HTMLInputElement || e.metaKey || e.ctrlKey) return;
+    if (e.key === 'Escape') closePicker();
+    if (e.key.toLowerCase() === 'h') panel.classList.toggle('is-hidden');
+    if (e.key.toLowerCase() === 'g') {
+      state.grid = !state.grid;
+      applyPageState();
+      save();
+      render();
+    }
+  });
+  if (new URLSearchParams(location.search).has('clean')) panel.classList.add('is-hidden');
+
+  applyPageState();
+  push();
+</script>

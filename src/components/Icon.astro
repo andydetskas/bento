@@ -1,0 +1,29 @@
+---
+// Inline Taos icon (currentColor). Decorative by default.
+import { icons } from '../lib/icons';
+
+interface Props {
+  name: string;
+  class?: string;
+  label?: string;
+}
+const { name, class: className, label } = Astro.props;
+const svg = icons[name];
+if (!svg) throw new Error(`Unknown Taos icon: ${name}`);
+---
+
+<span class:list={['icon', className]} role={label ? 'img' : undefined} aria-label={label} set:html={svg} />
+
+<style>
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+  .icon :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
