@@ -42,7 +42,26 @@ export interface SceneParams {
   tumble?: number;
   /** 0–1. Shade difference between the lit and shaded side walls. */
   contrast?: number;
+  /**
+   * Glyph arrangement. Rebuilds.
+   * scatter: loose, each glyph drifts at its own speed (the field loosens over time).
+   * grid: even rows and columns. checker: alternate squares, so neighbours sit on the diagonals.
+   * Grid and checker drift as one sheet, so the spacing stays even.
+   */
+  layout?: GlyphLayout;
+  /** 0–1. Grid and checker only: random offset from each glyph's spot (up to half a row). Rebuilds. */
+  jitter?: number;
 }
+
+export type GlyphLayout = 'scatter' | 'grid' | 'checker';
+
+/**
+ * How many glyphs a density (0–1) means: the count over the whole field, about a third of
+ * which is on screen. Grid and checker go about twice as dense, since even spacing has no
+ * clumps to fill the view.
+ */
+export const glyphCount = (density: number, layout: GlyphLayout = 'scatter') =>
+  Math.round(14 + ((layout === 'scatter' ? 48 : 96) - 14) * density);
 
 export interface CardStyle {
   mode: Mode;
@@ -85,6 +104,8 @@ export const GLYPH_DEFAULTS: SceneParams = {
   spread: 1,
   tumble: 1,
   contrast: 0.35,
+  layout: 'scatter',
+  jitter: 0,
 };
 
 export const presets: Preset[] = [
@@ -158,7 +179,8 @@ export const presets: Preset[] = [
     sceneAccent: false,
   },
   // ── Glyphs: extruded Taos icons. colors = face colors (any number), extrusion = side walls
-  // Andy's pick (2026-11-05): Adobe palette, dense field, deep extrusion, shallow depth spread.
+  // Andy's pick (2026-11-05, second round): Adobe palette, loose checker layout, larger glyphs,
+  // no depth spread, 15 of the 21 icons.
   {
     id: 'glyphs-color',
     name: 'Glyphs · Adobe',
@@ -171,21 +193,40 @@ export const presets: Preset[] = [
       colors: ['#E49065', '#D74C07', '#9D7F6B', '#836442', '#FECDCA', '#FAB469'],
     },
     params: {
-      density: 1,
-      tilt: 12,
+      density: 0.63,
+      tilt: 20,
       light: 40,
       speed: 1,
-      scale: 1.25,
+      scale: 1.34,
       seed: 5,
       tint: 0.85,
-      size: 1,
+      size: 1.44,
       depth: 1.45,
-      spread: 0.35,
+      spread: 0,
       tumble: 1,
       contrast: 0.74,
+      layout: 'checker',
+      jitter: 0.79,
     },
     card: { mode: 'light', radius: 32 },
     sceneAccent: true,
+    glyphs: [
+      'alpenglow',
+      'cactus',
+      'cloud',
+      'compass',
+      'crown',
+      'eye',
+      'feather',
+      'fox',
+      'hank',
+      'ladder',
+      'lightning',
+      'mirage',
+      'moon',
+      'spark',
+      'spiral',
+    ],
   },
   {
     id: 'glyphs-neutral',

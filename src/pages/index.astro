@@ -17,7 +17,7 @@ import { defaultPreset } from '../lib/presets';
 
 <script>
   // Review links: /?preset=ridgeline-color shows any concept without the lab panel;
-  // /?palette=earth applies a named Glyphs palette.
+  // /?palette=earth applies a named Glyphs palette; /?layout=checker a glyph layout.
   import { applyCardStyle } from '../lib/apply';
   import { defaultPreset, glyphPalettes, presets, type Preset } from '../lib/presets';
 
@@ -28,6 +28,12 @@ import { defaultPreset } from '../lib/presets';
   if (named) {
     const base = preset ?? defaultPreset;
     preset = { ...base, paletteId: named.id, palette: named.palette, card: { ...base.card, mode: named.mode } };
+  }
+  // /?layout=checker (or grid, scatter) previews a glyph layout.
+  const layout = params.get('layout');
+  if (layout === 'scatter' || layout === 'grid' || layout === 'checker') {
+    const base = preset ?? defaultPreset;
+    preset = { ...base, params: { ...base.params, layout } };
   }
   if (preset) {
     applyCardStyle(preset);
