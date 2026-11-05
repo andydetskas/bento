@@ -38,9 +38,19 @@ Pages talk to the scene through two DOM events: `bento:accent` (hover tint) and 
 - `extrusion`: the side walls. The default is **True Black 80%** (Taos True Black 500, `#323131`). `contrast` darkens the shaded side.
 - Hovering a link tints every face toward that link's accent. The strength is set by `tint`.
 
+## Deploy
+
+`.github/workflows/deploy.yml` builds on every push (Node from `.nvmrc`, `npm ci`, `npm run build`) and deploys `dist/` to GitHub Pages from `main` only. Branch pushes are a build check.
+
+To launch the redesign:
+
+1. Settings → Pages → Source: switch from "Deploy from a branch" to **GitHub Actions**. Do this at merge time: once it's switched, pushes to the current `main` (plain HTML) no longer publish.
+2. Merge `redesign` → `main`. The push to `main` runs the deploy.
+3. Check https://links.andydetskas.com. The custom domain and HTTPS are Pages settings and carry over.
+
+HTTPS is enforced (Let's Encrypt certificate, valid to Feb 3, 2027).
+
 ## Open before shipping
 
 - **Fonts.** DM Sans/DM Mono are free to ship. Apercu would need a web license: the only purchase on record is a Fontdeck hosted subscription (2014–15), and Fontdeck no longer exists.
-- **HTTPS.** The certificate is issued (Let's Encrypt, valid to Feb 3, 2027), but "Enforce HTTPS" (the http → https redirect) is still off in Settings → Pages.
-- **Deploy.** Pages builds `main` with the legacy builder. This branch needs a GitHub Actions deploy, and the Pages source switched to "GitHub Actions".
 - `legacy-index.html` is the previous single-file site, kept for reference until launch.
