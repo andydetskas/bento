@@ -1,14 +1,51 @@
 ---
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import '../styles/global.css';
 import type { Preset } from '../lib/presets';
+import data from '../content/links.json';
+
+interface ShareImage {
+  /** Path under public/. The default is captured from /og with `npm run og`. */
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+}
 
 interface Props {
   title: string;
   description: string;
   preset: Preset;
   noindex?: boolean;
+  /** Title shown on link previews; defaults to `title`. */
+  shareTitle?: string;
+  image?: ShareImage;
 }
-const { title, description, preset, noindex = false } = Astro.props;
+
+const { profile, links } = data;
+const defaultImage: ShareImage = {
+  src: '/og.png',
+  width: 2400,
+  height: 1260,
+  alt: `${profile.name}, ${profile.role}. A link card for ${links.map((l) => l.label).join(', ')}, beside extruded 3D Taos icons.`,
+};
+
+const { title, description, preset, noindex = false, shareTitle = title, image = defaultImage } = Astro.props;
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const canonical = new URL(Astro.url.pathname, site).href;
+
+// A content hash on the image URL, so link previews (LinkedIn caches for about a week)
+// pick up a recaptured image instead of the old one.
+const imageUrl = new URL(image.src, site);
+try {
+  const bytes = readFileSync(join(process.cwd(), 'public', image.src));
+  imageUrl.searchParams.set('v', createHash('sha1').update(bytes).digest('hex').slice(0, 8));
+} catch {
+  // Image missing at build time: keep the plain URL.
+}
 ---
 
 <!doctype html>
@@ -24,8 +61,25 @@ const { title, description, preset, noindex = false } = Astro.props;
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="canonical" href={canonical} />
     <meta name="theme-color" content={preset.palette.bg} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Link previews (Open Graph: LinkedIn, iMessage, Slack, Facebook; plus X/Twitter) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={profile.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={shareTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl.href} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={image.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:alt" content={image.alt} />
+
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
