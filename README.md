@@ -9,7 +9,7 @@ npm install
 npm run dev        # http://localhost:4321  (tokens rebuild first)
 ```
 
-- `/`: the page. `/?palette=earth` previews a named Glyphs palette. `/?preset=ridgeline-color` previews any scene preset.
+- `/`: the page. `/?palette=earth` previews a named Glyphs palette. `/?layout=checker` (or `grid`, `scatter`) previews a glyph layout. `/?preset=ridgeline-color` previews any scene preset.
 - `/lab`: the customizer. Sections: Scene, Palette, Glyphs, Shape, Motion & light, Card & type.
   - Click any swatch to pick a Taos color.
   - Tweaks persist on reload. **H** hides the panel, **G** toggles the baseline grid.
@@ -38,6 +38,7 @@ Pages talk to the scene through two DOM events: `bento:accent` (hover tint) and 
 - `colors`: 1–8 face colors. Each glyph takes one at random, spread evenly.
 - `extrusion`: the side walls. The default is **True Black 80%** (Taos True Black 500, `#323131`). `contrast` darkens the shaded side.
 - Hovering a link tints every face toward that link's accent. The strength is set by `tint`.
+- `layout`: `scatter` (default; each glyph drifts at its own speed, so the field loosens and clumps over time), `grid` (even rows and columns) or `checker` (alternate squares). Grid and checker drift as one sheet, so the spacing stays even. Neighbours avoid repeating an icon or face color, and `jitter` (0–1) loosens the lattice. Count runs about twice as dense in grid and checker.
 
 ## Deploy
 

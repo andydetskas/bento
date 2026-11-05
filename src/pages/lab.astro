@@ -16,9 +16,26 @@ const families = [
   { id: 'petal', label: 'Petal' },
 ];
 
-type Slider = { key: string; label: string; min: number; max: number; step: number; unit?: string; only?: string; rebuild?: boolean };
+type Slider = {
+  key: string;
+  label: string;
+  min: number;
+  max: number;
+  step: number;
+  unit?: string;
+  only?: string;
+  rebuild?: boolean;
+  /** Shown only for the grid and checker glyph layouts. */
+  ordered?: boolean;
+};
+const layouts = [
+  { id: 'scatter', label: 'Scatter', title: 'Loose; each glyph drifts at its own speed' },
+  { id: 'grid', label: 'Grid', title: 'Even rows and columns' },
+  { id: 'checker', label: 'Checker', title: 'Alternate squares; neighbours on the diagonals' },
+];
 const shapeSliders: Slider[] = [
   { key: 'density', label: 'Count', min: 0, max: 1, step: 0.01, rebuild: true },
+  { key: 'jitter', label: 'Jitter', min: 0, max: 1, step: 0.01, only: 'glyphs', rebuild: true, ordered: true },
   { key: 'size', label: 'Size', min: 0.5, max: 2, step: 0.01, only: 'glyphs' },
   { key: 'depth', label: 'Extrusion depth', min: 0.3, max: 3, step: 0.05, only: 'glyphs', rebuild: true },
   { key: 'spread', label: 'Depth spread', min: 0, max: 3, step: 0.05, only: 'glyphs', rebuild: true },
@@ -124,9 +141,12 @@ const steps = ['600', '500', '400', '300', '200'] as const;
 
       <details open>
         <summary>Shape</summary>
+        <div class="seg" role="group" aria-label="Glyph layout" data-only="glyphs">
+          {layouts.map((l) => <button type="button" data-layout={l.id} title={l.title}>{l.label}</button>)}
+        </div>
         {
           shapeSliders.map((s) => (
-            <label class="slider" data-only={s.only}>
+            <label class="slider" data-only={s.only} data-ordered={s.ordered ? '' : undefined}>
               <span class="slider-top">
                 <span>{s.label}</span>
                 <output data-out={s.key} />
@@ -609,7 +629,7 @@ const steps = ['600', '500', '400', '300', '200'] as const;
 
 <script>
   import type { NamedPalette, Preset, ScenePalette, SceneParams } from '../lib/presets';
-  import { GLYPH_DEFAULTS, swatchPool, TRUE_BLACK_80 } from '../lib/presets';
+  import { GLYPH_DEFAULTS, glyphCount, swatchPool, TRUE_BLACK_80 } from '../lib/presets';
   import { applyCardStyle } from '../lib/apply';
 
   const STORE = 'bento-lab-v2';
@@ -685,6 +705,9 @@ const steps = ['600', '500', '400', '300', '200'] as const;
     qa<HTMLButtonElement>('[data-tone]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tone === p.tone)));
     qa<HTMLElement>('[data-only]').forEach((el) => (el.hidden = el.dataset.only !== p.family));
     qa<HTMLElement>('[data-hide-for]').forEach((el) => (el.hidden = el.dataset.hideFor === p.family));
+    const layout = p.params.layout ?? 'scatter';
+    qa<HTMLButtonElement>('[data-layout]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.layout === layout)));
+    if (layout === 'scatter') qa<HTMLElement>('[data-ordered]').forEach((el) => (el.hidden = true));
     qa<HTMLButtonElement>('[data-mode-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modeBtn === p.card.mode)));
     qa<HTMLButtonElement>('[data-font-btn]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.fontBtn === state.font)));
 
@@ -713,7 +736,7 @@ const steps = ['600', '500', '400', '300', '200'] as const;
       const v = Number(p.params[key] ?? input.min);
       input.value = String(v);
       let text = `${v.toFixed(input.step.includes('.') ? 2 : 0)}${input.dataset.unit}`;
-      if (key === 'density' && isGlyphs) text = `${Math.round(14 + (48 - 14) * v)} glyphs`;
+      if (key === 'density' && isGlyphs) text = `${glyphCount(v, layout)} glyphs`;
       q(`[data-out="${key}"]`).textContent = text;
     });
     const gv = state.gutter ?? Math.round(parseFloat(getComputedStyle(document.querySelector('.frame')!).paddingLeft));
@@ -889,6 +912,14 @@ const steps = ['600', '500', '400', '300', '200'] as const;
       input.addEventListener('input', commit);
     }
   });
+  qa<HTMLButtonElement>('[data-layout]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const layout = b.dataset.layout as SceneParams['layout'];
+      if (layout === cur().params.layout) return;
+      state.preset = { ...cur(), params: { ...cur().params, layout } };
+      push();
+    }),
+  );
   q('[data-act="reseed"]').addEventListener('click', () => {
     state.preset = { ...cur(), params: { ...cur().params, seed: Math.floor(Math.random() * 10000) } };
     push();

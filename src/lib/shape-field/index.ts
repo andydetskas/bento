@@ -34,7 +34,7 @@ export interface ShapeFieldOptions {
   onFirstFrame?: () => void;
 }
 
-const REBUILD_KEYS: (keyof SceneParams)[] = ['density', 'seed', 'depth', 'spread'];
+const REBUILD_KEYS: (keyof SceneParams)[] = ['density', 'seed', 'depth', 'spread', 'layout', 'jitter'];
 const sameList = (a?: string[], b?: string[]) => (a ?? []).join() === (b ?? []).join();
 
 export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opts: ShapeFieldOptions = {}): ShapeField | null {
