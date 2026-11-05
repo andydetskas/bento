@@ -180,7 +180,7 @@ export const presets: Preset[] = [
   },
   // ── Glyphs: extruded Taos icons. colors = face colors (any number), extrusion = side walls
   // Andy's pick (2026-11-05, second round): Adobe palette, loose checker layout, larger glyphs,
-  // no depth spread, 15 of the 21 icons.
+  // no depth spread, 16 of the 21 icons.
   {
     id: 'glyphs-color',
     name: 'Glyphs · Adobe',
@@ -226,6 +226,7 @@ export const presets: Preset[] = [
       'moon',
       'spark',
       'spiral',
+      'sun',
     ],
   },
   {
