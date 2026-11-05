@@ -307,15 +307,18 @@ let line = 0; // stagger index: lines land 60ms apart
   }
 
   /* ── Small screens: scene on top, card below ─────────── */
+  /* Phones: the card centers vertically (the frame grows instead if the card is taller than
+     the screen). Row type follows the width but is capped by height, like desktop, so the
+     card still fits in short in-app browsers (Instagram, LinkedIn). */
   @media (max-width: 759px) {
     .frame {
-      padding-top: 30svh;
+      align-items: center;
     }
     .card {
       width: 100%;
     }
     .row {
-      --fz: clamp(2.25rem, 11.5vw, 3.25rem);
+      --fz: min(clamp(2.25rem, 11.5vw, 3.25rem), 6.2svh);
     }
     .row-arrow {
       width: 40px;
