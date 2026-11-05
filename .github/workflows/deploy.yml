@@ -1,0 +1,54 @@
+# Builds the Astro site and publishes it to GitHub Pages (links.andydetskas.com).
+#
+# - Every push builds, so a broken build shows up on any branch before it reaches main.
+# - Only main deploys. The deploy job needs Settings → Pages → Source set to "GitHub Actions";
+#   until then Pages keeps serving main as plain files and this job has nothing to publish to.
+# - The custom domain and HTTPS live in the Pages settings; public/CNAME is kept as a record.
+
+name: Build and deploy
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Branch builds replace each other; a deploy from main always runs to completion.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Rebuilds the token CSS/TS from tokens/taos.tokens.json, then runs astro build.
+      - run: npm run build
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
