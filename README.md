@@ -16,6 +16,8 @@ npm run dev        # http://localhost:4321  (tokens rebuild first)
 - `?settle=6` on either page renders a finished frame immediately (for captures and share images).
 - `/og`: the share-image template (1200×630). With the dev server running, `npm run og` captures it at 2x to `public/og.png`. Re-run it when the default preset, the profile or the links change, then commit the PNG. The Open Graph tags in `src/layouts/Base.astro` add a content hash to the image URL, so LinkedIn and others fetch the new one.
 
+- `npm run perf`: a phone performance check. Run `npm run build && npm run preview` first. It emulates a mid-range and a low-end phone (CPU slowed 4x and 6x, slow 4G) plus a desktop, then reports load timings, long tasks (anything over 50 ms holds up a tap), JS time per frame, and draw calls and triangles per frame. `--touch` taps a row on phones, and hovers then Tabs on desktop, to check the row states. Run it after changing the default preset (count, layout, glyph set or depth).
+
 Node 22.14 is installed, so this uses Astro 6. Astro 7 needs Node ≥ 22.23.
 
 ## How it's built
@@ -28,10 +30,19 @@ Node 22.14 is installed, so this uses Astro 6. Astro 7 needs Node ≥ 22.23.
 | Icons | `src/icons/*.svg` | Exported from Taos, recolored to `currentColor`. One source for the inline icons and the extruded 3D glyphs. |
 | Content | `src/content/links.json` | Profile + links (label, eyebrow, url, icon, tooltip). Accents live in tokens under `accent.*`. |
 | Presets & palettes | `src/lib/presets.ts` | A concept is a preset: scene family + palette + params + card style. `glyphPalettes` holds the 15 named Glyphs palettes (color, earth, mono), each with its own extrusion color. Paste "Copy preset" output from the lab here. |
-| 3D engine | `src/lib/shape-field/` | Framework-free Three.js. `createShapeField(canvas, preset)` returns `{ setPreset, setPalette, setParam, setAccent, setFocus, snapshot, advance, destroy }`. Families: `glyphs`, `pueblo`, `ridgeline`, `petal`. |
+| 3D engine | `src/lib/shape-field/` | Framework-free Three.js. `prepareShapeField(preset)` warms up the heavy assets, then `createShapeField(canvas, preset)` returns `{ setPreset, setPalette, setParam, setAccent, setFocus, snapshot, advance, destroy }`. Families: `glyphs`, `pueblo`, `ridgeline`, `petal`. |
 | Components | `src/components/` | `LinkCard`, `ShapeField`, `Icon`. |
 
 Pages talk to the scene through two DOM events: `bento:accent` (hover tint) and `bento:preset` (switch concept).
+
+**Start-up.** Three.js loads after first paint. `prepareShapeField(preset)` then extrudes the glyphs one per task, and the engine compiles its shaders with `compileAsync` before the first frame. That keeps the main thread free for taps while the scene loads.
+
+Baseline (default checker preset):
+- Mid-range phone (4x CPU): the longest task is about 55 ms (it was 285 ms before the split). The scene appears about 2.1 s after opening on slow 4G.
+- Low-end phone (6x CPU): the longest task is about 85 ms (was 427 ms).
+- While it runs: about 0.4 ms of JS per frame, a steady 60 fps, 12 draw calls and 66k triangles per frame on a phone. The camera only sees about a dozen of the ~90 glyphs, and the rest are culled.
+
+**Touch.** Taps get no tooltip, no scene tint and no row dimming. Hover styles sit behind `@media (hover: hover)`, and the tint follows keyboard focus (`:focus-visible`) only.
 
 ## Glyphs palette model
 

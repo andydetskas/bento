@@ -37,5 +37,7 @@ export interface FamilyInstance {
 export interface Family {
   id: FamilyId;
   camera: { type: 'ortho' | 'persp'; az: number; el: number; fov?: number };
+  /** Optional warm-up before build(): does the heavy setup in small tasks so taps aren't blocked. */
+  prepare?(ctx: Pick<FamilyContext, 'params' | 'glyphs'>): Promise<void>;
   build(ctx: FamilyContext): FamilyInstance;
 }

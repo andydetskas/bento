@@ -54,7 +54,8 @@ const { preset } = Astro.props;
     document.addEventListener('bento:preset', (e) => (preset = e.detail.preset));
 
     const boot = async () => {
-      const { createShapeField } = await import('../lib/shape-field');
+      const { createShapeField, prepareShapeField } = await import('../lib/shape-field');
+      await prepareShapeField(preset); // builds the glyphs in small steps, so taps stay responsive
       const field = createShapeField(canvas, preset, {
         onFirstFrame: () => canvas.classList.add('is-live'),
       });
