@@ -64,6 +64,7 @@ kit     techniques  about
 - **Portfolio panel.** Each case study shows my role and the public outcome, and links to the full, passcode-protected case study.
 - **Leadership.** Built only from the facts sheet's public-safe management lines.
 - **Widths.** Column one is `--site-col` (`global.css`). The hero card fills it, and the bento's exit narrows its card to it.
+- **Entrance: background first.** Your name reveals on the masthead over the scene color, as on the bento. The scene boots right away (`<ShapeField eager />`). If it arrives within 1.2 s, its glyphs get 0.9 s to grow in before the hero opens and the cards land. If it's late (a slow phone), the work lands at about 1.2–1.5 s and the scene fades in behind it. After a hand-off the bento has already shown the scene, so the site follows straight on. `ShapeField` fires `shapefield:firstframe` when the scene is on screen (or `live: false` without WebGL).
 
 **Hand-off (`src/lib/handoff.ts`).** `links.` and `www.` are different origins, so the browser can't morph one page into the other. Cross-document view transitions are same-origin only. They are the same site, though:
 1. **Exit.** Tapping Portfolio opens the site in the same tab. The card folds up to its masthead at the top-left and narrows to the site's first column, and the scene dissolves into the background color (440 ms). That is the hero card's first frame. The site then opens the hero and lands the other cards.

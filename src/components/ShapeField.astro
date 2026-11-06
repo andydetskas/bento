@@ -5,11 +5,13 @@ import type { Preset } from '../lib/presets';
 
 interface Props {
   preset: Preset;
+  /** Boot right away instead of at the first idle moment: for pages where the scene leads. */
+  eager?: boolean;
 }
-const { preset } = Astro.props;
+const { preset, eager = false } = Astro.props;
 ---
 
-<canvas class="scene" data-preset={JSON.stringify(preset)} aria-hidden="true"></canvas>
+<canvas class="scene" data-preset={JSON.stringify(preset)} data-eager={eager ? '' : undefined} aria-hidden="true"></canvas>
 
 <style>
   .scene {
@@ -47,6 +49,8 @@ const { preset } = Astro.props;
       'bento:accent': CustomEvent<{ hex: string | null }>;
       'bento:preset': CustomEvent<{ preset: Preset }>;
       'shapefield:ready': CustomEvent<{ field: ShapeField }>;
+      /** The scene's first frame is on screen (live: true), or there won't be one (no WebGL). */
+      'shapefield:firstframe': CustomEvent<{ live: boolean }>;
     }
   }
 
@@ -63,11 +67,15 @@ const { preset } = Astro.props;
     const boot = async () => {
       const { createShapeField, prepareShapeField } = await import('../lib/shape-field');
       await prepareShapeField(preset); // builds the glyphs in small steps, so taps stay responsive
+      const firstFrame = (live: boolean) => document.dispatchEvent(new CustomEvent('shapefield:firstframe', { detail: { live } }));
       const field = createShapeField(canvas, preset, {
-        onFirstFrame: () => canvas.classList.add('is-live'),
+        onFirstFrame: () => {
+          canvas.classList.add('is-live');
+          firstFrame(true);
+        },
       });
       window.shapeField = field;
-      if (!field) return;
+      if (!field) return firstFrame(false);
       if (continuing) field.seek(handoff.t + (Math.max(0, Date.now() - handoff.at) / 1000) * preset.params.speed);
       const refocus = () => {
         const f = focusForViewport();
@@ -88,8 +96,9 @@ const { preset } = Astro.props;
     };
 
     // The scene waits for an idle moment so it never delays first paint, except after a
-    // hand-off, where it's the thing that makes the two pages feel like one.
-    if (continuing) boot();
+    // hand-off, where it's the thing that makes the two pages feel like one, and on pages
+    // that lead with it (eager).
+    if (continuing || canvas.dataset.eager !== undefined) boot();
     else if ('requestIdleCallback' in window) requestIdleCallback(() => boot(), { timeout: 500 });
     else setTimeout(boot, 120);
   }

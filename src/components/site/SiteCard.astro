@@ -69,7 +69,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
       background-color var(--motion-base) var(--motion-ease-standard);
   }
 
-  /* Collapsed to the masthead until the page is ready (the hand-off's first frame), then it opens. */
+  /* Collapsed to the masthead (the hand-off's first frame) until the cards land, then it opens. */
   .card-more {
     display: grid;
     grid-template-rows: 1fr;
@@ -83,13 +83,13 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     gap: var(--space-6);
     transition: opacity 480ms var(--motion-ease-standard) 140ms;
   }
-  :global(html.js:not(.is-ready)) .site-card {
+  :global(html.js:not(.is-landing)) .site-card {
     padding-bottom: var(--pad-end);
   }
-  :global(html.js:not(.is-ready)) .card-more {
+  :global(html.js:not(.is-landing)) .card-more {
     grid-template-rows: 0fr;
   }
-  :global(html.js:not(.is-ready)) .card-more-inner {
+  :global(html.js:not(.is-landing)) .card-more-inner {
     opacity: 0;
   }
   /* Once open, let focus rings and hover lifts out of the clip. */
