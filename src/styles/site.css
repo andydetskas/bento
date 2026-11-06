@@ -89,15 +89,23 @@
   container-type: inline-size;
 }
 
-/* Focus mode (Bohdana): the hovered card stays, the others step back. Off while one is open. */
+/* Focus mode (Bohdana): the hovered card stays, the others step back. Only their content fades;
+   the card surface stays solid, so the scene never shows through and the page doesn't change
+   color. Off while a card is open. */
+.box {
+  --dim: 0.5;
+}
+.box > * {
+  transition: opacity var(--motion-base) var(--motion-ease-standard);
+}
 @media (hover: hover) {
-  .site:not(.has-open):has(> .box:hover) > .box:not(:hover) {
-    opacity: 0.28;
+  .site:not(.has-open):has(> .box:hover) > .box:not(:hover) > * {
+    opacity: var(--dim);
   }
 }
 /* Keyboard focus mirrors hover; the focus a click or tap leaves behind doesn't. */
-.site:not(.has-open):has(> .box :focus-visible) > .box:not(:has(:focus-visible)) {
-  opacity: 0.28;
+.site:not(.has-open):has(> .box :focus-visible) > .box:not(:has(:focus-visible)) > * {
+  opacity: var(--dim);
 }
 
 .box-top {
@@ -387,7 +395,7 @@
 }
 @media (hover: hover) {
   .tiles:has(.tile:hover) .tile:not(:hover) {
-    opacity: 0.4;
+    opacity: 0.55;
   }
   .tile:hover .tile-title {
     text-decoration: underline;
@@ -677,6 +685,7 @@ html.from-handoff .scene {
     animation: none;
   }
   .box,
+  .box > *,
   .arrow,
   .tile,
   .mosaic-cell img,
