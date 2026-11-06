@@ -217,12 +217,12 @@ let line = 0; // stagger index: lines land 60ms apart
     height: 18px;
   }
 
-  /* Focus mode: the hovered (or keyboard-focused) row stays, the others step back. */
-  .rows:has(.row:hover) .row:not(:hover),
+  /* Focus mode: the hovered (or keyboard-focused) row stays, the others step back.
+     Hover only where there's a real pointer: a tap leaves :hover stuck on phones, which kept
+     five rows faded when a visitor came back to the page. */
   .rows:has(.row:focus-visible) .row:not(:focus-visible) {
     opacity: 0.28;
   }
-  .row:hover .row-arrow,
   .row:focus-visible .row-arrow {
     opacity: 1;
     transform: none;
@@ -230,9 +230,23 @@ let line = 0; // stagger index: lines land 60ms apart
     border-color: var(--accent);
     color: var(--color-pill-text);
   }
-  .row:hover :global(.row-icon),
   .row:focus-visible :global(.row-icon) {
     color: var(--accent);
+  }
+  @media (hover: hover) {
+    .rows:has(.row:hover) .row:not(:hover) {
+      opacity: 0.28;
+    }
+    .row:hover .row-arrow {
+      opacity: 1;
+      transform: none;
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--color-pill-text);
+    }
+    .row:hover :global(.row-icon) {
+      color: var(--accent);
+    }
   }
   .row:focus-visible .label {
     text-decoration: underline;
@@ -372,8 +386,10 @@ let line = 0; // stagger index: lines land 60ms apart
     if (!raf) raf = requestAnimationFrame(follow);
   };
 
+  // Touch gets no tooltip and no scene tint: a tap is a click, not a hover.
   rows.forEach((row) => {
     row.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'touch') return;
       accent(row.dataset.accent ?? null);
       if (!finePointer || !pill) return;
       pill.textContent = row.dataset.tooltip ?? '';
@@ -390,7 +406,8 @@ let line = 0; // stagger index: lines land 60ms apart
       accent(null);
       pill?.classList.remove('is-on');
     });
-    row.addEventListener('focus', () => accent(row.dataset.accent ?? null));
+    // Keyboard focus mirrors hover; the focus a tap gives a link doesn't.
+    row.addEventListener('focus', () => row.matches(':focus-visible') && accent(row.dataset.accent ?? null));
     row.addEventListener('blur', () => accent(null));
   });
 

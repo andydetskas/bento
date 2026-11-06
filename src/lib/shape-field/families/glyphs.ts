@@ -7,7 +7,7 @@ import { iconNames, icons } from '../../icons';
 import { glyphCount, TRUE_BLACK_80, type GlyphLayout, type ScenePalette, type SceneParams } from '../../presets';
 import { Facet, type FacetColors } from '../facet';
 import type { Family } from '../types';
-import { lerp, settle, shade, TAU } from '../util';
+import { lerp, settle, shade, TAU, yieldToMain } from '../util';
 
 const H = 4.2; // half-height of the field
 const W = H * 1.9; // half-width (covers 16:10 plus the composition shift)
@@ -86,12 +86,25 @@ function distinct<T>(roll: () => T, clash: (v: T) => boolean): T {
   return v;
 }
 
+/** The icons a preset draws from: its own list when it names valid icons, otherwise all of them. */
+function iconPool(allowed?: string[]): string[] {
+  const names = allowed?.length ? allowed.filter((n) => n in icons) : GLYPH_NAMES;
+  return names.length ? names : GLYPH_NAMES;
+}
+
 export const glyphs: Family = {
   id: 'glyphs',
   camera: { type: 'persp', az: 90, el: 4, fov: 28 },
+  // Extruding an icon takes 15–30 ms on a mid-range phone, about 250–400 ms for the set.
+  // Build them one per task so a tap during load isn't held up.
+  async prepare({ params, glyphs: allowed }) {
+    for (const name of iconPool(allowed)) {
+      glyphGeometry(name, params.depth ?? 1);
+      await yieldToMain();
+    }
+  },
   build({ params, palette, rng, shared, glyphs: allowed }) {
-    const names = allowed?.length ? allowed.filter((n) => n in icons) : GLYPH_NAMES;
-    const pool = names.length ? names : GLYPH_NAMES;
+    const pool = iconPool(allowed);
     const layout = params.layout ?? 'scatter';
     const count = glyphCount(params.density, layout);
     const depth = params.depth ?? 1;

@@ -37,6 +37,14 @@ export interface ShapeFieldOptions {
 const REBUILD_KEYS: (keyof SceneParams)[] = ['density', 'seed', 'depth', 'spread', 'layout', 'jitter'];
 const sameList = (a?: string[], b?: string[]) => (a ?? []).join() === (b ?? []).join();
 
+/**
+ * Optional warm-up: builds a preset's heavy assets (the extruded glyphs) a piece at a time.
+ * Await it before createShapeField so start-up doesn't block the main thread in one long task.
+ */
+export async function prepareShapeField(preset: Preset): Promise<void> {
+  await families[preset.family].prepare?.({ params: preset.params, glyphs: preset.glyphs });
+}
+
 export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opts: ShapeFieldOptions = {}): ShapeField | null {
   let renderer: THREE.WebGLRenderer;
   try {
@@ -201,7 +209,14 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
   setLight();
   resize();
   build();
-  start();
+  // Compile the shaders before the first frame. Where the browser compiles in parallel
+  // (KHR_parallel_shader_compile), this keeps a 40–60 ms stall off the main thread on phones.
+  let destroyed = false;
+  layoutCamera();
+  renderer
+    .compileAsync(scene, camera)
+    .catch(() => {})
+    .finally(() => !destroyed && start());
 
   return {
     get preset() {
@@ -274,6 +289,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
       renderer.render(scene, camera);
     },
     destroy() {
+      destroyed = true;
       stop();
       ro.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);

@@ -7,6 +7,12 @@ export const deg = (d: number) => (d * Math.PI) / 180;
 /** Frame-rate independent smoothing factor: "fast in, long settle". */
 export const settle = (dt: number, rate: number) => 1 - Math.exp(-dt * rate);
 
+/** Hand the main thread back (input, paint) between chunks of heavy work. */
+export function yieldToMain(): Promise<void> {
+  const s = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+  return s?.yield ? s.yield() : new Promise((r) => setTimeout(r, 0));
+}
+
 /** Small, fast, seedable PRNG. */
 export function mulberry32(seed: number) {
   let a = seed >>> 0;
