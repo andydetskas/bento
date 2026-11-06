@@ -61,7 +61,10 @@
     "spotify":   { "$value": "{taos.light.verde.400}" },
     "sram":      { "$value": "{taos.light.indigo.600}" },
     "suppco":    { "$value": "{taos.light.verde.600}" },
-    "contact":   { "$value": "{taos.light.fire.600}" }
+    "contact":   { "$value": "{taos.light.fire.600}" },
+    "leadership": { "$value": "{taos.light.indigo.600}" },
+    "techniques": { "$value": "{taos.light.lavender.600}" },
+    "about":     { "$value": "{taos.light.alpenglow.600}" }
   },
   "font": {
     "$type": "fontFamily",

@@ -16,6 +16,21 @@
   --card-radius: var(--radius-lg);
   --scene-bg: var(--color-page);
   --bl: var(--baseline-unit);
+  /* Main site grid. Column one (the hero card) is --site-col wide; the bento's exit narrows its
+     card to it, so the hand-off lands on the hero's exact frame. 100vw: on overlay-scrollbar
+     platforms (macOS, phones) it matches the site's grid exactly. */
+  --site-gap: clamp(12px, round(1.8vw, 4px), 28px);
+  --site-col: 100%;
+}
+@media (min-width: 760px) {
+  :root {
+    --site-col: calc((100vw - 2 * var(--gutter) - var(--site-gap)) / 2);
+  }
+}
+@media (min-width: 1100px) {
+  :root {
+    --site-col: calc((100vw - 2 * var(--gutter) - 2 * var(--site-gap)) / 3);
+  }
 }
 
 [data-font='apercu'] {

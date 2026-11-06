@@ -1,8 +1,8 @@
 ---
-// The site's card: the bento card, grown up. Same masthead in the same spot, so the bento's
-// exit (card collapsed to its masthead at the top-left) is this card's first frame. Below the
-// masthead: the positioning line, follow links and the one call to action.
-// On wide screens it stays put while the work scrolls beside it.
+// The site's hero card: the bento card, grown up. Same masthead in the same spot (top-left, one
+// gutter in, one site column wide), so the bento's exit, the card folded to its masthead, is
+// this card's first frame. Below the masthead: the positioning line, follow links and the one
+// call to action.
 import links from '../../content/links.json';
 import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
@@ -14,8 +14,7 @@ const accents = tokens.accent as Record<string, string>;
 const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 ---
 
-<aside class="site-card-wrap">
-  <section class="card site-card" aria-label={`${links.profile.name}, about`}>
+<section class="card site-card area-hero" aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
     <CardHead />
     <div class="card-more">
       <div class="card-more-inner">
@@ -59,18 +58,9 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
         </div>
       </div>
     </div>
-  </section>
-</aside>
+</section>
 
 <style>
-  /* Stays put beside the work when the screen is tall enough to hold all of it. */
-  @media (min-width: 760px) and (min-height: 760px) {
-    .site-card-wrap {
-      position: sticky;
-      top: var(--gutter);
-    }
-  }
-
   /* Bottom padding grows from the bento's (--pad-end) to the full --pad as the card opens. */
   .site-card {
     padding-bottom: var(--pad);
@@ -91,7 +81,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     display: flex;
     flex-direction: column;
     gap: var(--space-6);
-    transition: opacity 600ms var(--motion-ease-standard) 260ms;
+    transition: opacity 480ms var(--motion-ease-standard) 140ms;
   }
   :global(html.js:not(.is-ready)) .site-card {
     padding-bottom: var(--pad-end);
@@ -109,7 +99,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 
   .headline {
     margin: 0;
-    font-size: min(var(--step-4), 5.4svh);
+    font-size: min(var(--step-3), 4.6svh);
     line-height: 1.08;
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-display);
@@ -117,7 +107,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
   }
   .sub {
     margin: calc(var(--space-6) * -0.5) 0 0;
-    font-size: var(--step-1);
+    font-size: var(--step-0);
     line-height: 1.4;
     color: var(--color-text-muted);
     text-wrap: pretty;

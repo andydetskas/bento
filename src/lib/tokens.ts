@@ -175,7 +175,10 @@ export const tokens = {
     "spotify": "#73B7A6",
     "sram": "#5897C8",
     "suppco": "#1B8D73",
-    "contact": "#D74C07"
+    "contact": "#D74C07",
+    "leadership": "#5897C8",
+    "techniques": "#A99AFB",
+    "about": "#FAA446"
   },
   "font": {
     "sans": [

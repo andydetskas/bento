@@ -1,30 +1,31 @@
 ---
-// Main site prototype (andydetskas.com, "full" treatment): the bento card on the left, the work
-// as boxes over the same scene. Lives at /site/ on the `site` branch; not linked or indexed.
+// Main site prototype (andydetskas.com, "full" treatment). Two rows of three cards over the
+// bento's scene: hero, Portfolio, Leadership / Kit, Techniques, About. Opening Portfolio,
+// Leadership, Techniques or About takes over the right two columns (Bohdana); the hero and the
+// kit stay put. Lives at /site/ on the `site` branch; not linked or indexed.
 import '../../styles/site.css';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import Pill from '../../components/Pill.astro';
 import ShapeField from '../../components/ShapeField.astro';
+import SectionCard from '../../components/site/SectionCard.astro';
 import SiteCard from '../../components/site/SiteCard.astro';
-import WorkBox from '../../components/site/WorkBox.astro';
+import WorkTile from '../../components/site/WorkTile.astro';
 import site from '../../content/site.json';
 import { HANDOFF_COOKIE, HANDOFF_MAX_AGE_S } from '../../lib/handoff';
 import { defaultPreset } from '../../lib/presets';
 import { tokens } from '../../lib/tokens';
 
-const { work, kit, techniques, about, contact, intro } = site;
+const { portfolio, leadership, work, kit, techniques, about } = site;
+const accent = tokens.accent as Record<string, string>;
+const light = tokens.taos.light as Record<string, Record<string, string>>;
 const byId = (id: string) => work.find((w) => w.id === id)!;
-const contactAccent = (tokens.accent as Record<string, string>).contact;
-
-// Order: work first, the rest interleaved so every screenful has some of both.
-// (Order of the work follows the master profile's recommended /work order.)
-let b = 0;
+const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
 ---
 
 <Base
   title="Andy Detskas · Product Design"
-  description="Hands-on design leadership for products people have to trust. Case studies, working kit, techniques and how to reach me."
+  description="Hands-on design leadership for products people have to trust. Case studies, leadership, working kit, techniques and how to reach me."
   preset={defaultPreset}
   noindex
 >
@@ -48,17 +49,71 @@ let b = 0;
 
   <ShapeField preset={defaultPreset} />
 
-  <div class="site">
+  <main class="site">
     <SiteCard />
 
-    <main class="boxes" aria-label="Work and more">
-      <WorkBox item={byId('designing-for-trust')} index={b++} />
-      <WorkBox item={byId('agentic-design-system')} index={b++} />
-      <WorkBox item={byId('surfacing-value')} index={b++} />
+    <SectionCard id="portfolio" eyebrow={portfolio.eyebrow} title={portfolio.title} accent={accent.portfolio} pill="See the work" index={0}>
+      <Fragment slot="summary">
+        <div class="mosaic" aria-hidden="true">
+          {portfolio.preview.map((id) => {
+            const w = byId(id);
+            return (
+              <span class="mosaic-cell" data-fit={w.fit} style={`--tint:${tintOf(w)}`}>
+                <img src={w.image.src} width={w.image.width} height={w.image.height} alt="" loading="eager" decoding="async" />
+              </span>
+            );
+          })}
+        </div>
+        <p class="box-body">{portfolio.lede}</p>
+        <p class="meta">{work.length} case studies</p>
+      </Fragment>
+      <Fragment slot="panel">
+        <p class="panel-lede">{portfolio.lede}</p>
+        <div class="tiles">
+          {work.map((w) => <WorkTile item={w} />)}
+        </div>
+      </Fragment>
+    </SectionCard>
 
-      <section class="card box is-wide is-neutral kit" aria-labelledby="kit-title" style={`--b:${b++};view-transition-name:box-kit`}>
-        <div class="box-top"><p class="eyebrow">How I work</p></div>
-        <h2 class="box-title" id="kit-title">{kit.title}</h2>
+    <SectionCard id="leadership" eyebrow={leadership.eyebrow} title={leadership.title} accent={accent.leadership} pill="How I lead" index={1}>
+      <Fragment slot="summary">
+        <ul class="stats" role="list">
+          {leadership.stats.map((s) => (
+            <li>
+              <strong>{s.value}</strong>
+              <span>{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      </Fragment>
+      <Fragment slot="panel">
+        <p class="panel-lede">{leadership.lede}</p>
+        <ul class="stats stats-row" role="list">
+          {leadership.stats.map((s) => (
+            <li>
+              <strong>{s.value}</strong>
+              <span>{s.label}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="groups">
+          {leadership.groups.map((g) => (
+            <section class="group">
+              <header>
+                <h3>{g.org}</h3>
+                <p class="eyebrow">{g.role}</p>
+              </header>
+              <ul role="list">
+                {g.points.map((pt) => <li>{pt}</li>)}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </Fragment>
+    </SectionCard>
+
+    <SectionCard id="kit" eyebrow={kit.eyebrow} title={kit.title} index={2} expandable={false}>
+      <Fragment slot="summary">
         <p class="box-body">{kit.lede}</p>
         <ul class="kit-tools" role="list">
           {kit.tools.map((t) => (
@@ -68,52 +123,51 @@ let b = 0;
             </li>
           ))}
         </ul>
-      </section>
+      </Fragment>
+    </SectionCard>
 
-      <WorkBox item={byId('crushing-the-basics')} index={b++} />
-      <WorkBox item={byId('stackscore')} index={b++} />
-
-      <section class="card box is-wide is-neutral techniques" aria-labelledby="techniques-title" style={`--b:${b++};view-transition-name:box-techniques`}>
-        <div class="box-top"><p class="eyebrow">Techniques</p></div>
-        <h2 class="box-title" id="techniques-title">Pixels and people.</h2>
+    <SectionCard id="techniques" eyebrow={techniques.eyebrow} title={techniques.title} accent={accent.techniques} pill="Read the techniques" index={3}>
+      <Fragment slot="summary">
         <p class="box-body">{techniques.lede}</p>
-        <ul class="posts" role="list">
+        <ul class="post-list" role="list">
           {techniques.posts.map((p) => (
             <li>
-              <a class="post" href={p.url} target="_blank" rel="noopener noreferrer" data-pill="Read the technique">
-                <Icon name={p.icon} />
-                <span class="post-text">
-                  <span class="post-title">{p.title}</span>
-                  <span class="post-note">{p.note}</span>
-                </span>
-                <span class="arrow" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg>
-                </span>
-                <span class="sr-only">(opens in a new tab)</span>
-              </a>
+              <Icon name={p.icon} />
+              <span>{p.title}</span>
             </li>
           ))}
         </ul>
-        <a class="text-link" href={techniques.all} target="_blank" rel="noopener noreferrer">See all techniques</a>
-      </section>
-
-      <WorkBox item={byId('buying-club')} index={b++} />
-      <WorkBox item={byId('battery-ui')} index={b++} />
-
-      <article class="card box is-neutral about" id="about" data-expandable data-pill="More about me" data-pill-open="Close" style={`--b:${b++};view-transition-name:box-about`}>
-        <div class="box-top">
-          <p class="eyebrow">About</p>
-          <span class="arrow" aria-hidden="true">
-            <svg class="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8" /></svg>
-            <svg class="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17" /></svg>
-          </span>
+      </Fragment>
+      <Fragment slot="panel">
+        <p class="panel-lede">{techniques.lede}</p>
+        <div class="tiles">
+          {techniques.posts.map((p) => (
+            <article class="tile">
+              <div class="post-art">
+                <img src={p.image} width="800" height="448" alt="" loading="lazy" decoding="async" />
+              </div>
+              <h3 class="tile-title">
+                <a href={p.url} target="_blank" rel="noopener noreferrer" data-pill="Read the technique">
+                  {p.title}
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+              </h3>
+              <p class="box-body">{p.note}</p>
+            </article>
+          ))}
         </div>
-        <h2 class="box-title">
-          <button class="box-hit" type="button" aria-expanded="false" aria-controls="about-panel">{about.title}</button>
-        </h2>
+        <a class="text-link" href={techniques.all} target="_blank" rel="noopener noreferrer">See all techniques</a>
+      </Fragment>
+    </SectionCard>
+
+    <SectionCard id="about" eyebrow={about.eyebrow} title={about.title} accent={accent.about} pill="More about me" index={4}>
+      <Fragment slot="summary">
         <p class="box-body">{about.body}</p>
-        <div class="about-panel" id="about-panel" hidden>
-          <p>{about.more}</p>
+      </Fragment>
+      <Fragment slot="panel">
+        <div class="about-panel">
+          <p class="panel-lede">{about.body}</p>
+          <p class="box-body">{about.more}</p>
           <ul class="roles" role="list">
             {about.experience.map((x) => (
               <li>
@@ -123,76 +177,82 @@ let b = 0;
             ))}
           </ul>
         </div>
-      </article>
-
-      <WorkBox item={byId('call-and-response')} index={b++} />
-
-      <section class="card box is-wide contact" aria-labelledby="contact-title" data-accent={contactAccent} style={`--accent:${contactAccent};--b:${b++};view-transition-name:box-contact`}>
-        <div class="box-top"><p class="eyebrow">{intro.timezone}</p></div>
-        <h2 class="contact-title" id="contact-title">{contact.title}</h2>
-        <p class="box-body">{contact.body}</p>
-        <div class="cta">
-          <a class="btn" href={intro.cta.url} target="_blank" rel="noopener noreferrer" data-pill="Pick a time that works">
-            {intro.cta.label}
-            <span class="sr-only">(opens in a new tab)</span>
-          </a>
-        </div>
-      </section>
-    </main>
-  </div>
+      </Fragment>
+    </SectionCard>
+  </main>
 
   <Pill />
 </Base>
 
 <script>
   const root = document.documentElement;
+  const grid = document.querySelector<HTMLElement>('.site')!;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wide = window.matchMedia('(min-width: 760px)');
 
-  // ── Open in place ───────────────────────────────────
-  // One box open at a time. The box spans the work column; a same-document view transition
-  // moves every box from its old spot to its new one (browsers without it just switch).
-  const boxes = [...document.querySelectorAll<HTMLElement>('[data-expandable]')];
+  // ── Takeover ────────────────────────────────────────
+  // One card open at a time. On tablet and desktop it takes over the work area and the other
+  // work cards step out; on phones it opens in place. A same-document view transition moves
+  // everything (browsers without it just switch). The URL hash follows (#portfolio etc.), so a
+  // section can be linked to; replaceState, so Back still leaves the page.
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-expandable]')];
+  const openCard = () => cards.find((c) => c.classList.contains('is-open'));
 
-  const setOpen = (box: HTMLElement, open: boolean) => {
-    const hit = box.querySelector<HTMLButtonElement>('.box-hit')!;
-    const panel = document.getElementById(hit.getAttribute('aria-controls')!)!;
-    box.classList.toggle('is-open', open);
+  const setOpen = (card: HTMLElement, open: boolean) => {
+    const hit = card.querySelector<HTMLButtonElement>('.box-hit')!;
+    card.classList.toggle('is-open', open);
     hit.setAttribute('aria-expanded', String(open));
-    panel.hidden = !open;
-    box.dataset.pillClosed ??= box.dataset.pill;
-    box.dataset.pill = open ? box.dataset.pillOpen : box.dataset.pillClosed;
+    document.getElementById(hit.getAttribute('aria-controls')!)!.hidden = !open;
+    card.dataset.pillClosed ??= card.dataset.pill;
+    if (open) delete card.dataset.pill;
+    else card.dataset.pill = card.dataset.pillClosed;
   };
 
-  const toggle = (box: HTMLElement) => {
-    const opening = !box.classList.contains('is-open');
+  const show = (card: HTMLElement | undefined, { animate = true } = {}) => {
     const update = () => {
-      for (const other of boxes) if (other !== box && other.classList.contains('is-open')) setOpen(other, false);
-      setOpen(box, opening);
-      if (!opening) return;
-      // Bring the opened box's top in line with the card's (instantly; the transition animates the move).
-      const line = parseFloat(getComputedStyle(document.querySelector('.site')!).paddingTop) || 16;
-      const r = box.getBoundingClientRect();
-      if (r.top < line || r.top > window.innerHeight * 0.5) window.scrollBy({ top: r.top - line, behavior: 'instant' });
+      for (const c of cards) if (c !== card && c.classList.contains('is-open')) setOpen(c, false);
+      if (card) setOpen(card, true);
+      grid.classList.toggle('has-open', !!card);
+      history.replaceState(null, '', card ? `#${card.id}` : location.pathname + location.search);
+      // Takeover starts at the top row; on phones, bring the opened card's top into view.
+      if (card && wide.matches) window.scrollTo({ top: 0, behavior: 'instant' });
+      else if (card) {
+        const line = parseFloat(getComputedStyle(grid).paddingTop) || 16;
+        window.scrollBy({ top: card.getBoundingClientRect().top - line, behavior: 'instant' });
+      }
     };
-    if (!reduced && 'startViewTransition' in document) document.startViewTransition(update);
+    if (animate && !reduced && 'startViewTransition' in document) document.startViewTransition(update);
     else update();
-    document.dispatchEvent(new CustomEvent('pill:refresh'));
+    document.dispatchEvent(new CustomEvent('pill:clear'));
   };
 
-  for (const box of boxes) {
-    box.querySelector('.box-hit')!.addEventListener('click', () => toggle(box));
+  for (const card of cards) {
+    card.querySelector('.box-hit')!.addEventListener('click', () => show(card.classList.contains('is-open') ? undefined : card));
+    card.querySelector('.box-close')!.addEventListener('click', () => {
+      show(undefined);
+      card.querySelector<HTMLElement>('.box-hit')?.focus();
+    });
   }
   document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    const open = boxes.find((b) => b.classList.contains('is-open'));
-    if (!open) return;
-    toggle(open);
+    const open = openCard();
+    if (e.key !== 'Escape' || !open) return;
+    show(undefined);
     open.querySelector<HTMLElement>('.box-hit')?.focus();
   });
 
+  // Deep links: /#portfolio opens Portfolio on arrival, and an in-page link to #leadership
+  // (or editing the hash) opens Leadership.
+  const fromHash = () => cards.find((c) => `#${c.id}` === location.hash);
+  const linked = fromHash();
+  if (linked) show(linked, { animate: false });
+  window.addEventListener('hashchange', () => {
+    const card = fromHash();
+    if (card !== openCard()) show(card);
+  });
+
   // ── Entrance ────────────────────────────────────────
-  // Once fonts are in (or after a short wait on a slow connection): the card opens below its
-  // masthead and the boxes land around it.
+  // Once fonts are in (or after a short wait on a slow connection): the hero opens below its
+  // masthead and the other cards land around it.
   const ready = () =>
     requestAnimationFrame(() => {
       root.classList.add('is-ready');
