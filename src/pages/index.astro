@@ -3,6 +3,12 @@ import Base from '../layouts/Base.astro';
 import LinkCard from '../components/LinkCard.astro';
 import ShapeField from '../components/ShapeField.astro';
 import { defaultPreset } from '../lib/presets';
+import { MAIN_URL } from '../lib/handoff';
+
+// Portfolio hand-off: open the connection to the main site now (every browser, including
+// in-app ones), and let Chrome prefetch the page when a pointer settles on the link.
+const mainOrigin = new URL(MAIN_URL).origin;
+const speculation = JSON.stringify({ prefetch: [{ where: { href_matches: MAIN_URL }, eagerness: 'moderate' }] });
 ---
 
 <Base
@@ -11,6 +17,10 @@ import { defaultPreset } from '../lib/presets';
   description="Hands-on design manager for products people have to trust. Portfolio, LinkedIn, Figma resources, photography, rides and playlists."
   preset={defaultPreset}
 >
+  <Fragment slot="head">
+    <link rel="preconnect" href={mainOrigin} />
+    <script type="speculationrules" set:html={speculation} />
+  </Fragment>
   <ShapeField preset={defaultPreset} />
   <LinkCard />
 </Base>

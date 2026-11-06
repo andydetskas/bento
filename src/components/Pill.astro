@@ -1,0 +1,117 @@
+---
+// Hover affordances shared by every page:
+//   [data-pill="text"]   a cursor pill with that text follows the pointer (mouse and pen only)
+//   [data-accent="#hex"] tints the scene toward that color while hovered or keyboard-focused,
+//                        and colors the pill
+// Nested targets work: entering a row inside a box shows the row's pill, leaving it brings the
+// box's back. Touch gets neither: a tap is a click, not a hover.
+// Change data-pill at any time and dispatch `pill:refresh` to update a pill that's showing.
+---
+
+<div class="pill" aria-hidden="true"></div>
+
+<style>
+  .pill {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    pointer-events: none;
+    padding: 7px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--pill-bg, #fff);
+    color: var(--color-pill-text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: var(--weight-mono);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    opacity: 0;
+    scale: 0.85;
+    transition:
+      opacity var(--motion-quick) var(--motion-ease-standard),
+      scale var(--motion-base) var(--motion-ease-settle),
+      background-color var(--motion-quick) var(--motion-ease-standard);
+  }
+  .pill.is-on {
+    opacity: 1;
+    scale: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pill {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const pill = document.querySelector<HTMLElement>('.pill');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const accent = (hex: string | null) => document.dispatchEvent(new CustomEvent('bento:accent', { detail: { hex } }));
+
+  // Cursor pill: eased follow so it trails the pointer slightly.
+  let x = 0, y = 0, tx = 0, ty = 0, raf = 0;
+  const follow = () => {
+    x += (tx - x) * (reduced ? 1 : 0.22);
+    y += (ty - y) * (reduced ? 1 : 0.22);
+    if (pill) pill.style.translate = `${x + 16}px ${y + 18}px`;
+    raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(follow) : 0;
+  };
+
+  // Hovered targets, outermost first. The innermost one decides what shows.
+  const stack: HTMLElement[] = [];
+  const show = () => {
+    const top = stack.at(-1);
+    accent(stack.findLast((el) => el.dataset.accent)?.dataset.accent ?? null);
+    const text = top?.dataset.pill;
+    if (!pill || !finePointer || !top || !text) {
+      pill?.classList.remove('is-on');
+      return;
+    }
+    pill.textContent = text;
+    pill.style.setProperty('--pill-bg', top.dataset.accent ?? '#fff');
+    if (!pill.classList.contains('is-on')) {
+      x = tx;
+      y = ty;
+      follow();
+    }
+    pill.classList.add('is-on');
+  };
+
+  document.addEventListener(
+    'pointermove',
+    (e) => {
+      tx = e.clientX;
+      ty = e.clientY;
+      if (stack.length && !raf) raf = requestAnimationFrame(follow);
+    },
+    { passive: true },
+  );
+  document.addEventListener('pill:refresh', show);
+  // A hand-off or an expanding panel can pull the target out from under the pointer.
+  document.addEventListener('pill:clear', () => {
+    stack.length = 0;
+    show();
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-pill], [data-accent]').forEach((el) => {
+    el.addEventListener('pointerenter', (e) => {
+      if (e.pointerType === 'touch') return;
+      tx = e.clientX;
+      ty = e.clientY;
+      if (!stack.includes(el)) stack.push(el);
+      show();
+    });
+    el.addEventListener('pointerleave', (e) => {
+      if (e.pointerType === 'touch') return;
+      const i = stack.indexOf(el);
+      if (i >= 0) stack.splice(i);
+      show();
+    });
+    // Keyboard focus mirrors hover for the scene tint; the focus a tap gives a link doesn't.
+    el.addEventListener('focus', () => el.matches(':focus-visible') && el.dataset.accent && accent(el.dataset.accent));
+    el.addEventListener('blur', () => accent(null));
+  });
+</script>

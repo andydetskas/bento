@@ -30,6 +30,8 @@ export interface FamilyInstance {
    * params: the live params (sliders that don't need a rebuild read from here).
    */
   update(t: number, dt: number, dtReal: number, params: SceneParams): void;
+  /** Optional: jump straight to scene time t (as if update() had run from 0). Without it the engine steps there. */
+  seek?(t: number, params: SceneParams): void;
   setPalette(palette: ScenePalette): void;
   dispose(): void;
 }

@@ -1,0 +1,519 @@
+/*
+  Main site (prototype): the bento card on the left, work boxes landing over the scene on the
+  right. Boxes share the card surface (.card in global.css), so the page reads as one card that
+  became many.
+*/
+
+.site {
+  --gap: clamp(12px, round(1.8vw, 4px), 28px);
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  padding: var(--gutter);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap);
+  align-items: start;
+}
+/* The card keeps the bento's width and spot (top-left, one gutter in), so the hand-off lines up. */
+@media (min-width: 760px) {
+  .site {
+    grid-template-columns: var(--card-w) minmax(0, 1fr);
+  }
+}
+
+.boxes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: row dense;
+  gap: var(--gap);
+  margin: 0;
+}
+@media (min-width: 1100px) {
+  .boxes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .box.is-wide,
+  .box.is-open {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ── Box ────────────────────────────────────────────── */
+.box {
+  position: relative;
+  padding: var(--pad);
+  container-type: inline-size;
+  view-transition-class: box;
+  transition:
+    opacity var(--motion-base) var(--motion-ease-standard),
+    background-color var(--motion-base) var(--motion-ease-standard);
+}
+
+/* Focus mode (Bohdana): the hovered box stays, the others step back. */
+@media (hover: hover) {
+  .boxes:has(> .box:hover) > .box:not(:hover) {
+    opacity: 0.28;
+  }
+}
+/* Keyboard focus mirrors hover; the focus a click or tap leaves behind doesn't. */
+.boxes:has(> .box :focus-visible) > .box:not(:has(:focus-visible)) {
+  opacity: 0.28;
+}
+
+.box-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 40px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-mono);
+  line-height: 16px;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.box-title {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+  text-wrap: balance;
+}
+.box-body {
+  margin: 0;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* The whole box is the button: the title's button stretches over it. Links inside an open box
+   sit above that layer. */
+.box-hit {
+  all: unset;
+  cursor: pointer;
+}
+.box-hit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.box:has(.box-hit:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+.box .btn,
+.box a:not(.box-hit) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Arrow circle ───────────────────────────────────── */
+.arrow {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line);
+  display: grid;
+  place-items: center;
+  color: var(--color-text-primary);
+  transition:
+    background-color var(--motion-quick) var(--motion-ease-standard),
+    border-color var(--motion-quick) var(--motion-ease-standard),
+    color var(--motion-quick) var(--motion-ease-standard),
+    transform var(--motion-base) var(--motion-ease-settle);
+}
+.arrow svg {
+  grid-area: 1 / 1;
+  width: 18px;
+  height: 18px;
+  transition: opacity var(--motion-quick) var(--motion-ease-standard), rotate var(--motion-base) var(--motion-ease-settle);
+}
+.arrow .i-close {
+  opacity: 0;
+  rotate: -45deg;
+}
+.box.is-open .arrow .i-open {
+  opacity: 0;
+  rotate: 45deg;
+}
+.box.is-open .arrow .i-close {
+  opacity: 1;
+  rotate: 0deg;
+}
+@media (hover: hover) {
+  .box:hover .arrow,
+  .frow:hover .arrow {
+    background: var(--accent, var(--color-text-primary));
+    border-color: var(--accent, var(--color-text-primary));
+    color: var(--color-pill-text);
+  }
+  .box.is-neutral:hover .arrow {
+    color: var(--color-card);
+  }
+}
+.frow .arrow {
+  width: 32px;
+  height: 32px;
+}
+.frow .arrow svg {
+  width: 14px;
+  height: 14px;
+}
+.frow:focus-visible .arrow {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--color-pill-text);
+}
+
+/* ── Button ─────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
+  color: var(--color-card);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--motion-quick) var(--motion-ease-standard);
+}
+.btn::after {
+  content: '';
+  width: 14px;
+  height: 14px;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+@media (hover: hover) {
+  .btn:hover {
+    background: color-mix(in srgb, var(--color-text-primary) 82%, var(--color-card));
+  }
+}
+
+/* ── Work box ───────────────────────────────────────── */
+.work-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.work-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.work-art {
+  --r: max(8px, calc(var(--card-radius) - var(--pad) * 0.6));
+  order: -1;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--r);
+  background: var(--tint);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 6%;
+}
+.work-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: scale var(--motion-settle) var(--motion-ease-settle);
+}
+/* Phone screens rise from the bottom edge instead of shrinking to fit. */
+.work-art[data-fit='rise'] {
+  place-items: start center;
+  padding: 7% 0 0;
+}
+.work-art[data-fit='rise'] img {
+  width: 42%;
+  height: auto;
+}
+.is-wide .work-art {
+  aspect-ratio: 16 / 8;
+}
+@media (hover: hover) {
+  .work:hover .work-art img {
+    scale: 1.025;
+  }
+}
+
+/* Open: role, outcome and the link to the full case study. Wide boxes put the text beside the art. */
+.work-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding-top: var(--space-3);
+}
+.facts {
+  margin: 0;
+  display: grid;
+  gap: var(--space-1);
+}
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.facts dd {
+  margin: 0;
+  font-weight: var(--weight-medium);
+}
+.outcome {
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--accent);
+  font-size: var(--step-1);
+  line-height: 1.4;
+  font-weight: var(--weight-medium);
+  text-wrap: pretty;
+}
+.work.is-open .box-title {
+  font-size: var(--step-3);
+}
+@container (min-width: 680px) {
+  .work.is-open .work-body {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+    gap: var(--space-8);
+  }
+  .work.is-open .work-art {
+    order: 1;
+    aspect-ratio: 5 / 4;
+  }
+}
+
+/* ── Kit ────────────────────────────────────────────── */
+.kit-tools {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  gap: var(--space-5) var(--space-6);
+}
+.kit-tools li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-line);
+}
+.kit-tools strong {
+  font-weight: var(--weight-medium);
+}
+.kit-tools span {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+/* ── Techniques ─────────────────────────────────────── */
+.posts {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  column-gap: var(--space-8);
+}
+.post {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-line);
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+  transition: opacity var(--motion-base) var(--motion-ease-standard);
+}
+.post .icon {
+  width: 24px;
+  height: 24px;
+}
+.post-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.post-title {
+  font-weight: var(--weight-medium);
+}
+.post-note {
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+}
+.post .arrow {
+  width: 32px;
+  height: 32px;
+}
+.post .arrow svg {
+  width: 14px;
+  height: 14px;
+}
+.posts:has(.post:focus-visible) .post:not(:focus-visible) {
+  opacity: 0.28;
+}
+.post:focus-visible .post-title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+  text-decoration-color: var(--color-focus);
+}
+@media (hover: hover) {
+  .posts:has(.post:hover) .post:not(:hover) {
+    opacity: 0.28;
+  }
+  .post:hover .arrow {
+    background: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    color: var(--color-card);
+  }
+}
+.text-link {
+  align-self: flex-start;
+  color: inherit;
+  font-weight: var(--weight-medium);
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+.text-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ── About ──────────────────────────────────────────── */
+.about-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.about-panel p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+.roles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.roles li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--color-line);
+}
+.roles strong {
+  font-weight: var(--weight-medium);
+}
+.roles span {
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+}
+
+/* ── Contact ────────────────────────────────────────── */
+.contact-title {
+  margin: 0;
+  font-size: var(--step-4);
+  line-height: 1.05;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-display);
+}
+.contact .box-body {
+  max-width: 36em;
+  font-size: var(--step-1);
+  line-height: 1.4;
+}
+.contact .cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* ── Landing: boxes rise into place once the card has opened ── */
+@keyframes box-land {
+  from {
+    opacity: 0;
+    translate: 0 40px;
+  }
+}
+html.js:not(.is-ready) .box {
+  opacity: 0;
+}
+html.js.is-ready .box {
+  animation: box-land 900ms var(--motion-ease-settle) backwards;
+  animation-delay: calc(min(var(--b), 8) * 70ms + 280ms);
+}
+/* Arriving from the bento: the masthead is already in place, so it doesn't reveal again. */
+html.from-handoff .card-head .line-inner {
+  transform: none;
+  transition: none;
+}
+html.from-handoff .scene {
+  transition-duration: 480ms;
+}
+
+/* ── Open in place (same-document view transition) ──── */
+/* Each box animates from its old spot and size to its new one. Snapshots keep their natural
+   size, pinned top-left and clipped by the box, so text never stretches while a box grows. */
+::view-transition-group(*.box) {
+  animation-duration: 560ms;
+  animation-timing-function: var(--motion-ease-settle);
+}
+::view-transition-image-pair(*.box) {
+  overflow: clip;
+  border-radius: var(--card-radius);
+}
+::view-transition-old(*.box),
+::view-transition-new(*.box) {
+  width: 100%;
+  height: 100%;
+  object-fit: none;
+  object-position: left top;
+}
+::view-transition-old(*.box) {
+  animation-duration: 180ms;
+}
+/* The rest of the page (the card and the scene) just switches. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js:not(.is-ready) .box {
+    opacity: 1;
+  }
+  html.js.is-ready .box {
+    animation: none;
+  }
+  .box,
+  .arrow,
+  .arrow svg,
+  .work-art img,
+  .post {
+    transition: none;
+  }
+}

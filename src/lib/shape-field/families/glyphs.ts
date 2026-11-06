@@ -125,6 +125,8 @@ export const glyphs: Family = {
       size: number;
       delay: number;
       baseRot: number;
+      /** Starting height, so seek() can place the glyph at any time without replaying the drift. */
+      y0: number;
     }[] = [];
 
     const assign = () => {
@@ -164,6 +166,7 @@ export const glyphs: Family = {
           rise: 0.1 + rng() * 0.12,
           baseRot: (rng() - 0.5) * 0.9,
           delay: 0.1 + rng() * 1.1,
+          y0: mesh.position.y,
         });
       }
     } else {
@@ -199,6 +202,7 @@ export const glyphs: Family = {
           const y = (r + 0.5 - rows / 2) * sy + (rng() - 0.5) * offset;
           items.push({
             mesh: place(name, x, y, (rng() - 0.5) * 2.4 * spread),
+            y0: y,
             slot,
             size: lerp(0.7, 1.25, rng()),
             spin: (rng() - 0.5) * 0.7,
@@ -213,6 +217,14 @@ export const glyphs: Family = {
       }
     }
     assign();
+
+    // Rotation is a pure function of time; the drift and the grow-in are integrated in update().
+    const pose = (it: (typeof items)[number], t: number, tumble: number) => {
+      const m = it.mesh;
+      m.rotation.y = it.baseRot * tumble + Math.sin(t * it.spin + it.phase) * 0.9 * tumble;
+      m.rotation.x = Math.sin(t * it.wob + it.phase) * 0.35 * tumble;
+      m.rotation.z = Math.sin(t * 0.13 + it.phase) * 0.12 * tumble;
+    };
 
     return {
       root,
@@ -229,9 +241,7 @@ export const glyphs: Family = {
           // Grow in after a stagger; when the scene is paused (speed 0), size changes apply at once.
           if (dt === 0) m.scale.setScalar(goal);
           else if (t > it.delay) m.scale.setScalar(m.scale.x + (goal - m.scale.x) * k);
-          m.rotation.y = it.baseRot * tumble + Math.sin(t * it.spin + it.phase) * 0.9 * tumble;
-          m.rotation.x = Math.sin(t * it.wob + it.phase) * 0.35 * tumble;
-          m.rotation.z = Math.sin(t * 0.13 + it.phase) * 0.12 * tumble;
+          pose(it, t, tumble);
           m.position.y += dt * it.rise;
           if (m.position.y > top) m.position.y -= span;
         }
@@ -242,6 +252,19 @@ export const glyphs: Family = {
         }
         const kc = settle(dtReal, 6);
         for (const f of facets) f.step(kc);
+      },
+      // Closed form of update() integrated from 0 to t: same drift, wrap and grow-in.
+      seek(t, live: SceneParams) {
+        const sizeMul = live.size ?? 1;
+        const tumble = live.tumble ?? 1;
+        for (const it of items) {
+          const m = it.mesh;
+          const goal = it.size * sizeMul;
+          m.scale.setScalar(t > it.delay ? goal - (goal - 0.001) * Math.exp(-3.5 * (t - it.delay)) : 0.001);
+          const y = it.y0 + t * it.rise;
+          m.position.y = y > top ? y - span * Math.ceil((y - top) / span) : y;
+          pose(it, t, tumble);
+        }
       },
       setPalette(p) {
         pal = p;

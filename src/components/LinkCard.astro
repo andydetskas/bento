@@ -1,8 +1,13 @@
 ---
 // The calling card: profile header + link rows. Content comes from src/content/links.json.
+// A link with "handoff": true (Portfolio) opens the main site in the same tab, behind an exit
+// that hands the card over to the site's own card (see src/lib/handoff.ts).
 import data from '../content/links.json';
+import { MAIN_URL } from '../lib/handoff';
 import { tokens } from '../lib/tokens';
+import CardHead from './CardHead.astro';
 import Icon from './Icon.astro';
+import Pill from './Pill.astro';
 
 interface Props {
   showIcons?: boolean;
@@ -10,58 +15,56 @@ interface Props {
 const { showIcons = true } = Astro.props;
 const { profile, links } = data;
 const accents = tokens.accent as Record<string, string>;
-let line = 0; // stagger index: lines land 60ms apart
+let line = 2; // stagger index: lines land 60ms apart (the masthead takes 0 and 1)
 ---
 
 <main class="frame">
   <section class="card" aria-label={`${profile.name}, links`}>
-    <header class="card-head">
-      <Icon name={profile.mark} class="mark" />
-      <div class="who">
-        <h1 class="name line trim-sans"><span class="line-inner" style={`--i:${line++}`}>{profile.name}</span></h1>
-        <p class="role line trim-mono"><span class="line-inner" style={`--i:${line++}`}>{profile.role}</span></p>
-      </div>
-    </header>
+    <CardHead />
 
     <ul class="rows" role="list">
       {
-        links.map((link) => (
-          <li>
-            <a
-              class="row"
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-accent={accents[link.id]}
-              data-tooltip={link.tooltip}
-              style={`--accent:${accents[link.id]}`}
-            >
-              <span class="row-text">
-                <span class="eyebrow line trim-mono">
-                  <span class="line-inner" style={`--i:${line++}`}>
-                    {showIcons && <Icon name={link.icon} class="row-icon" />}
-                    {link.eyebrow}
+        links.map((link, n) => {
+          const handoff = 'handoff' in link && link.handoff;
+          return (
+            <li style={`--n:${n}`}>
+              <a
+                class="row"
+                href={handoff ? MAIN_URL : link.url}
+                target={handoff ? undefined : '_blank'}
+                rel={handoff ? undefined : 'noopener noreferrer'}
+                data-handoff={handoff ? '' : undefined}
+                data-accent={accents[link.id]}
+                data-pill={link.tooltip}
+                style={`--accent:${accents[link.id]}`}
+              >
+                <span class="row-text">
+                  <span class="eyebrow line trim-mono">
+                    <span class="line-inner" style={`--i:${line++}`}>
+                      {showIcons && <Icon name={link.icon} class="row-icon" />}
+                      {link.eyebrow}
+                    </span>
+                  </span>
+                  <span class="label line trim-sans">
+                    <span class="line-inner" style={`--i:${line++}`}>{link.label}</span>
                   </span>
                 </span>
-                <span class="label line trim-sans">
-                  <span class="line-inner" style={`--i:${line++}`}>{link.label}</span>
+                <span class="row-arrow" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17 17 7M9 7h8v8" />
+                  </svg>
                 </span>
-              </span>
-              <span class="row-arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17 17 7M9 7h8v8" />
-                </svg>
-              </span>
-              <span class="sr-only">(opens in a new tab)</span>
-            </a>
-          </li>
-        ))
+                {!handoff && <span class="sr-only">(opens in a new tab)</span>}
+              </a>
+            </li>
+          );
+        })
       }
     </ul>
   </section>
 </main>
 
-<div class="pill" aria-hidden="true"></div>
+<Pill />
 
 <style>
   .frame {
@@ -75,61 +78,6 @@ let line = 0; // stagger index: lines land 60ms apart
 
   .card {
     width: min(100%, var(--card-w));
-    display: flex;
-    flex-direction: column;
-    /* Card hugs its content: masthead, a fixed gap, then the table. */
-    gap: var(--space-6);
-    /* All spacing snaps to the 4px baseline unit. */
-    --pad: clamp(20px, round(2.6vw, 4px), 36px);
-    padding: var(--pad) var(--pad) clamp(12px, round(1.6vw, 4px), 20px);
-    background: var(--color-card);
-    color: var(--color-text-primary);
-    border-radius: var(--card-radius);
-    box-shadow:
-      0 1px 0 rgb(0 0 0 / 0.03),
-      0 40px 90px -50px rgb(20 20 30 / 0.45);
-    transition:
-      background-color var(--motion-base) var(--motion-ease-standard),
-      border-radius var(--motion-base) var(--motion-ease-standard);
-  }
-
-  /* ── Header ─────────────────────────────────────────── */
-  /* Type is trimmed to cap height and baseline (see .trim-* in global.css), and every cap
-     height is a multiple of 4px, so the mark can match the text block exactly. */
-  .card-head {
-    --name-cap: round(var(--type-title) * var(--cap-sans), var(--bl));
-    --role-cap: 8px;
-    --who-gap: var(--space-2);
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-3);
-  }
-  /* The globe runs from the name's cap height to the role's baseline. The script below
-     re-measures if the role wraps onto a second line. */
-  .card-head :global(.mark) {
-    height: calc(var(--name-cap) + var(--who-gap) + var(--role-cap));
-    aspect-ratio: 918 / 862;
-    flex: none;
-  }
-  .who {
-    display: flex;
-    flex-direction: column;
-    gap: var(--who-gap);
-    min-width: 0;
-  }
-  .name {
-    --cap: var(--name-cap);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-title);
-  }
-  .role {
-    --cap: var(--role-cap);
-    --lh: var(--leading-eyebrow);
-    font-family: var(--font-mono);
-    font-weight: var(--weight-mono);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: var(--color-text-muted);
   }
 
   /* ── Rows ───────────────────────────────────────────── */
@@ -158,6 +106,7 @@ let line = 0; // stagger index: lines land 60ms apart
     color: inherit;
     text-decoration: none;
     outline: none;
+    -webkit-tap-highlight-color: transparent;
     transition: opacity var(--motion-base) var(--motion-ease-standard);
   }
   .row-text {
@@ -263,61 +212,34 @@ let line = 0; // stagger index: lines land 60ms apart
     }
   }
 
-  /* ── Load: lines land 60ms apart, the card never moves ─ */
-  /* Each line is its own mask. --trim-pad keeps ascenders and descenders inside it
-     without changing the trimmed layout. */
-  .line {
-    display: block;
+  /* ── Hand-off exit (Portfolio) ──────────────────────── */
+  /* The card folds up to its masthead at the top-left, the site card's first frame. The rows
+     stay put while the card's bottom edge rises over them, each fading just before it's
+     covered (bottom row first). The script pins the card's current top first, so on phones
+     (where the card is centered) it slides up from where it was instead of jumping. */
+  :global(html.is-leaving) .frame {
+    align-items: flex-start;
+  }
+  :global(html.is-leaving) .card {
+    transition: margin-top var(--exit-ms) var(--motion-ease-standard);
+  }
+  :global(html.is-leaving) .rows {
     overflow: hidden;
-    --trim-pad: 0.25em;
+    transition: height var(--exit-ms) var(--motion-ease-standard);
   }
-  .line-inner {
-    display: inline-block;
-  }
-  :global(html.js) .line-inner {
-    transform: translateY(calc(100% + 0.5em));
-    transition: transform var(--motion-settle) var(--motion-ease-settle);
-    transition-delay: calc(var(--i) * var(--motion-stagger) + 120ms);
-  }
-  :global(html.js.is-ready) .line-inner {
-    transform: none;
-  }
-
-  /* ── Cursor pill ────────────────────────────────────── */
-  .pill {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 10;
-    pointer-events: none;
-    padding: 7px 12px;
-    border-radius: var(--radius-pill);
-    background: var(--pill-bg, #fff);
-    color: var(--color-pill-text);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: var(--weight-mono);
-    letter-spacing: 0.02em;
-    white-space: nowrap;
+  :global(html.is-leaving) .rows li {
     opacity: 0;
-    scale: 0.85;
-    transition:
-      opacity var(--motion-quick) var(--motion-ease-standard),
-      scale var(--motion-base) var(--motion-ease-settle),
-      background-color var(--motion-quick) var(--motion-ease-standard);
+    transition: opacity calc(var(--exit-ms) * 0.45) var(--motion-ease-exit);
+    transition-delay: calc((5 - var(--n)) * var(--exit-ms) * 0.09);
   }
-  .pill.is-on {
-    opacity: 1;
-    scale: 1;
+  :global(html.is-leaving) .row {
+    pointer-events: none;
   }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+  /* The scene dissolves into the background color in the second half, because the site needs a
+     moment to rebuild it. The site fades the same field back in, at the moment it left off. */
+  :global(html.is-leaving .scene.is-live) {
+    opacity: 0;
+    transition: opacity calc(var(--exit-ms) * 0.6) var(--motion-ease-standard) calc(var(--exit-ms) * 0.4);
   }
 
   /* ── Small screens: scene on top, card below ─────────── */
@@ -341,78 +263,64 @@ let line = 0; // stagger index: lines land 60ms apart
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :global(html.js) .line-inner {
-      transform: none;
-      transition: none;
-    }
     .row,
-    .row-arrow,
-    .pill {
+    .row-arrow {
       transition: none;
     }
   }
 </style>
 
 <script>
-  // Globe height = name cap height → role baseline, re-measured if the role wraps.
-  const who = document.querySelector<HTMLElement>('.who');
-  const mark = document.querySelector<HTMLElement>('.card-head .mark');
-  if (who && mark) {
-    const fitMark = () => (mark.style.height = `${who.getBoundingClientRect().height}px`);
-    fitMark();
-    document.fonts?.ready.then(fitMark);
-    window.addEventListener('resize', fitMark, { passive: true });
-    new ResizeObserver(fitMark).observe(who);
-  }
+  import { EXIT_MS, warmMainSite, writeHandoff } from '../lib/handoff';
 
-  const pill = document.querySelector<HTMLElement>('.pill');
-  const rows = document.querySelectorAll<HTMLAnchorElement>('.row');
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const root = document.documentElement;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const accent = (hex: string | null) => document.dispatchEvent(new CustomEvent('bento:accent', { detail: { hex } }));
-
-  // Cursor pill: eased follow so it trails the pointer slightly.
-  let x = 0, y = 0, tx = 0, ty = 0, raf = 0;
-  const follow = () => {
-    x += (tx - x) * (reduced ? 1 : 0.22);
-    y += (ty - y) * (reduced ? 1 : 0.22);
-    if (pill) pill.style.translate = `${x + 16}px ${y + 18}px`;
-    raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(follow) : 0;
-  };
-  const move = (e: PointerEvent) => {
-    tx = e.clientX;
-    ty = e.clientY;
-    if (!raf) raf = requestAnimationFrame(follow);
-  };
-
-  // Touch gets no tooltip and no scene tint: a tap is a click, not a hover.
-  rows.forEach((row) => {
-    row.addEventListener('pointerenter', (e) => {
-      if (e.pointerType === 'touch') return;
-      accent(row.dataset.accent ?? null);
-      if (!finePointer || !pill) return;
-      pill.textContent = row.dataset.tooltip ?? '';
-      pill.style.setProperty('--pill-bg', row.dataset.accent ?? '#fff');
-      if (!pill.classList.contains('is-on')) {
-        x = tx = e.clientX;
-        y = ty = e.clientY;
-        follow();
+  // ── Hand-off to the main site ───────────────────────
+  // Warm the site's HTML as soon as a finger or button goes down, then play the exit while the
+  // navigation is on its way. The bento stays on screen until the site paints.
+  const card = document.querySelector<HTMLElement>('.frame .card');
+  const rows = document.querySelector<HTMLElement>('.frame .rows');
+  document.querySelectorAll<HTMLAnchorElement>('a[data-handoff]').forEach((a) => {
+    a.addEventListener('pointerdown', () => warmMainSite(a.href), { once: true });
+    a.addEventListener('click', (e) => {
+      // Let new-tab and new-window clicks through untouched.
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      e.preventDefault();
+      warmMainSite(a.href);
+      const field = window.shapeField;
+      writeHandoff({ t: field?.time ?? 0, preset: root.dataset.preset ?? '' });
+      document.dispatchEvent(new CustomEvent('pill:clear'));
+      if (reduced || !card || !rows) {
+        location.assign(a.href);
+        return;
       }
-      pill.classList.add('is-on');
+      // Pin the card where it is, switch the frame to top alignment, then let it slide up
+      // while the rows collapse.
+      const gutter = parseFloat(getComputedStyle(card.parentElement!).paddingTop);
+      card.style.marginTop = `${card.getBoundingClientRect().top - gutter}px`;
+      rows.style.height = `${rows.offsetHeight}px`;
+      root.style.setProperty('--exit-ms', `${EXIT_MS}ms`);
+      root.classList.add('is-leaving');
+      card.offsetHeight; // commit the pinned state before animating from it
+      requestAnimationFrame(() => {
+        card.style.marginTop = '0px';
+        rows.style.height = '0px';
+      });
+      setTimeout(() => location.assign(a.href), EXIT_MS);
     });
-    row.addEventListener('pointermove', move);
-    row.addEventListener('pointerleave', () => {
-      accent(null);
-      pill?.classList.remove('is-on');
-    });
-    // Keyboard focus mirrors hover; the focus a tap gives a link doesn't.
-    row.addEventListener('focus', () => row.matches(':focus-visible') && accent(row.dataset.accent ?? null));
-    row.addEventListener('blur', () => accent(null));
+  });
+
+  // Back button: the browser may restore this page exactly as it left (bfcache). Put it back.
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted || !root.classList.contains('is-leaving')) return;
+    root.classList.remove('is-leaving');
+    card?.style.removeProperty('margin-top');
+    rows?.style.removeProperty('height');
   });
 
   // Start the line reveal once fonts are in (avoids a reflow mid-animation).
-  const ready = () => requestAnimationFrame(() => document.documentElement.classList.add('is-ready'));
+  const ready = () => requestAnimationFrame(() => root.classList.add('is-ready'));
   if (document.fonts?.ready) document.fonts.ready.then(ready);
   else ready();
 </script>

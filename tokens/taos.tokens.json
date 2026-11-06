@@ -52,13 +52,16 @@
   },
   "accent": {
     "$type": "color",
-    "$description": "One accent per destination. Used for the hover pill and the scene accent shift.",
+    "$description": "One accent per destination (bento links) or company (site boxes). Used for the hover pill, the arrow circle and the scene accent shift.",
     "linkedin":  { "$value": "{taos.light.indigo.600}" },
     "portfolio": { "$value": "{taos.light.fire.600}" },
     "figma":     { "$value": "{taos.light.lavender.600}" },
     "instagram": { "$value": "{taos.light.coral.600}" },
     "strava":    { "$value": "{taos.light.alpenglow.600}" },
-    "spotify":   { "$value": "{taos.light.verde.400}" }
+    "spotify":   { "$value": "{taos.light.verde.400}" },
+    "sram":      { "$value": "{taos.light.indigo.600}" },
+    "suppco":    { "$value": "{taos.light.verde.600}" },
+    "contact":   { "$value": "{taos.light.fire.600}" }
   },
   "font": {
     "$type": "fontFamily",

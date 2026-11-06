@@ -18,6 +18,7 @@
       "label": "Portfolio",
       "eyebrow": "Case Studies",
       "url": "https://www.andydetskas.com/",
+      "handoff": true,
       "icon": "eye",
       "tooltip": "Case studies and process"
     },

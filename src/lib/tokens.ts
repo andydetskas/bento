@@ -172,7 +172,10 @@ export const tokens = {
     "figma": "#A99AFB",
     "instagram": "#FECDCA",
     "strava": "#FAA446",
-    "spotify": "#73B7A6"
+    "spotify": "#73B7A6",
+    "sram": "#5897C8",
+    "suppco": "#1B8D73",
+    "contact": "#D74C07"
   },
   "font": {
     "sans": [

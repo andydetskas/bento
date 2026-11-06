@@ -7,6 +7,7 @@ export function applyCardStyle(preset: Preset, root: HTMLElement = document.docu
   root.dataset.preset = preset.id;
   root.style.setProperty('--card-radius', `${preset.card.radius}px`);
   root.style.setProperty('--scene-bg', preset.palette.bg);
+  root.style.background = preset.palette.bg; // overscroll and the first frame before CSS
 }
 
 /**

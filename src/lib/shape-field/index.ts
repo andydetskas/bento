@@ -14,6 +14,10 @@ export const families: Record<Preset['family'], Family> = { pueblo, ridgeline, p
 
 export interface ShapeField {
   readonly preset: Preset;
+  /** Scene seconds since the last build (what a hand-off passes on, so the next page picks up the same moment). */
+  readonly time: number;
+  /** Jump to scene time t and render. */
+  seek(t: number): void;
   setPreset(preset: Preset): void;
   setPalette(palette: ScenePalette): void;
   setParam<K extends keyof SceneParams>(key: K, value: SceneParams[K]): void;
@@ -221,6 +225,25 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
   return {
     get preset() {
       return structuredClone(preset);
+    },
+    get time() {
+      return t;
+    },
+    seek(target) {
+      if (!inst || !(target >= 0)) return;
+      if (inst.seek) {
+        t = target;
+        inst.seek(t, preset.params);
+      } else {
+        // Families without a closed form: step there (capped, so a long visit can't stall the page).
+        const step = 1 / 30;
+        for (let s = 0; t < target && s < 900; s++) {
+          t += step;
+          inst.update(t, step, step, preset.params);
+        }
+      }
+      shared.uTime.value = t;
+      dirty = Math.max(dirty, 2);
     },
     setPreset(next) {
       const prev = preset;
