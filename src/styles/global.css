@@ -103,3 +103,65 @@ html.is-static *::after {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
+
+/* ── Card surface (bento card, site card and site boxes) ── */
+/* All spacing snaps to the 4px baseline unit. --pad-end is the card's bottom padding when its
+   last child brings its own room (the bento's rows); a collapsed card keeps it, so the bento's
+   exit and the site's entrance meet at the same height. */
+.card {
+  --pad: clamp(20px, round(2.6vw, 4px), 36px);
+  --pad-end: clamp(12px, round(1.6vw, 4px), 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--pad) var(--pad) var(--pad-end);
+  background: var(--color-card);
+  color: var(--color-text-primary);
+  border-radius: var(--card-radius);
+  box-shadow:
+    0 1px 0 rgb(0 0 0 / 0.03),
+    0 40px 90px -50px rgb(20 20 30 / 0.45);
+  transition:
+    background-color var(--motion-base) var(--motion-ease-standard),
+    border-radius var(--motion-base) var(--motion-ease-standard);
+}
+
+/* ── Load: lines land 60ms apart, the card never moves ─ */
+/* Each line is its own mask. --trim-pad keeps ascenders and descenders inside it
+   without changing the trimmed layout. */
+.line {
+  display: block;
+  overflow: hidden;
+  --trim-pad: 0.25em;
+}
+.line-inner {
+  display: inline-block;
+}
+html.js .line-inner {
+  transform: translateY(calc(100% + 0.5em));
+  transition: transform var(--motion-settle) var(--motion-ease-settle);
+  transition-delay: calc(var(--i) * var(--motion-stagger) + 120ms);
+}
+html.js.is-ready .line-inner {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .line-inner {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Components set display on elements that toggle `hidden`; hidden always wins. */
+[hidden] {
+  display: none !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

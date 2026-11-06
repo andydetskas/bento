@@ -4,7 +4,19 @@
     {
       "name": "bento",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 4321
+    },
+    {
+      "name": "handoff",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "handoff"
+      ],
       "port": 4321
     }
   ]

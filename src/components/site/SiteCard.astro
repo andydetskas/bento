@@ -1,0 +1,218 @@
+---
+// The site's card: the bento card, grown up. Same masthead in the same spot, so the bento's
+// exit (card collapsed to its masthead at the top-left) is this card's first frame. Below the
+// masthead: the positioning line, follow links and the one call to action.
+// On wide screens it stays put while the work scrolls beside it.
+import links from '../../content/links.json';
+import site from '../../content/site.json';
+import { tokens } from '../../lib/tokens';
+import CardHead from '../CardHead.astro';
+import Icon from '../Icon.astro';
+
+const { intro } = site;
+const accents = tokens.accent as Record<string, string>;
+const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
+---
+
+<aside class="site-card-wrap">
+  <section class="card site-card" aria-label={`${links.profile.name}, about`}>
+    <CardHead />
+    <div class="card-more">
+      <div class="card-more-inner">
+        <p class="headline">{intro.headline}</p>
+        <p class="sub">{intro.sub}</p>
+
+        <ul class="follow" role="list">
+          {
+            follow.map((l) => (
+              <li>
+                <a
+                  class="frow"
+                  href={l.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-accent={accents[l.id]}
+                  data-pill={l.tooltip}
+                  style={`--accent:${accents[l.id]}`}
+                >
+                  <Icon name={l.icon} class="frow-icon" />
+                  <span class="frow-label">{l.label}</span>
+                  <span class="frow-note">{l.eyebrow}</span>
+                  <span class="arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17 17 7M9 7h8v8" />
+                    </svg>
+                  </span>
+                  <span class="sr-only">(opens in a new tab)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="cta-row">
+          <p class="status"><span class="dot" aria-hidden="true"></span>{intro.status}</p>
+          <a class="btn" href={intro.cta.url} target="_blank" rel="noopener noreferrer" data-accent={accents.contact} data-pill="Pick a time that works" style={`--accent:${accents.contact}`}>
+            {intro.cta.label}
+            <span class="sr-only">(opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</aside>
+
+<style>
+  /* Stays put beside the work when the screen is tall enough to hold all of it. */
+  @media (min-width: 760px) and (min-height: 760px) {
+    .site-card-wrap {
+      position: sticky;
+      top: var(--gutter);
+    }
+  }
+
+  /* Bottom padding grows from the bento's (--pad-end) to the full --pad as the card opens. */
+  .site-card {
+    padding-bottom: var(--pad);
+    transition:
+      padding-bottom var(--motion-settle) var(--motion-ease-settle) 160ms,
+      background-color var(--motion-base) var(--motion-ease-standard);
+  }
+
+  /* Collapsed to the masthead until the page is ready (the hand-off's first frame), then it opens. */
+  .card-more {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows var(--motion-settle) var(--motion-ease-settle) 160ms;
+  }
+  .card-more-inner {
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    transition: opacity 600ms var(--motion-ease-standard) 260ms;
+  }
+  :global(html.js:not(.is-ready)) .site-card {
+    padding-bottom: var(--pad-end);
+  }
+  :global(html.js:not(.is-ready)) .card-more {
+    grid-template-rows: 0fr;
+  }
+  :global(html.js:not(.is-ready)) .card-more-inner {
+    opacity: 0;
+  }
+  /* Once open, let focus rings and hover lifts out of the clip. */
+  :global(html.is-settled) .card-more-inner {
+    overflow: visible;
+  }
+
+  .headline {
+    margin: 0;
+    font-size: min(var(--step-4), 5.4svh);
+    line-height: 1.08;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-display);
+    text-wrap: balance;
+  }
+  .sub {
+    margin: calc(var(--space-6) * -0.5) 0 0;
+    font-size: var(--step-1);
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+
+  /* ── Follow rows: the bento's rows, at a smaller size ── */
+  .follow {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .follow li + li .frow {
+    border-top: 1px solid var(--color-line);
+  }
+  .frow {
+    display: grid;
+    grid-template-columns: 20px auto 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+    transition: opacity var(--motion-base) var(--motion-ease-standard);
+  }
+  .frow :global(.frow-icon) {
+    width: 20px;
+    height: 20px;
+    transition: color var(--motion-quick) var(--motion-ease-standard);
+  }
+  .frow-label {
+    font-size: var(--step-1);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-title);
+  }
+  .frow-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--weight-mono);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .follow:has(.frow:focus-visible) .frow:not(:focus-visible) {
+    opacity: 0.28;
+  }
+  .frow:focus-visible .frow-label {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: var(--color-focus);
+  }
+  @media (hover: hover) {
+    .follow:has(.frow:hover) .frow:not(:hover) {
+      opacity: 0.28;
+    }
+    .frow:hover :global(.frow-icon) {
+      color: var(--accent);
+    }
+  }
+
+  /* ── Call to action ─────────────────────────────────── */
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-4);
+  }
+  .status {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: var(--weight-mono);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--taos-light-verde-600);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--taos-light-verde-600) 22%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-card,
+    .card-more,
+    .card-more-inner,
+    .frow {
+      transition: none;
+    }
+  }
+</style>

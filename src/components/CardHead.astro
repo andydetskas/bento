@@ -1,0 +1,69 @@
+---
+// The card's masthead: globe runner, name and role. Shared by the bento card and the site card,
+// so a hand-off between them lands on the same pixels.
+import data from '../content/links.json';
+import Icon from './Icon.astro';
+
+const { profile } = data;
+---
+
+<header class="card-head">
+  <Icon name={profile.mark} class="mark" />
+  <div class="who">
+    <h1 class="name line trim-sans"><span class="line-inner" style="--i:0">{profile.name}</span></h1>
+    <p class="role line trim-mono"><span class="line-inner" style="--i:1">{profile.role}</span></p>
+  </div>
+</header>
+
+<style>
+  /* Type is trimmed to cap height and baseline (see .trim-* in global.css), and every cap
+     height is a multiple of 4px, so the mark can match the text block exactly. */
+  .card-head {
+    --name-cap: round(var(--type-title) * var(--cap-sans), var(--bl));
+    --role-cap: 8px;
+    --who-gap: var(--space-2);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  /* The globe runs from the name's cap height to the role's baseline. The script below
+     re-measures if the role wraps onto a second line. */
+  .card-head :global(.mark) {
+    height: calc(var(--name-cap) + var(--who-gap) + var(--role-cap));
+    aspect-ratio: 918 / 862;
+    flex: none;
+  }
+  .who {
+    display: flex;
+    flex-direction: column;
+    gap: var(--who-gap);
+    min-width: 0;
+  }
+  .name {
+    --cap: var(--name-cap);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-title);
+  }
+  .role {
+    --cap: var(--role-cap);
+    --lh: var(--leading-eyebrow);
+    font-family: var(--font-mono);
+    font-weight: var(--weight-mono);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+</style>
+
+<script>
+  // Globe height = name cap height → role baseline, re-measured if the role wraps.
+  const who = document.querySelector<HTMLElement>('.card-head .who');
+  const mark = document.querySelector<HTMLElement>('.card-head .mark');
+  if (who && mark) {
+    const fitMark = () => (mark.style.height = `${who.getBoundingClientRect().height}px`);
+    fitMark();
+    document.fonts?.ready.then(fitMark);
+    window.addEventListener('resize', fitMark, { passive: true });
+    new ResizeObserver(fitMark).observe(who);
+  }
+</script>

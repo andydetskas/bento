@@ -18,6 +18,9 @@ npm run dev        # http://localhost:4321  (tokens rebuild first)
 
 - `npm run perf`: a phone performance check. Run `npm run build && npm run preview` first. It emulates a mid-range and a low-end phone (CPU slowed 4x and 6x, slow 4G) plus a desktop, then reports load timings, long tasks (anything over 50 ms holds up a tap), JS time per frame, and draw calls and triangles per frame. `--touch` taps a row on phones, and hovers then Tabs on desktop, to check the row states. Run it after changing the default preset (count, layout, glyph set or depth).
 
+- `/site/`: the main-site prototype (andydetskas.com, "full" treatment), `site` branch only. Not linked, `noindex`.
+- `npm run handoff`: the bento → main-site hand-off across two origins. It builds once and serves the bento at http://localhost:4321/ and the site at http://localhost:4322/site/ with GitHub Pages' headers (`max-age=600`, CORS `*`, gzip). Tap Portfolio on the bento. Throttle the network in DevTools to feel it on a slow phone.
+
 Node 22.14 is installed, so this uses Astro 6. Astro 7 needs Node ≥ 22.23.
 
 ## How it's built
@@ -30,8 +33,9 @@ Node 22.14 is installed, so this uses Astro 6. Astro 7 needs Node ≥ 22.23.
 | Icons | `src/icons/*.svg` | Exported from Taos, recolored to `currentColor`. One source for the inline icons and the extruded 3D glyphs. |
 | Content | `src/content/links.json` | Profile + links (label, eyebrow, url, icon, tooltip). Accents live in tokens under `accent.*`. |
 | Presets & palettes | `src/lib/presets.ts` | A concept is a preset: scene family + palette + params + card style. `glyphPalettes` holds the 15 named Glyphs palettes (color, earth, mono), each with its own extrusion color. Paste "Copy preset" output from the lab here. |
-| 3D engine | `src/lib/shape-field/` | Framework-free Three.js. `prepareShapeField(preset)` warms up the heavy assets, then `createShapeField(canvas, preset)` returns `{ setPreset, setPalette, setParam, setAccent, setFocus, snapshot, advance, destroy }`. Families: `glyphs`, `pueblo`, `ridgeline`, `petal`. |
-| Components | `src/components/` | `LinkCard`, `ShapeField`, `Icon`. |
+| 3D engine | `src/lib/shape-field/` | Framework-free Three.js. `prepareShapeField(preset)` warms up the heavy assets, then `createShapeField(canvas, preset)` returns `{ time, seek, setPreset, setPalette, setParam, setAccent, setFocus, snapshot, advance, destroy }`. `seek(t)` jumps to scene time t (the glyph family has a closed form). Families: `glyphs`, `pueblo`, `ridgeline`, `petal`. |
+| Components | `src/components/` | `LinkCard`, `ShapeField`, `Icon`, plus the parts both pages share: `CardHead` (globe, name, role) and `Pill` (cursor pill and scene tint for any `[data-pill]` / `[data-accent]`). Site parts are in `site/`. The card surface (`.card`) and the line reveal live in `global.css`. |
+| Site content | `src/content/site.json` | Main-site prototype copy. Card copy from andydetskas.com. Roles and outcomes from the public-safe column of the facts sheet (Master Profile §2.2). No years. |
 
 Pages talk to the scene through two DOM events: `bento:accent` (hover tint) and `bento:preset` (switch concept).
 
@@ -43,6 +47,23 @@ Baseline (default checker preset):
 - While it runs: about 0.4 ms of JS per frame, a steady 60 fps, 12 draw calls and 66k triangles per frame on a phone. The camera only sees about a dozen of the ~90 glyphs, and the rest are culled.
 
 **Touch.** Taps get no tooltip, no scene tint and no row dimming. Hover styles sit behind `@media (hover: hover)`, and the tint follows keyboard focus (`:focus-visible`) only.
+
+## Main site prototype and the hand-off (`site` branch)
+
+`/site/` is the bento card grown into a site. The card keeps the bento's spot and width (top-left, one gutter in) and stays put on wide screens. The work lands beside it as boxes over the same scene. Hovering a box fades the others (keyboard focus does the same). Clicking a box opens it in place to show my role and the public outcome, with a link to the full, passcode-protected case study. One box is open at a time, Escape closes it, and a same-document view transition moves the other boxes.
+
+**Hand-off (`src/lib/handoff.ts`).** `links.` and `www.` are different origins, so the browser can't morph one page into the other. Cross-document view transitions are same-origin only. They are the same site, though:
+1. **Exit.** Tapping Portfolio opens the site in the same tab. The card folds up to its masthead at the top-left, and the scene dissolves into the background color (440 ms). That is the site card's first frame. The site then opens the card and lands the boxes.
+2. **Scene clock.** A 20-second cookie (`Domain=andydetskas.com` in production) carries the scene time. The site reads it before first paint, boots the scene right away, and `seek()`s to the same moment, so the glyph field continues instead of restarting.
+3. **Cache.** The bento preconnects to the site. Chrome prefetches the page from a speculation rule when a pointer lands on Portfolio. Elsewhere (Safari, in-app browsers) a `fetch()` on pointerdown warms the HTTP cache. With `ASSETS_ORIGIN` set at build time, every page takes `/_astro/` files from one origin. A visitor coming from the bento then already has Three.js, the fonts and the scene code cached: the HTTP cache is shared per site, but only for the same URL.
+4. **Back button.** A bfcache restore puts the bento back as it was. Cmd/Ctrl-click opens a new tab with no exit.
+
+Measured (`npm run handoff`, emulated mid-range phone, 4x CPU, slow 4G):
+- The site paints its first frame about 0.85 s after the tap, down from 1.17 s before the shared cache.
+- The HTML, Three.js, both fonts and the scene code come from cache. The site's own stylesheet and the box images come over the network.
+- Scrolling the site holds 60 fps on both emulated phones (p95 frame 16.8 ms).
+
+Not verified yet: Safari and in-app browsers. The `fetch()` warm-up and cross-origin cache reuse were only measured in Chrome.
 
 ## Glyphs palette model
 

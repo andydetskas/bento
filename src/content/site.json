@@ -1,0 +1,158 @@
+{
+  "$comment": "Main-site prototype content. Card copy comes from andydetskas.com. Roles and outcomes come from the public-safe column of the facts sheet (Master Profile 2.2). No years on this page. Case-study bodies stay on the passcode-protected pages.",
+  "intro": {
+    "headline": "Hands-on design leadership for products people have to trust.",
+    "sub": "I build teams and AI-native design systems that keep quality high.",
+    "status": "Open for opportunities",
+    "cta": { "label": "Schedule a call", "url": "https://calendar.app.google/tpdYDn9zC7N2nGeM8" },
+    "timezone": "Mountain Time Zone",
+    "follow": ["linkedin", "instagram", "figma"]
+  },
+  "work": [
+    {
+      "id": "designing-for-trust",
+      "title": "Designing for Trust",
+      "company": "Strava",
+      "accent": "strava",
+      "tint": ["alpenglow", "300"],
+      "summary": "Redesigned Strava’s privacy controls so athletes could understand, and choose, what they share.",
+      "role": "Hands-on design lead",
+      "outcome": "Within a month, more than a quarter of active athletes reviewed the new controls, and 27% of them changed a setting.",
+      "image": { "src": "/site/work/designing-for-trust.webp", "width": 1200, "height": 763, "alt": "Strava privacy controls: the privacy settings list, profile page visibility, and the Heatmap opt-out" },
+      "fit": "contain",
+      "url": "https://www.andydetskas.com/design-strava-privacy-controls",
+      "featured": true
+    },
+    {
+      "id": "agentic-design-system",
+      "title": "Agentic Design System",
+      "company": "SuppCo",
+      "accent": "suppco",
+      "tint": ["verde", "200"],
+      "summary": "Made SuppCo’s design system AI-native, so designers, engineers, and agents build from one source of truth.",
+      "role": "Hands-on owner",
+      "outcome": "Raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills inside the product repo, at a company where roughly a third of commits came from coding agents.",
+      "image": { "src": "/site/work/agentic-design-system.webp", "width": 1200, "height": 1083, "alt": "Capsule design system: agent skills repo, product sticker sheet, and TESTED catalog screen" },
+      "fit": "contain",
+      "url": "https://www.andydetskas.com/design-suppco-agentic-design-system"
+    },
+    {
+      "id": "surfacing-value",
+      "title": "Surfacing Value",
+      "company": "Strava",
+      "accent": "strava",
+      "tint": ["alpenglow", "300"],
+      "summary": "Strategic redesign of Strava’s information architecture and navigation for improved clarity, scale, and growth.",
+      "role": "Facilitator and design leader",
+      "outcome": "I facilitated the redesign sprint and led design direction. 84% of subscribers rated the new navigation better, and the experiment modeled +$3.3M a year in net bookings.",
+      "image": { "src": "/site/work/surfacing-value.webp", "width": 554, "height": 1200, "alt": "Strava redesigned home screen" },
+      "fit": "rise",
+      "url": "https://www.andydetskas.com/strategy-strava-navigation-for-clarity-retention-scale"
+    },
+    {
+      "id": "crushing-the-basics",
+      "title": "Crushing the Basics",
+      "company": "SRAM",
+      "accent": "sram",
+      "tint": ["indigo", "200"],
+      "summary": "Re-oriented the team around the core value prop of the AXS App: battery status, firmware, and connectivity.",
+      "role": "Strategy lead and facilitator",
+      "outcome": "Re-centered the app strategy on reliability (battery, firmware, connection) using a 10,000-rider survey, community vote data and 25 stakeholder interviews. It became the Digital Product Group’s plan for the year.",
+      "image": { "src": "/site/work/crushing-the-basics.webp", "width": 1148, "height": 1200, "alt": "Crush the Basics prioritization matrix" },
+      "fit": "contain",
+      "url": "https://www.andydetskas.com/strategy-sram-crush-the-basics"
+    },
+    {
+      "id": "stackscore",
+      "title": "StackScore",
+      "company": "SuppCo",
+      "accent": "suppco",
+      "tint": ["verde", "200"],
+      "summary": "Redesigned SuppCo’s signature score into a hub that explains itself and tells you what to do next.",
+      "role": "Designer (product and engineering owned the scoring logic)",
+      "outcome": "An A/B-tested update prompt raised score updates 24% for free and Pro members.",
+      "image": { "src": "/site/work/stackscore.webp", "width": 1200, "height": 763, "alt": "SuppCo StackScore app screens: the score overview ring, Quality tab, and Goals tab" },
+      "fit": "contain",
+      "url": "https://www.andydetskas.com/design-suppco-stackscore"
+    },
+    {
+      "id": "buying-club",
+      "title": "Buying Club",
+      "company": "SuppCo",
+      "accent": "suppco",
+      "tint": ["verde", "200"],
+      "summary": "Designed SuppCo’s first commerce product: a members-only club that sells trusted supplements without discounting.",
+      "role": "Responsible for design, alongside the Head of Product",
+      "outcome": "Credits, not discounts. In alpha, 56% of carts became orders, 41% of purchases were subscriptions, and 54% of buyers reordered within 45 days.",
+      "image": { "src": "/site/work/buying-club.webp", "width": 1200, "height": 783, "alt": "SuppCo Buying Club app screens: onboarding, product page with member credits, and the Buying Club hub" },
+      "fit": "contain",
+      "url": "https://www.andydetskas.com/design-suppco-buying-club"
+    },
+    {
+      "id": "battery-ui",
+      "title": "Battery UI",
+      "company": "SRAM",
+      "accent": "sram",
+      "tint": ["indigo", "200"],
+      "summary": "Redesigned battery status so riders can see how much time their SRAM batteries have left.",
+      "role": "Manager and sponsor. Two designers on my team designed it.",
+      "outcome": "My team discovered riders believed in a yellow battery light that doesn’t exist.",
+      "image": { "src": "/site/work/battery-ui.webp", "width": 548, "height": 1200, "alt": "SRAM AXS app battery status screen" },
+      "fit": "rise",
+      "url": "https://www.andydetskas.com/design-sram-battery-improvements"
+    },
+    {
+      "id": "call-and-response",
+      "title": "Call-and-Response",
+      "company": "SuppCo",
+      "accent": "suppco",
+      "tint": ["verde", "200"],
+      "summary": "Turned an onboarding questionnaire into a conversation where answers are rewarded with facts.",
+      "role": "My concept",
+      "image": { "src": "/site/work/call-and-response.webp", "width": 1200, "height": 763, "alt": "SuppCo onboarding responses: trusted products, staying consistent, and best value" },
+      "fit": "contain",
+      "url": "https://www.andydetskas.com/design-suppco-call-and-response"
+    }
+  ],
+  "kit": {
+    "title": "My working kit.",
+    "lede": "These tools help me create, manage and maintain design systems that span Figma and code.",
+    "tools": [
+      { "name": "Figma", "note": "Build the system, connect it to code, align in FigJam." },
+      { "name": "Tokens Studio", "note": "Keep tokens in sync between Figma and code." },
+      { "name": "Storybook", "note": "Keep components honest in CI, and documented." },
+      { "name": "WCAG", "note": "Hold every component to an accessible bar." },
+      { "name": "GitHub", "note": "Open the PR instead of filing a ticket for it." },
+      { "name": "Cursor", "note": "Prototype and fix components in real code." },
+      { "name": "Claude", "note": "Skill creation for design containment and code generation." },
+      { "name": "Devin", "note": "Hand a spec to a coding agent, then review." }
+    ]
+  },
+  "techniques": {
+    "lede": "My creative process involves pixels and people. These are the approaches you can expect when we work together.",
+    "posts": [
+      { "title": "Vibeframing", "note": "Speeding up product definition and prototyping", "url": "https://www.andydetskas.com/techniques/vibeframing", "icon": "spark" },
+      { "title": "Integrity Compass", "note": "Design methods for trust, safety, inclusion, and integrity", "url": "https://www.andydetskas.com/techniques/integrity-compass", "icon": "compass" },
+      { "title": "Haptic patterns", "note": "Quick ways and custom ways to design with haptics", "url": "https://www.andydetskas.com/techniques/making-haptics-happen", "icon": "lightning" },
+      { "title": "Design Dojo", "note": "Creating space to learn and grow in your design team", "url": "https://www.andydetskas.com/techniques/the-design-dojo", "icon": "spiral" }
+    ],
+    "all": "https://www.andydetskas.com/techniques"
+  },
+  "about": {
+    "title": "Hi, I’m Andy.",
+    "body": "I lead design for products people have to trust: privacy and safety at Strava, connected bikes at SRAM, and supplement trust at SuppCo (acquired by Function Health). I’m a player-coach who does the work alongside my team and builds the systems around it.",
+    "more": "For inspiration, I love to watch movies, travel and shoot photos, and spend time learning about the craftsmanship that goes into building watches and bikes. I love creative endeavors that blend the technical and creative.",
+    "experience": [
+      { "role": "Head of Product Design", "org": "SuppCo (acquired by Function Health)" },
+      { "role": "UX Manager (Product Design & Research)", "org": "SRAM" },
+      { "role": "Senior Staff Product Designer / Senior Product Design Manager", "org": "Strava" },
+      { "role": "Staff Product Designer", "org": "VMware Tanzu Labs (formerly Pivotal Labs)" },
+      { "role": "Senior Product Designer", "org": "Wipfli (formerly Punchkick Interactive)" },
+      { "role": "Senior Interactive Designer", "org": "DePaul University" }
+    ]
+  },
+  "contact": {
+    "title": "Open for Opportunities",
+    "body": "Hiring a design manager or head of design for a product people have to trust? I’m a design leader who still ships. Let’s talk."
+  }
+}
