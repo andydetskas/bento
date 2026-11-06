@@ -2,6 +2,8 @@
 // A section of the site as a card. Closed, it shows a summary and the whole card is a button.
 // Open, it takes over the work area (the right two columns on desktop, the right column on
 // tablet; in place on phones) and shows its panel. The hero and the kit card stay put.
+// The URL hash is the section name (#portfolio) and the element id is card-portfolio, so the
+// browser's own jump-to-anchor doesn't fight the takeover's scroll.
 interface Props {
   id: string;
   eyebrow: string;
@@ -21,7 +23,8 @@ const arrow = 'M7 17 17 7M9 7h8v8';
 
 <section
   class:list={['card box', `area-${id}`, { 'is-neutral': !accent, 'is-takeover': expandable }]}
-  id={id}
+  id={`card-${id}`}
+  data-section={id}
   data-expandable={expandable ? '' : undefined}
   data-accent={accent}
   data-pill={pill}

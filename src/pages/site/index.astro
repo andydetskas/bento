@@ -208,18 +208,20 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
     else card.dataset.pill = card.dataset.pillClosed;
   };
 
-  const show = (card: HTMLElement | undefined, { animate = true } = {}) => {
+  // Takeover starts at the top row; on phones, bring the opened card's top to the gutter line.
+  const bringIntoView = (card: HTMLElement, behavior: ScrollBehavior = 'instant') => {
+    if (wide.matches) return window.scrollTo({ top: 0, behavior });
+    const line = parseFloat(getComputedStyle(grid).paddingTop) || 16;
+    window.scrollBy({ top: card.getBoundingClientRect().top - line, behavior });
+  };
+
+  const show = (card: HTMLElement | undefined, { animate = true, scroll = true } = {}) => {
     const update = () => {
       for (const c of cards) if (c !== card && c.classList.contains('is-open')) setOpen(c, false);
       if (card) setOpen(card, true);
       grid.classList.toggle('has-open', !!card);
-      history.replaceState(null, '', card ? `#${card.id}` : location.pathname + location.search);
-      // Takeover starts at the top row; on phones, bring the opened card's top into view.
-      if (card && wide.matches) window.scrollTo({ top: 0, behavior: 'instant' });
-      else if (card) {
-        const line = parseFloat(getComputedStyle(grid).paddingTop) || 16;
-        window.scrollBy({ top: card.getBoundingClientRect().top - line, behavior: 'instant' });
-      }
+      history.replaceState(null, '', card ? `#${card.dataset.section}` : location.pathname + location.search);
+      if (card && scroll) bringIntoView(card);
     };
     if (animate && !reduced && 'startViewTransition' in document) document.startViewTransition(update);
     else update();
@@ -242,9 +244,10 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
 
   // Deep links: /#portfolio opens Portfolio on arrival, and an in-page link to #leadership
   // (or editing the hash) opens Leadership.
-  const fromHash = () => cards.find((c) => `#${c.id}` === location.hash);
+  const fromHash = () => cards.find((c) => `#${c.dataset.section}` === location.hash);
+  // On arrival the hero is still opening above it, so on phones the scroll waits for the entrance.
   const linked = fromHash();
-  if (linked) show(linked, { animate: false });
+  if (linked) show(linked, { animate: false, scroll: wide.matches });
   window.addEventListener('hashchange', () => {
     const card = fromHash();
     if (card !== openCard()) show(card);
@@ -256,7 +259,10 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
   const ready = () =>
     requestAnimationFrame(() => {
       root.classList.add('is-ready');
-      setTimeout(() => root.classList.add('is-settled'), 1400);
+      setTimeout(() => {
+        root.classList.add('is-settled');
+        if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, reduced ? 'instant' : 'smooth');
+      }, 1400);
     });
   const fontsIn = document.fonts?.ready ?? Promise.resolve();
   Promise.race([fontsIn, new Promise((r) => setTimeout(r, 400))]).then(ready);
