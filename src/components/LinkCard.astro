@@ -220,8 +220,12 @@ let line = 2; // stagger index: lines land 60ms apart (the masthead takes 0 and 
   :global(html.is-leaving) .frame {
     align-items: flex-start;
   }
+  /* ...and narrows to the site's first column (--site-col), where the hero card sits. */
   :global(html.is-leaving) .card {
-    transition: margin-top var(--exit-ms) var(--motion-ease-standard);
+    width: min(100%, var(--site-col));
+    transition:
+      margin-top var(--exit-ms) var(--motion-ease-standard),
+      width var(--exit-ms) var(--motion-ease-standard);
   }
   :global(html.is-leaving) .rows {
     overflow: hidden;

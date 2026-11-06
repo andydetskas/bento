@@ -50,10 +50,23 @@ Baseline (default checker preset):
 
 ## Main site prototype and the hand-off (`site` branch)
 
-`/site/` is the bento card grown into a site. The card keeps the bento's spot and width (top-left, one gutter in) and stays put on wide screens. The work lands beside it as boxes over the same scene. Hovering a box fades the others (keyboard focus does the same). Clicking a box opens it in place to show my role and the public outcome, with a link to the full, passcode-protected case study. One box is open at a time, Escape closes it, and a same-document view transition moves the other boxes.
+`/site/` is the bento card grown into a site: six cards over the same scene, two rows of three on desktop.
+
+```
+hero    portfolio   leadership
+kit     techniques  about
+```
+
+- **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The hero and the kit stay put and the other cards step out. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
+- **Smaller screens.** Tablet: hero and kit on the left, the work cards stacked on the right, and the takeover fills the right column. Phones: one column, and cards open in place.
+- **Hover.** Hovering a card fades the others; keyboard focus does the same. Off while a card is open.
+- **Deep links.** The URL hash follows the open card (`/site/#portfolio`), so a section can be linked from a resume or email. It uses `replaceState`, so Back still leaves the page.
+- **Portfolio panel.** Each case study shows my role and the public outcome, and links to the full, passcode-protected case study.
+- **Leadership.** Built only from the facts sheet's public-safe management lines.
+- **Widths.** Column one is `--site-col` (`global.css`). The hero card fills it, and the bento's exit narrows its card to it.
 
 **Hand-off (`src/lib/handoff.ts`).** `links.` and `www.` are different origins, so the browser can't morph one page into the other. Cross-document view transitions are same-origin only. They are the same site, though:
-1. **Exit.** Tapping Portfolio opens the site in the same tab. The card folds up to its masthead at the top-left, and the scene dissolves into the background color (440 ms). That is the site card's first frame. The site then opens the card and lands the boxes.
+1. **Exit.** Tapping Portfolio opens the site in the same tab. The card folds up to its masthead at the top-left and narrows to the site's first column, and the scene dissolves into the background color (440 ms). That is the hero card's first frame. The site then opens the hero and lands the other cards.
 2. **Scene clock.** A 20-second cookie (`Domain=andydetskas.com` in production) carries the scene time. The site reads it before first paint, boots the scene right away, and `seek()`s to the same moment, so the glyph field continues instead of restarting.
 3. **Cache.** The bento preconnects to the site. Chrome prefetches the page from a speculation rule when a pointer lands on Portfolio. Elsewhere (Safari, in-app browsers) a `fetch()` on pointerdown warms the HTTP cache. With `ASSETS_ORIGIN` set at build time, every page takes `/_astro/` files from one origin. A visitor coming from the bento then already has Three.js, the fonts and the scene code cached: the HTTP cache is shared per site, but only for the same URL.
 4. **Back button.** A bfcache restore puts the bento back as it was. Cmd/Ctrl-click opens a new tab with no exit.

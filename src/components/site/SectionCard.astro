@@ -1,0 +1,73 @@
+---
+// A section of the site as a card. Closed, it shows a summary and the whole card is a button.
+// Open, it takes over the work area (the right two columns on desktop, the right column on
+// tablet; in place on phones) and shows its panel. The hero and the kit card stay put.
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  /** Accent color (hex): arrow, pill and scene tint. None = neutral. */
+  accent?: string;
+  /** Pill text while closed. */
+  pill?: string;
+  /** Landing order (stagger). */
+  index: number;
+  /** Cards without a panel (the kit) are plain cards. */
+  expandable?: boolean;
+}
+const { id, eyebrow, title, accent, pill, index, expandable = true } = Astro.props;
+const arrow = 'M7 17 17 7M9 7h8v8';
+---
+
+<section
+  class:list={['card box', `area-${id}`, { 'is-neutral': !accent, 'is-takeover': expandable }]}
+  id={id}
+  data-expandable={expandable ? '' : undefined}
+  data-accent={accent}
+  data-pill={pill}
+  aria-labelledby={`${id}-title`}
+  style={`${accent ? `--accent:${accent};` : ''}--b:${index};view-transition-name:box-${id}`}
+>
+  {
+    expandable && (
+      <button class="box-close" type="button" aria-label={`Close ${title}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M7 7l10 10M17 7 7 17" />
+        </svg>
+      </button>
+    )
+  }
+  <div class="box-top">
+    <p class="eyebrow">{eyebrow}</p>
+    {
+      expandable && (
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d={arrow} />
+          </svg>
+        </span>
+      )
+    }
+  </div>
+  <h2 class="box-title" id={`${id}-title`}>
+    {
+      expandable ? (
+        <button class="box-hit" type="button" aria-expanded="false" aria-controls={`${id}-panel`}>
+          {title}
+        </button>
+      ) : (
+        title
+      )
+    }
+  </h2>
+  <div class="box-summary">
+    <slot name="summary" />
+  </div>
+  {
+    expandable && (
+      <div class="box-panel" id={`${id}-panel`} hidden>
+        <slot name="panel" />
+      </div>
+    )
+  }
+</section>

@@ -1,63 +1,102 @@
 /*
-  Main site (prototype): the bento card on the left, work boxes landing over the scene on the
-  right. Boxes share the card surface (.card in global.css), so the page reads as one card that
-  became many.
+  Main site (prototype). Six cards over the bento's scene, two rows of three on desktop:
+    hero       portfolio   leadership
+    kit        techniques  about
+  Opening a work card (portfolio, leadership, techniques, about) takes over the right two
+  columns; the hero and the kit stay put. Tablet: hero and kit on the left, the work cards
+  stacked on the right, and the takeover fills the right column. Phones: one column, cards
+  open in place. Column one is --site-col (global.css), which the bento's exit also narrows to.
 */
 
 .site {
-  --gap: clamp(12px, round(1.8vw, 4px), 28px);
   position: relative;
   z-index: 1;
   min-height: 100svh;
+  margin: 0;
   padding: var(--gutter);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--gap);
-  align-items: start;
+  gap: var(--site-gap);
+  align-items: stretch;
 }
-/* The card keeps the bento's width and spot (top-left, one gutter in), so the hand-off lines up. */
+
 @media (min-width: 760px) {
   .site {
-    grid-template-columns: var(--card-w) minmax(0, 1fr);
+    grid-template-columns: var(--site-col) minmax(0, 1fr);
+    grid-template-areas:
+      'hero portfolio'
+      'hero leadership'
+      'kit  techniques'
+      'kit  about';
+    align-items: start;
   }
-}
-
-.boxes {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-auto-flow: row dense;
-  gap: var(--gap);
-  margin: 0;
+  .site.has-open {
+    grid-template-areas:
+      'hero panel'
+      'kit  panel'
+      '.    panel';
+    grid-template-rows: auto auto 1fr;
+  }
 }
 @media (min-width: 1100px) {
-  .boxes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .site {
+    grid-template-columns: var(--site-col) repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'hero portfolio  leadership'
+      'kit  techniques about';
+    align-items: stretch;
   }
-  .box.is-wide,
-  .box.is-open {
-    grid-column: 1 / -1;
+  .site.has-open {
+    grid-template-areas:
+      'hero panel panel'
+      'kit  panel panel'
+      '.    panel panel';
+    grid-template-rows: auto auto 1fr;
+  }
+}
+@media (min-width: 760px) {
+  .area-hero { grid-area: hero; }
+  .area-portfolio { grid-area: portfolio; }
+  .area-leadership { grid-area: leadership; }
+  .area-kit { grid-area: kit; }
+  .area-techniques { grid-area: techniques; }
+  .area-about { grid-area: about; }
+  .site.has-open > .area-hero,
+  .site.has-open > .area-kit {
+    align-self: start;
+  }
+  .site.has-open > .is-open {
+    grid-area: panel;
+  }
+  /* The other work cards step out while one is open. */
+  .site.has-open > .is-takeover:not(.is-open) {
+    display: none;
   }
 }
 
-/* ── Box ────────────────────────────────────────────── */
+/* ── Card ───────────────────────────────────────────── */
 .box {
   position: relative;
   padding: var(--pad);
-  container-type: inline-size;
+  gap: var(--space-4);
   view-transition-class: box;
   transition:
     opacity var(--motion-base) var(--motion-ease-standard),
     background-color var(--motion-base) var(--motion-ease-standard);
 }
+.box.is-open {
+  gap: var(--space-6);
+  container-type: inline-size;
+}
 
-/* Focus mode (Bohdana): the hovered box stays, the others step back. */
+/* Focus mode (Bohdana): the hovered card stays, the others step back. Off while one is open. */
 @media (hover: hover) {
-  .boxes:has(> .box:hover) > .box:not(:hover) {
+  .site:not(.has-open):has(> .box:hover) > .box:not(:hover) {
     opacity: 0.28;
   }
 }
 /* Keyboard focus mirrors hover; the focus a click or tap leaves behind doesn't. */
-.boxes:has(> .box :focus-visible) > .box:not(:has(:focus-visible)) {
+.site:not(.has-open):has(> .box :focus-visible) > .box:not(:has(:focus-visible)) {
   opacity: 0.28;
 }
 
@@ -88,14 +127,49 @@
   letter-spacing: var(--tracking-title);
   text-wrap: balance;
 }
+.box.is-open .box-title {
+  font-size: var(--step-4);
+  letter-spacing: var(--tracking-display);
+}
 .box-body {
   margin: 0;
   color: var(--color-text-muted);
   text-wrap: pretty;
 }
+.box-summary,
+.box-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.box-summary {
+  flex: 1;
+}
+.box-panel {
+  gap: var(--space-8);
+}
+.box.is-open .box-summary {
+  display: none;
+}
+.panel-lede {
+  margin: 0;
+  max-width: 40em;
+  font-size: var(--step-1);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+.meta {
+  margin: auto 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
 
-/* The whole box is the button: the title's button stretches over it. Links inside an open box
-   sit above that layer. */
+/* Closed, the whole card is the button: the title's button stretches over it. Open, only the
+   title and the close button act, so links and text in the panel work normally. */
 .box-hit {
   all: unset;
   cursor: pointer;
@@ -106,14 +180,63 @@
   inset: 0;
   border-radius: inherit;
 }
+.box.is-open .box-hit::after {
+  content: none;
+}
 .box:has(.box-hit:focus-visible) {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
-.box .btn,
-.box a:not(.box-hit) {
+.box a {
   position: relative;
   z-index: 1;
+}
+
+/* Close: stays in reach while a long panel scrolls (sticky, without taking up a row). */
+.box-close {
+  all: unset;
+  box-sizing: border-box;
+  position: sticky;
+  top: var(--gutter);
+  z-index: 2;
+  align-self: flex-end;
+  width: 40px;
+  height: 40px;
+  margin-bottom: -40px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line);
+  background: var(--color-card);
+  display: none;
+  place-items: center;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-quick) var(--motion-ease-standard),
+    color var(--motion-quick) var(--motion-ease-standard);
+}
+.box-close svg {
+  width: 18px;
+  height: 18px;
+}
+.box.is-open .box-close {
+  display: grid;
+}
+/* The close button takes no row, so the eyebrow keeps its closed position. */
+.box.is-open .box-close + .box-top {
+  margin-top: calc(var(--space-6) * -1);
+}
+.box.is-open .box-top .arrow {
+  visibility: hidden;
+}
+.box-close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .box-close:hover {
+    background: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    color: var(--color-card);
+  }
 }
 
 /* ── Arrow circle ───────────────────────────────────── */
@@ -129,36 +252,18 @@
   transition:
     background-color var(--motion-quick) var(--motion-ease-standard),
     border-color var(--motion-quick) var(--motion-ease-standard),
-    color var(--motion-quick) var(--motion-ease-standard),
-    transform var(--motion-base) var(--motion-ease-settle);
+    color var(--motion-quick) var(--motion-ease-standard);
 }
 .arrow svg {
-  grid-area: 1 / 1;
   width: 18px;
   height: 18px;
-  transition: opacity var(--motion-quick) var(--motion-ease-standard), rotate var(--motion-base) var(--motion-ease-settle);
-}
-.arrow .i-close {
-  opacity: 0;
-  rotate: -45deg;
-}
-.box.is-open .arrow .i-open {
-  opacity: 0;
-  rotate: 45deg;
-}
-.box.is-open .arrow .i-close {
-  opacity: 1;
-  rotate: 0deg;
 }
 @media (hover: hover) {
-  .box:hover .arrow,
+  .box:not(.is-open):hover .arrow,
   .frow:hover .arrow {
     background: var(--accent, var(--color-text-primary));
     border-color: var(--accent, var(--color-text-primary));
     color: var(--color-pill-text);
-  }
-  .box.is-neutral:hover .arrow {
-    color: var(--color-card);
   }
 }
 .frow .arrow {
@@ -203,35 +308,114 @@
   }
 }
 
-/* ── Work box ───────────────────────────────────────── */
-.work-body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
+/* ── Portfolio ──────────────────────────────────────── */
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-1);
 }
-.work-text {
+.mosaic-cell {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--space-2);
+  background: var(--tint);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 8%;
+}
+.mosaic-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: scale var(--motion-settle) var(--motion-ease-settle);
+}
+.mosaic-cell[data-fit='rise'] {
+  place-items: start center;
+  padding: 10% 0 0;
+}
+.mosaic-cell[data-fit='rise'] img {
+  width: 44%;
+  height: auto;
+}
+@media (hover: hover) {
+  .area-portfolio:not(.is-open):hover .mosaic-cell img {
+    scale: 1.04;
+  }
+}
+
+/* Tiles: case studies (Portfolio) and posts (Techniques), two across in a takeover. */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-10) var(--space-8);
+}
+.tile {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  transition: opacity var(--motion-base) var(--motion-ease-standard);
 }
+.tile-title {
+  margin: var(--space-1) 0 0;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+/* The tile is the link: the title's link stretches over it. */
+.box .tile-title a {
+  position: static;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+.tile-title a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.tile:has(a:focus-visible) {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 6px;
+  border-radius: var(--space-2);
+}
+.tile .eyebrow {
+  margin-top: var(--space-2);
+}
+@media (hover: hover) {
+  .tiles:has(.tile:hover) .tile:not(:hover) {
+    opacity: 0.4;
+  }
+  .tile:hover .tile-title {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: var(--accent, currentColor);
+  }
+  .tile:hover img {
+    scale: 1.025;
+  }
+}
+
 .work-art {
-  --r: max(8px, calc(var(--card-radius) - var(--pad) * 0.6));
-  order: -1;
   aspect-ratio: 16 / 10;
-  border-radius: var(--r);
+  border-radius: var(--space-3);
   background: var(--tint);
   overflow: hidden;
   display: grid;
   place-items: center;
   padding: 6%;
 }
-.work-art img {
+.work-art img,
+.post-art img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   transition: scale var(--motion-settle) var(--motion-ease-settle);
 }
-/* Phone screens rise from the bottom edge instead of shrinking to fit. */
 .work-art[data-fit='rise'] {
   place-items: start center;
   padding: 7% 0 0;
@@ -240,27 +424,20 @@
   width: 42%;
   height: auto;
 }
-.is-wide .work-art {
-  aspect-ratio: 16 / 8;
+.post-art {
+  aspect-ratio: 800 / 448;
+  border-radius: var(--space-3);
+  overflow: hidden;
+  background: var(--color-page);
 }
-@media (hover: hover) {
-  .work:hover .work-art img {
-    scale: 1.025;
-  }
+.post-art img {
+  object-fit: cover;
 }
 
-/* Open: role, outcome and the link to the full case study. Wide boxes put the text beside the art. */
-.work-panel {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-5);
-  padding-top: var(--space-3);
-}
 .facts {
-  margin: 0;
+  margin: var(--space-1) 0 0;
   display: grid;
-  gap: var(--space-1);
+  gap: 2px;
 }
 .facts dt {
   font-family: var(--font-mono);
@@ -275,38 +452,96 @@
   font-weight: var(--weight-medium);
 }
 .outcome {
-  margin: 0;
+  margin: var(--space-1) 0 0;
   padding-left: var(--space-4);
   border-left: 3px solid var(--accent);
-  font-size: var(--step-1);
-  line-height: 1.4;
+  font-size: var(--step-0);
+  line-height: 1.45;
   font-weight: var(--weight-medium);
   text-wrap: pretty;
 }
-.work.is-open .box-title {
-  font-size: var(--step-3);
+
+/* ── Leadership ─────────────────────────────────────── */
+.stats {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
 }
-@container (min-width: 680px) {
-  .work.is-open .work-body {
-    display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    align-items: start;
-    gap: var(--space-8);
+.stats li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-line);
+}
+.stats strong {
+  font-size: var(--step-4);
+  line-height: 1;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+}
+.stats span {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  column-gap: var(--space-8);
+}
+.groups {
+  display: flex;
+  flex-direction: column;
+}
+.group {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3) var(--space-8);
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--color-line);
+}
+@container (min-width: 640px) {
+  .group {
+    grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr);
   }
-  .work.is-open .work-art {
-    order: 1;
-    aspect-ratio: 5 / 4;
-  }
+}
+.group header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.group h3 {
+  margin: 0;
+  font-size: var(--step-1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+.group ul {
+  margin: 0;
+  padding: 0 0 0 1.1em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.group li {
+  text-wrap: pretty;
+}
+.group li::marker {
+  color: var(--accent);
 }
 
 /* ── Kit ────────────────────────────────────────────── */
 .kit-tools {
   list-style: none;
-  margin: var(--space-2) 0 0;
+  margin: var(--space-1) 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
-  gap: var(--space-5) var(--space-6);
+  gap: var(--space-4) var(--space-5);
 }
 .kit-tools li {
   display: flex;
@@ -325,69 +560,23 @@
 }
 
 /* ── Techniques ─────────────────────────────────────── */
-.posts {
+.post-list {
   list-style: none;
-  margin: var(--space-2) 0 0;
+  margin: var(--space-1) 0 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  column-gap: var(--space-8);
 }
-.post {
-  display: grid;
-  grid-template-columns: 24px 1fr auto;
+.post-list li {
+  display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  padding: var(--space-3) 0;
   border-top: 1px solid var(--color-line);
-  color: inherit;
-  text-decoration: none;
-  outline: none;
-  transition: opacity var(--motion-base) var(--motion-ease-standard);
-}
-.post .icon {
-  width: 24px;
-  height: 24px;
-}
-.post-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-.post-title {
   font-weight: var(--weight-medium);
 }
-.post-note {
-  font-size: var(--step--1);
-  color: var(--color-text-muted);
-}
-.post .arrow {
-  width: 32px;
-  height: 32px;
-}
-.post .arrow svg {
-  width: 14px;
-  height: 14px;
-}
-.posts:has(.post:focus-visible) .post:not(:focus-visible) {
-  opacity: 0.28;
-}
-.post:focus-visible .post-title {
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.15em;
-  text-decoration-color: var(--color-focus);
-}
-@media (hover: hover) {
-  .posts:has(.post:hover) .post:not(:hover) {
-    opacity: 0.28;
-  }
-  .post:hover .arrow {
-    background: var(--color-text-primary);
-    border-color: var(--color-text-primary);
-    color: var(--color-card);
-  }
+.post-list .icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
 }
 .text-link {
   align-self: flex-start;
@@ -406,11 +595,8 @@
 .about-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-}
-.about-panel p {
-  margin: 0;
-  color: var(--color-text-muted);
+  gap: var(--space-6);
+  max-width: 44em;
 }
 .roles {
   list-style: none;
@@ -432,27 +618,7 @@
   color: var(--color-text-muted);
 }
 
-/* ── Contact ────────────────────────────────────────── */
-.contact-title {
-  margin: 0;
-  font-size: var(--step-4);
-  line-height: 1.05;
-  font-weight: var(--weight-medium);
-  letter-spacing: var(--tracking-display);
-}
-.contact .box-body {
-  max-width: 36em;
-  font-size: var(--step-1);
-  line-height: 1.4;
-}
-.contact .cta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-/* ── Landing: boxes rise into place once the card has opened ── */
+/* ── Landing: cards rise into place once the hero has opened ── */
 @keyframes box-land {
   from {
     opacity: 0;
@@ -464,7 +630,7 @@ html.js:not(.is-ready) .box {
 }
 html.js.is-ready .box {
   animation: box-land 900ms var(--motion-ease-settle) backwards;
-  animation-delay: calc(min(var(--b), 8) * 70ms + 280ms);
+  animation-delay: calc(var(--b) * 80ms + 280ms);
 }
 /* Arriving from the bento: the masthead is already in place, so it doesn't reveal again. */
 html.from-handoff .card-head .line-inner {
@@ -475,9 +641,10 @@ html.from-handoff .scene {
   transition-duration: 480ms;
 }
 
-/* ── Open in place (same-document view transition) ──── */
-/* Each box animates from its old spot and size to its new one. Snapshots keep their natural
-   size, pinned top-left and clipped by the box, so text never stretches while a box grows. */
+/* ── Takeover (same-document view transition) ────────── */
+/* Each card animates from its old spot and size to its new one. Snapshots keep their natural
+   size, pinned top-left and clipped by the card, so text never stretches while a card grows;
+   cards that step out fade. */
 ::view-transition-group(*.box) {
   animation-duration: 560ms;
   animation-timing-function: var(--motion-ease-settle);
@@ -494,9 +661,9 @@ html.from-handoff .scene {
   object-position: left top;
 }
 ::view-transition-old(*.box) {
-  animation-duration: 180ms;
+  animation-duration: 200ms;
 }
-/* The rest of the page (the card and the scene) just switches. */
+/* The rest of the page (the scene) just switches. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -511,9 +678,10 @@ html.from-handoff .scene {
   }
   .box,
   .arrow,
-  .arrow svg,
+  .tile,
+  .mosaic-cell img,
   .work-art img,
-  .post {
+  .post-art img {
     transition: none;
   }
 }
