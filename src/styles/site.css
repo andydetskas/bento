@@ -65,6 +65,11 @@
   .site.has-open > .area-kit {
     align-self: start;
   }
+  /* The hero hugs its content while it opens; stretched to the row from the start, it showed
+     as a tall blank card before its content arrived. */
+  html.js:not(.is-settled) .area-hero {
+    align-self: start;
+  }
   .site.has-open > .is-open {
     grid-area: panel;
   }
@@ -626,17 +631,22 @@
   color: var(--color-text-muted);
 }
 
-/* ── Landing: cards rise into place once the hero has opened ── */
+/* ── Entrance ───────────────────────────────────────── */
+/* Two steps, set by the page script:
+   is-ready    fonts are in: the masthead's lines reveal over the scene (as on the bento).
+   is-landing  the hero opens and the cards rise into place. On a direct visit this waits
+               until the scene is showing (capped), so the background comes first; after a
+               hand-off it follows straight on, since the bento already showed the scene. */
 @keyframes box-land {
   from {
     opacity: 0;
     translate: 0 40px;
   }
 }
-html.js:not(.is-ready) .box {
+html.js:not(.is-landing) .box {
   opacity: 0;
 }
-html.js.is-ready .box {
+html.js.is-landing .box {
   animation: box-land 900ms var(--motion-ease-settle) backwards;
   animation-delay: calc(var(--b) * 80ms + 280ms);
 }
@@ -678,10 +688,10 @@ html.from-handoff .scene {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.js:not(.is-ready) .box {
+  html.js:not(.is-landing) .box {
     opacity: 1;
   }
-  html.js.is-ready .box {
+  html.js.is-landing .box {
     animation: none;
   }
   .box,
