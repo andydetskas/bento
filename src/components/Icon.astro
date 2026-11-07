@@ -1,6 +1,6 @@
 ---
-// Inline Taos icon (currentColor). Decorative by default.
-import { icons } from '../lib/icons';
+// Inline icon (currentColor): the Taos set, then the site's marks. Decorative by default.
+import { icons, marks } from '../lib/icons';
 
 interface Props {
   name: string;
@@ -8,8 +8,8 @@ interface Props {
   label?: string;
 }
 const { name, class: className, label } = Astro.props;
-const svg = icons[name];
-if (!svg) throw new Error(`Unknown Taos icon: ${name}`);
+const svg = icons[name] ?? marks[name];
+if (!svg) throw new Error(`Unknown icon: ${name}`);
 ---
 
 <span class:list={['icon', className]} role={label ? 'img' : undefined} aria-label={label} set:html={svg} />
