@@ -57,13 +57,14 @@ hero    portfolio   leadership
         techniques  about
 ```
 
-The left column below the hero stays open, so the scene shows there as you scroll. My working kit lives in About: one line on the card, and the full kit beside the experience list when it's open.
+The left column below the hero stays open, so the scene shows there as you scroll. The hero links to LinkedIn and Figma. Leadership's card lists four practices (the numbers are in its panel). About leads with a photo, and My working kit lives there: one line on the card, and the full kit beside the experience list when it's open.
 
 - **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The other cards step out, and the hero stays put while the panel scrolls. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
 - **Smaller screens.** Tablet: the hero on the left, the other cards stacked on the right, and the takeover fills the right column. Phones: one column, and cards open in place.
 - **Hover.** Hovering a card fades the others; keyboard focus does the same. Off while a card is open. The hero card has no mouseovers (no pills, no scene tint, no row dimming); keyboard focus still shows.
 - **Panels show everything.** Portfolio opens to all eight case studies and Techniques to all six techniques, so nothing hides behind a "see all" link.
-- **Deep links.** The URL hash follows the open card (`/site/#portfolio`), so a section can be linked from a resume or email. It uses `replaceState`, so Back still leaves the page.
+- **A URL per section.** `/site/work/`, `/site/leadership/`, `/site/techniques/` and `/site/about/` are real pages (`src/pages/site/[section].astro`, list in `src/lib/site-sections.ts`): the same grid rendered with that card open, with its own title, description and canonical URL, so search engines and AI answer engines see a page per section. Each card is a link to its page; on the page, a click opens the card in place and swaps the URL (`replaceState`, so Back still leaves the page), and a new-tab click loads the section's page. Slugs match the Framer site's paths. Old hash links (`/site/#portfolio`) still open their card and move to its URL.
+- **Techniques link out.** Each technique on the card links to its article (new tab), above the card's own link. Hovering one brings in an arrow and a cursor pill with its one-line note; a long pill flips to the pointer's left near the edge.
 - **Portfolio panel.** Each case study shows my role and the public outcome, and links to the full, passcode-protected case study.
 - **Leadership.** Built only from the facts sheet's public-safe management lines.
 - **Widths.** Column one is `--site-col` (`global.css`). The hero card fills it, and the bento's exit narrows its card to it.

@@ -181,11 +181,16 @@
   color: var(--color-text-muted);
 }
 
-/* Closed, the whole card is the button: the title's button stretches over it. Open, only the
-   title and the close button act, so links and text in the panel work normally. */
+/* Closed, the whole card is a link to its section: the title's link stretches over it, and links
+   inside the card (each technique) sit above it. Open, only the title and the close button act,
+   so links and text in the panel work normally. */
 .box-hit {
   all: unset;
   cursor: pointer;
+}
+.box .box-hit {
+  position: static;
+  z-index: auto;
 }
 .box-hit::after {
   content: '';
@@ -500,6 +505,43 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
   column-gap: var(--space-8);
 }
+/* How I lead, in four lines: the card shows these; the numbers live in the open panel. */
+.principles {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.principles li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) 0;
+  border-top: 1px solid var(--color-line);
+}
+.principles strong {
+  font-size: var(--step-1);
+  line-height: 1.2;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+.principles span {
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+.principles-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: var(--space-8);
+}
+@container (min-width: 640px) {
+  .principles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 .groups {
   display: flex;
   flex-direction: column;
@@ -573,25 +615,106 @@
   padding: 0;
 }
 .post-list li {
+  border-top: 1px solid var(--color-line);
+}
+/* Each technique links to its article. Hover (or keyboard focus) underlines it and brings in
+   the arrow; the cursor pill says what the technique is about. */
+.post-list a {
   display: flex;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) 0;
-  border-top: 1px solid var(--color-line);
+  color: inherit;
   font-weight: var(--weight-medium);
+  text-decoration: none;
+  outline: none;
 }
 .post-list .icon {
   width: 24px;
   height: 20px;
   flex: none;
 }
+.post-title {
+  flex: 1;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--motion-quick) var(--motion-ease-standard);
+}
+.post-go {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--color-text-muted);
+  opacity: 0;
+  translate: -4px 0;
+  transition:
+    opacity var(--motion-quick) var(--motion-ease-standard),
+    translate var(--motion-base) var(--motion-ease-settle);
+}
+.post-list a:focus-visible .post-title {
+  text-decoration-color: var(--color-focus);
+  text-decoration-thickness: 2px;
+}
+.post-list a:focus-visible .post-go {
+  opacity: 1;
+  translate: 0 0;
+}
+@media (hover: hover) {
+  .post-list a:hover .post-title {
+    text-decoration-color: currentColor;
+  }
+  .post-list a:hover .post-go {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+/* Touch: no hover, so the arrow is always there. */
+@media (hover: none) {
+  .post-go {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
 
 /* ── About (with My working kit) ────────────────────── */
+/* The photo crops to the face on the card; open, it sits beside the intro. */
+.about-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: 50% 24%;
+  border-radius: var(--space-2);
+  background: var(--color-page);
+}
 .about-panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
   max-width: 48em;
+}
+.about-intro {
+  display: grid;
+  gap: var(--space-6);
+}
+.about-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.about-intro .about-photo {
+  max-width: 320px;
+  aspect-ratio: 576 / 650;
+  border-radius: var(--space-3);
+}
+@container (min-width: 640px) {
+  .about-intro {
+    grid-template-columns: minmax(0, 0.38fr) minmax(0, 1fr);
+    align-items: start;
+  }
 }
 .about-section {
   display: flex;
@@ -716,7 +839,9 @@ html.from-handoff .scene {
   .tile,
   .mosaic-cell img,
   .work-art img,
-  .post-art img {
+  .post-art img,
+  .post-title,
+  .post-go {
     transition: none;
   }
 }

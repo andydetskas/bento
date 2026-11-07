@@ -11,7 +11,6 @@
     "timezone": "Mountain Time Zone",
     "follow": [
       "linkedin",
-      "instagram",
       "figma"
     ]
   },
@@ -30,6 +29,24 @@
     "eyebrow": "Leadership",
     "title": "How I lead",
     "lede": "I build the team and the operating system around it: research, rituals, career growth and design systems.",
+    "principles": [
+      {
+        "title": "Stay in the work",
+        "body": "I design alongside the team, so my feedback comes from the work, not from a distance."
+      },
+      {
+        "title": "Enable others",
+        "body": "Research, critique and design systems that help everyone make good calls without me in the room."
+      },
+      {
+        "title": "Grow people on purpose",
+        "body": "Clear career levels and honest critique. I’ve promoted designers into staff and management roles."
+      },
+      {
+        "title": "Build trust in early",
+        "body": "Integrity Compass, which I co-created, brings privacy, safety and inclusion into the room before launch."
+      }
+    ],
     "stats": [
       {
         "value": "5→15",
@@ -332,6 +349,12 @@
   },
   "about": {
     "title": "Hi, I’m Andy.",
+    "photo": {
+      "src": "/site/about/andy.webp",
+      "width": 576,
+      "height": 650,
+      "alt": "Andy Detskas, outdoors under a tree, in a denim shirt"
+    },
     "body": "I lead design for products people have to trust: privacy and safety at Strava, connected bikes at SRAM, and supplement trust at SuppCo (acquired by Function Health). I’m a player-coach who does the work alongside my team and builds the systems around it.",
     "more": "For inspiration, I love to watch movies, travel and shoot photos, and spend time learning about the craftsmanship that goes into building watches and bikes. I love creative endeavors that blend the technical and creative.",
     "experience": [

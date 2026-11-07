@@ -1,0 +1,14 @@
+---
+// One page per section (/site/work/, /site/leadership/, /site/techniques/, /site/about/): the
+// same grid, rendered with that card open, with its own title and description for search.
+import SitePage from '../../components/site/SitePage.astro';
+import { sections, type Section } from '../../lib/site-sections';
+
+export function getStaticPaths() {
+  return sections.map((s) => ({ params: { section: s.slug }, props: { id: s.id } }));
+}
+
+const { id } = Astro.props as { id: Section['id'] };
+---
+
+<SitePage open={id} />
