@@ -771,11 +771,47 @@
 }
 
 /* ── A closer look (ungated case-study pages) ────────── */
-/* The page is one open card beside the hero. Its × is a link back to Selected work, so it
-   keeps the close button's sticky place even though links in a card sit above the card link. */
-.box a.box-close {
+/* The page is one open card beside the hero, with a Back link at its top (Bohdana) that stays in
+   reach while the page scrolls. (.box a lifts card links to position: relative; this keeps it
+   sticky.) */
+.box a.look-backlink {
   position: sticky;
+  top: var(--gutter);
   z-index: 2;
+}
+.look-backlink {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 40px;
+  padding: 0 var(--space-4) 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line);
+  background: var(--color-card);
+  color: inherit;
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  outline: none;
+  transition:
+    background-color var(--motion-quick) var(--motion-ease-standard),
+    border-color var(--motion-quick) var(--motion-ease-standard),
+    color var(--motion-quick) var(--motion-ease-standard);
+}
+.look-backlink svg {
+  width: 18px;
+  height: 18px;
+}
+.look-backlink:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .look-backlink:hover {
+    background: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    color: var(--color-card);
+  }
 }
 .look-head {
   display: flex;
@@ -1008,6 +1044,33 @@ html.from-handoff .card-head .line-inner {
 }
 html.from-handoff .scene {
   transition-duration: 480ms;
+}
+
+/* Arriving from another site page (SiteHead adds html.from-site): everything is already in
+   place at first paint, so nothing lands, and the scene, picking up where the last page left
+   it, comes back quickly. */
+html.from-site.is-landing .box {
+  animation: none;
+}
+html.from-site .card-head .line-inner {
+  transform: none;
+  transition: none;
+}
+html.from-site .scene {
+  transition-duration: 320ms;
+}
+
+/* ── Between site pages (cross-document view transition) ── */
+/* Same-origin page loads (Selected work ↔ a closer look, section pages) animate like the
+   takeover: the hero stays, and the open Selected work card becomes the closer-look card
+   (both are box-portfolio). Browsers without it just load the page. */
+@view-transition {
+  navigation: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
 }
 
 /* ── Takeover (same-document view transition) ────────── */

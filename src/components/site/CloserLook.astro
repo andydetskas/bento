@@ -1,7 +1,11 @@
 ---
 // A closer look at one piece of work: the public, ungated version of a case study. It's a page
 // of its own (/site/work/<slug>/) in the site's shell: the hero stays on the left and the work
-// fills the right two columns, like an open card. × (or Escape) goes back to Selected work.
+// fills the right two columns, like an open card. A Back link at the top (Bohdana) returns to
+// Selected work: through history when that's where the visitor came from (scroll and state come
+// back as they were), otherwise as a plain link. Escape does the same.
+// Arriving from Selected work shows the page at once and keeps the scene running (SiteHead), and
+// the open Selected work card morphs into this one (shared view-transition name box-portfolio).
 // What belongs on these pages: the problem in public terms, my role, the key decisions with their
 // artifacts, what shipped and what I learned, plus at most the one public-safe result line from
 // the facts sheet. Call-only numbers, internal tools and colleagues' details stay off.
@@ -10,6 +14,7 @@ import Base from '../../layouts/Base.astro';
 import Pill from '../Pill.astro';
 import ShapeField from '../ShapeField.astro';
 import SiteCard from './SiteCard.astro';
+import SiteHead from './SiteHead.astro';
 import { defaultPreset } from '../../lib/presets';
 
 interface Props {
@@ -28,15 +33,20 @@ const { title, subtitle, company, pageTitle, description, accent, backHref, back
 ---
 
 <Base title={pageTitle} description={description} preset={defaultPreset} noindex>
+  <Fragment slot="head">
+    <SiteHead />
+  </Fragment>
+
   <ShapeField preset={defaultPreset} eager />
 
   <main class="site has-open">
     <SiteCard nameAs="p" />
-    <article class="card box is-open is-takeover look" style={`--accent:${accent};--b:0`} aria-labelledby="look-title" data-back={backHref}>
-      <a class="box-close" href={backHref} aria-label={`Back to ${backLabel}`}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <path d="M7 7l10 10M17 7 7 17" />
+    <article class="card box is-open is-takeover look" style={`--accent:${accent};--b:0;view-transition-name:box-portfolio`} aria-labelledby="look-title">
+      <a class="look-backlink" href={backHref} data-back aria-label={`Back to ${backLabel}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M11 6l-6 6 6 6" />
         </svg>
+        Back
       </a>
       <div class="box-top">
         <p class="eyebrow">{company} · A closer look</p>
@@ -55,13 +65,31 @@ const { title, subtitle, company, pageTitle, description, accent, backHref, back
 </Base>
 
 <script>
-  import { runEntrance, watchHeroHeight } from '../../lib/site-shell';
+  import { rememberScene, runEntrance, watchHeroHeight } from '../../lib/site-shell';
 
+  rememberScene();
   watchHeroHeight(document.querySelector<HTMLElement>('.site')!);
   runEntrance();
-  // Escape goes back to the work, like closing a card.
-  const back = document.querySelector<HTMLElement>('.look')?.dataset.back;
+
+  // Back: if the visitor came from the page Back points to, step back through history, so it
+  // returns exactly as they left it (often instantly, from the back/forward cache). Otherwise
+  // (a direct visit, a shared link) it's a normal link. New-tab clicks are left alone.
+  const link = document.querySelector<HTMLAnchorElement>('.look-backlink');
+  const cameFromBack = () => {
+    try {
+      const ref = new URL(document.referrer);
+      return !!link && ref.origin === location.origin && ref.pathname === new URL(link.href).pathname && history.length > 1;
+    } catch {
+      return false;
+    }
+  };
+  const goBack = () => (cameFromBack() ? history.back() : link && location.assign(link.href));
+  link?.addEventListener('click', (e) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    goBack();
+  });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && back) location.assign(back);
+    if (e.key === 'Escape') goBack();
   });
 </script>
