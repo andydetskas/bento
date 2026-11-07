@@ -2,12 +2,10 @@
   Main site (prototype). Cards over the bento's scene. Desktop:
     hero   portfolio   leadership
     .      techniques  about
-    .      kit         kit
-  The left column below the hero stays open, so the scene shows there. Opening a work card
-  (portfolio, leadership, techniques, about) takes over the right two columns; the other cards
-  and the kit step out, and the hero stays put. Tablet: the hero on the left, every other card
-  stacked on the right, and the takeover fills the right column. Phones: one column, cards open
-  in place. Column one is --site-col (global.css), which the bento's exit also narrows to.
+  The left column below the hero stays open, so the scene shows there. My working kit lives
+  inside About. Opening a card takes over the right two columns; the other cards step out and
+  the hero stays put. Tablet: the hero on the left, the other cards stacked on the right, and
+  the takeover fills the right column. Phones: one column, cards open in place. Column one is --site-col (global.css), which the bento's exit also narrows to.
 */
 
 .site {
@@ -29,8 +27,7 @@
       'hero portfolio'
       'hero leadership'
       '.    techniques'
-      '.    about'
-      '.    kit';
+      '.    about';
     align-items: start;
   }
   .site.has-open {
@@ -45,8 +42,7 @@
     grid-template-columns: var(--site-col) repeat(2, minmax(0, 1fr));
     grid-template-areas:
       'hero portfolio   leadership'
-      '.    techniques  about'
-      '.    kit         kit';
+      '.    techniques  about';
     align-items: stretch;
   }
   .site.has-open {
@@ -55,18 +51,11 @@
       '.    panel panel';
     grid-template-rows: auto 1fr;
   }
-  .area-kit .kit-tools {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  .area-kit .box-body {
-    max-width: 36em;
-  }
 }
 @media (min-width: 760px) {
   .area-hero { grid-area: hero; }
   .area-portfolio { grid-area: portfolio; }
   .area-leadership { grid-area: leadership; }
-  .area-kit { grid-area: kit; }
   .area-techniques { grid-area: techniques; }
   .area-about { grid-area: about; }
   /* The hero hugs its content while it opens; stretched to the row from the start, it showed
@@ -77,9 +66,8 @@
   .site.has-open > .is-open {
     grid-area: panel;
   }
-  /* The other cards and the kit step out while one is open. */
-  .site.has-open > .is-takeover:not(.is-open),
-  .site.has-open > .area-kit {
+  /* The other cards step out while one is open. */
+  .site.has-open > .is-takeover:not(.is-open) {
     display: none;
   }
   /* The hero stays put while an open panel scrolls (Bohdana). If it's taller than the screen,
@@ -599,7 +587,7 @@
   font-weight: var(--weight-medium);
 }
 .post-list .icon {
-  width: 20px;
+  width: 24px;
   height: 20px;
   flex: none;
 }
@@ -616,12 +604,46 @@
   text-decoration-color: currentColor;
 }
 
-/* ── About ──────────────────────────────────────────── */
+/* ── About (with My working kit) ────────────────────── */
 .about-panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  max-width: 44em;
+  max-width: 48em;
+}
+.about-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-line);
+}
+.about-section h3 {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+@container (min-width: 640px) {
+  .about-panel .kit-tools {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+/* Closed About card: the kit as one line, so the craft signal stays on the grid. */
+.kit-inline {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-line);
+}
+.kit-names {
+  margin: 0;
+  font-size: var(--step--1);
+  line-height: 1.5;
+  font-weight: var(--weight-medium);
 }
 .roles {
   list-style: none;

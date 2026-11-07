@@ -1,9 +1,9 @@
 ---
 // Main site prototype (andydetskas.com, "full" treatment). Cards over the bento's scene: the
-// hero on the left, and in the right two columns Portfolio, Leadership / Techniques, About /
-// a wide Kit. The left column below the hero stays open so the scene shows. Opening Portfolio,
-// Leadership, Techniques or About takes over the right two columns (Bohdana) and the hero
-// stays put. Lives at /site/ on the `site` branch; not linked or indexed.
+// hero on the left, and in the right two columns Portfolio, Leadership / Techniques, About
+// (which holds My working kit). The left column below the hero stays open so the scene shows.
+// Opening Portfolio, Leadership, Techniques or About takes over the right two columns
+// (Bohdana) and the hero stays put. Lives at /site/ on the `site` branch; not linked or indexed.
 import '../../styles/site.css';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
@@ -22,6 +22,7 @@ const accent = tokens.accent as Record<string, string>;
 const light = tokens.taos.light as Record<string, Record<string, string>>;
 const byId = (id: string) => work.find((w) => w.id === id)!;
 const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
+const kitLabel = kit.title.replace(/\.$/, ''); // "My working kit"
 ---
 
 <Base
@@ -150,34 +151,39 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
     <SectionCard id="about" eyebrow={about.eyebrow} title={about.title} accent={accent.about} pill="More about me" index={3}>
       <Fragment slot="summary">
         <p class="box-body">{about.body}</p>
+        <div class="kit-inline">
+          <p class="eyebrow">{kitLabel}</p>
+          <p class="kit-names">{kit.tools.map((t) => t.name).join(' · ')}</p>
+        </div>
       </Fragment>
       <Fragment slot="panel">
         <div class="about-panel">
           <p class="panel-lede">{about.body}</p>
           <p class="box-body">{about.more}</p>
-          <ul class="roles" role="list">
-            {about.experience.map((x) => (
-              <li>
-                <strong>{x.role}</strong>
-                <span>{x.org}</span>
-              </li>
-            ))}
-          </ul>
+          <section class="about-section" aria-labelledby="about-kit">
+            <h3 id="about-kit">{kit.title}</h3>
+            <p class="box-body">{kit.lede}</p>
+            <ul class="kit-tools" role="list">
+              {kit.tools.map((t) => (
+                <li>
+                  <strong>{t.name}</strong>
+                  <span>{t.note}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section class="about-section" aria-labelledby="about-experience">
+            <h3 id="about-experience">Experience</h3>
+            <ul class="roles" role="list">
+              {about.experience.map((x) => (
+                <li>
+                  <strong>{x.role}</strong>
+                  <span>{x.org}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
         </div>
-      </Fragment>
-    </SectionCard>
-
-    <SectionCard id="kit" eyebrow={kit.eyebrow} title={kit.title} index={4} expandable={false}>
-      <Fragment slot="summary">
-        <p class="box-body">{kit.lede}</p>
-        <ul class="kit-tools" role="list">
-          {kit.tools.map((t) => (
-            <li>
-              <strong>{t.name}</strong>
-              <span>{t.note}</span>
-            </li>
-          ))}
-        </ul>
       </Fragment>
     </SectionCard>
   </main>

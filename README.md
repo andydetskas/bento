@@ -30,7 +30,7 @@ Node 22.14 is installed, so this uses Astro 6. Astro 7 needs Node ≥ 22.23.
 | Tokens | `tokens/taos.tokens.json` → `npm run tokens` → `src/styles/tokens.css`, `src/lib/tokens.ts` | W3C design-tokens format. Palette sampled from the Taos Style Guide (Figma `JrqclJqDkOD0I4oc22cnVx`). Components use the role tokens (`--color-*`), never raw palette values. |
 | Type & grid | `scale`, `baseline`, `leading` in the token file | 4px baseline unit. Fluid type steps `--step--2…5` (Utopia method, built by the token script). Line-heights snap up to 4px with CSS `round()`. Spacing tokens are multiples of 4. |
 | Fonts | `src/styles/global.css` | DM Sans (variable, optical sizes) + DM Mono, by Colophon Foundry, SIL OFL, self-hosted via Fontsource. `[data-font="apercu"]` swaps to a locally installed Apercu for comparison. |
-| Icons | `src/icons/*.svg` | Exported from Taos, recolored to `currentColor`. One source for the inline icons and the extruded 3D glyphs. |
+| Icons | `src/icons/*.svg`, `src/icons/marks/*.svg` | Taos icons, recolored to `currentColor`: one source for the inline icons and the extruded 3D glyphs. `marks/` holds one-off site icons (the technique marks from the 2026 Portfolio file's blog heroes), kept out of the scene's glyph pool. `Icon` looks in both. |
 | Content | `src/content/links.json` | Profile + links (label, eyebrow, url, icon, tooltip). Accents live in tokens under `accent.*`. |
 | Presets & palettes | `src/lib/presets.ts` | A concept is a preset: scene family + palette + params + card style. `glyphPalettes` holds the 15 named Glyphs palettes (color, earth, mono), each with its own extrusion color. Paste "Copy preset" output from the lab here. |
 | 3D engine | `src/lib/shape-field/` | Framework-free Three.js. `prepareShapeField(preset)` warms up the heavy assets, then `createShapeField(canvas, preset)` returns `{ time, seek, setPreset, setPalette, setParam, setAccent, setFocus, snapshot, advance, destroy }`. `seek(t)` jumps to scene time t (the glyph family has a closed form). Families: `glyphs`, `pueblo`, `ridgeline`, `petal`. |
@@ -55,13 +55,12 @@ Baseline (default checker preset):
 ```
 hero    portfolio   leadership
         techniques  about
-        kit         kit
 ```
 
-The left column below the hero stays open, so the scene shows there as you scroll.
+The left column below the hero stays open, so the scene shows there as you scroll. My working kit lives in About: one line on the card, and the full kit beside the experience list when it's open.
 
-- **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The other cards and the kit step out, and the hero stays put while the panel scrolls. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
-- **Smaller screens.** Tablet: the hero on the left, every other card stacked on the right (kit last), and the takeover fills the right column. Phones: one column, kit last, and cards open in place.
+- **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The other cards step out, and the hero stays put while the panel scrolls. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
+- **Smaller screens.** Tablet: the hero on the left, the other cards stacked on the right, and the takeover fills the right column. Phones: one column, and cards open in place.
 - **Hover.** Hovering a card fades the others; keyboard focus does the same. Off while a card is open.
 - **Deep links.** The URL hash follows the open card (`/site/#portfolio`), so a section can be linked from a resume or email. It uses `replaceState`, so Back still leaves the page.
 - **Portfolio panel.** Each case study shows my role and the public outcome, and links to the full, passcode-protected case study.
