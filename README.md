@@ -50,15 +50,18 @@ Baseline (default checker preset):
 
 ## Main site prototype and the hand-off (`site` branch)
 
-`/site/` is the bento card grown into a site: six cards over the same scene, two rows of three on desktop.
+`/site/` is the bento card grown into a site: cards over the same scene. On desktop:
 
 ```
 hero    portfolio   leadership
-kit     techniques  about
+        techniques  about
+        kit         kit
 ```
 
-- **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The hero and the kit stay put and the other cards step out. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
-- **Smaller screens.** Tablet: hero and kit on the left, the work cards stacked on the right, and the takeover fills the right column. Phones: one column, and cards open in place.
+The left column below the hero stays open, so the scene shows there as you scroll.
+
+- **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The other cards and the kit step out, and the hero stays put while the panel scrolls. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
+- **Smaller screens.** Tablet: the hero on the left, every other card stacked on the right (kit last), and the takeover fills the right column. Phones: one column, kit last, and cards open in place.
 - **Hover.** Hovering a card fades the others; keyboard focus does the same. Off while a card is open.
 - **Deep links.** The URL hash follows the open card (`/site/#portfolio`), so a section can be linked from a resume or email. It uses `replaceState`, so Back still leaves the page.
 - **Portfolio panel.** Each case study shows my role and the public outcome, and links to the full, passcode-protected case study.

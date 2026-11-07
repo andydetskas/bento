@@ -1,8 +1,9 @@
 ---
-// Main site prototype (andydetskas.com, "full" treatment). Two rows of three cards over the
-// bento's scene: hero, Portfolio, Leadership / Kit, Techniques, About. Opening Portfolio,
-// Leadership, Techniques or About takes over the right two columns (Bohdana); the hero and the
-// kit stay put. Lives at /site/ on the `site` branch; not linked or indexed.
+// Main site prototype (andydetskas.com, "full" treatment). Cards over the bento's scene: the
+// hero on the left, and in the right two columns Portfolio, Leadership / Techniques, About /
+// a wide Kit. The left column below the hero stays open so the scene shows. Opening Portfolio,
+// Leadership, Techniques or About takes over the right two columns (Bohdana) and the hero
+// stays put. Lives at /site/ on the `site` branch; not linked or indexed.
 import '../../styles/site.css';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
@@ -112,21 +113,7 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
       </Fragment>
     </SectionCard>
 
-    <SectionCard id="kit" eyebrow={kit.eyebrow} title={kit.title} index={2} expandable={false}>
-      <Fragment slot="summary">
-        <p class="box-body">{kit.lede}</p>
-        <ul class="kit-tools" role="list">
-          {kit.tools.map((t) => (
-            <li>
-              <strong>{t.name}</strong>
-              <span>{t.note}</span>
-            </li>
-          ))}
-        </ul>
-      </Fragment>
-    </SectionCard>
-
-    <SectionCard id="techniques" eyebrow={techniques.eyebrow} title={techniques.title} accent={accent.techniques} pill="Read the techniques" index={3}>
+    <SectionCard id="techniques" eyebrow={techniques.eyebrow} title={techniques.title} accent={accent.techniques} pill="Read the techniques" index={2}>
       <Fragment slot="summary">
         <p class="box-body">{techniques.lede}</p>
         <ul class="post-list" role="list">
@@ -160,7 +147,7 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
       </Fragment>
     </SectionCard>
 
-    <SectionCard id="about" eyebrow={about.eyebrow} title={about.title} accent={accent.about} pill="More about me" index={4}>
+    <SectionCard id="about" eyebrow={about.eyebrow} title={about.title} accent={accent.about} pill="More about me" index={3}>
       <Fragment slot="summary">
         <p class="box-body">{about.body}</p>
       </Fragment>
@@ -177,6 +164,20 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
             ))}
           </ul>
         </div>
+      </Fragment>
+    </SectionCard>
+
+    <SectionCard id="kit" eyebrow={kit.eyebrow} title={kit.title} index={4} expandable={false}>
+      <Fragment slot="summary">
+        <p class="box-body">{kit.lede}</p>
+        <ul class="kit-tools" role="list">
+          {kit.tools.map((t) => (
+            <li>
+              <strong>{t.name}</strong>
+              <span>{t.note}</span>
+            </li>
+          ))}
+        </ul>
       </Fragment>
     </SectionCard>
   </main>
@@ -196,6 +197,10 @@ const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
   // everything (browsers without it just switch). The URL hash follows (#portfolio etc.), so a
   // section can be linked to; replaceState, so Back still leaves the page.
   const cards = [...document.querySelectorAll<HTMLElement>('[data-expandable]')];
+
+  // The hero's height, for its sticky offset during a takeover (see site.css).
+  const hero = document.querySelector<HTMLElement>('.area-hero');
+  if (hero) new ResizeObserver(() => grid.style.setProperty('--hero-h', `${hero.offsetHeight}px`)).observe(hero);
   const openCard = () => cards.find((c) => c.classList.contains('is-open'));
 
   const setOpen = (card: HTMLElement, open: boolean) => {
