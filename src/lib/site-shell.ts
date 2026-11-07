@@ -1,5 +1,22 @@
 // Shared by every main-site page (the grid and the closer-look pages): the hero's height for its
-// sticky offset, and the staged entrance.
+// sticky offset, the staged entrance, and the scene clock handed from page to page.
+
+/** sessionStorage key for the scene clock handed between site pages (read in SiteHead.astro). */
+export const SITE_SCENE_KEY = 'ad_site_scene';
+
+/** On leaving the page, leave the scene's clock for the next site page to pick up. */
+export function rememberScene() {
+  window.addEventListener('pagehide', () => {
+    const field = window.shapeField;
+    if (!field) return;
+    try {
+      const preset = document.documentElement.dataset.preset ?? '';
+      sessionStorage.setItem(SITE_SCENE_KEY, JSON.stringify({ v: 1, at: Date.now(), t: field.time, preset }));
+    } catch {
+      // Private mode or storage off: the next page plays its entrance instead.
+    }
+  });
+}
 
 /** Keep --hero-h on the grid current, for the hero's sticky offset during a takeover. */
 export function watchHeroHeight(grid: HTMLElement) {
@@ -17,6 +34,11 @@ export function watchHeroHeight(grid: HTMLElement) {
  */
 export function runEntrance(onSettled?: () => void) {
   const root = document.documentElement;
+  // Arriving from another site page: SiteHead already showed everything; no intro.
+  if (root.classList.contains('from-site')) {
+    requestAnimationFrame(() => onSettled?.());
+    return;
+  }
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ARRIVE_BY = 1200; // ms after navigation start
   const SCENE_BEAT = 900; // ms of scene before the cards cover it

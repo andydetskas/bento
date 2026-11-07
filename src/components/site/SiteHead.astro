@@ -1,0 +1,38 @@
+---
+// Runs before first paint on every main-site page. Two ways to arrive mid-story:
+//   From the bento (links. subdomain): a short-lived cookie carries the scene's clock, and the
+//     site plays its arrival choreography (html.from-handoff; see src/lib/handoff.ts).
+//   From another site page (Selected work → a closer look, Back, a section page): the scene
+//     picks up where the last page left it, and the page shows at once with no intro
+//     (html.from-site). The last page leaves its scene clock in sessionStorage on pagehide
+//     (lib/site-shell.ts rememberScene). A reload plays the full entrance again.
+import { HANDOFF_COOKIE, HANDOFF_MAX_AGE_S } from '../../lib/handoff';
+import { SITE_SCENE_KEY } from '../../lib/site-shell';
+---
+
+<script is:inline define:vars={{ name: HANDOFF_COOKIE, maxAge: HANDOFF_MAX_AGE_S, sceneKey: SITE_SCENE_KEY }}>
+  const root = document.documentElement;
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  if (m) {
+    const domain = location.hostname.endsWith('andydetskas.com') ? '; Domain=andydetskas.com' : '';
+    document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax' + domain;
+    try {
+      const h = JSON.parse(decodeURIComponent(m[1]));
+      if (h.v === 1 && Date.now() - h.at < maxAge * 1000) {
+        window.__handoff = h;
+        root.classList.add('from-handoff');
+      }
+    } catch {}
+  }
+  if (!window.__handoff) {
+    try {
+      const nav = performance.getEntriesByType('navigation')[0];
+      const s = JSON.parse(sessionStorage.getItem(sceneKey) || 'null');
+      sessionStorage.removeItem(sceneKey);
+      if (s && s.v === 1 && Date.now() - s.at < 10000 && (!nav || nav.type !== 'reload')) {
+        window.__handoff = s;
+        root.classList.add('from-site', 'is-ready', 'is-landing', 'is-settled');
+      }
+    } catch {}
+  }
+</script>

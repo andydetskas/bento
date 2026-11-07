@@ -13,9 +13,9 @@ import Pill from '../Pill.astro';
 import ShapeField from '../ShapeField.astro';
 import SectionCard from './SectionCard.astro';
 import SiteCard from './SiteCard.astro';
+import SiteHead from './SiteHead.astro';
 import WorkTile from './WorkTile.astro';
 import site from '../../content/site.json';
-import { HANDOFF_COOKIE, HANDOFF_MAX_AGE_S } from '../../lib/handoff';
 import { defaultPreset } from '../../lib/presets';
 import { SITE_BASE, SITE_DESCRIPTION, SITE_TITLE, sectionById, sectionPath, type Section } from '../../lib/site-sections';
 import { tokens } from '../../lib/tokens';
@@ -42,21 +42,8 @@ const arrow = 'M7 17 17 7M9 7h8v8';
 
 <Base title={current?.title ?? SITE_TITLE} description={current?.description ?? SITE_DESCRIPTION} preset={defaultPreset} noindex>
   <Fragment slot="head">
-    {/* Before first paint: arriving from the bento? Then start from the bento's last frame. */}
-    <script is:inline define:vars={{ name: HANDOFF_COOKIE, maxAge: HANDOFF_MAX_AGE_S }}>
-      const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-      if (m) {
-        const domain = location.hostname.endsWith('andydetskas.com') ? '; Domain=andydetskas.com' : '';
-        document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax' + domain;
-        try {
-          const h = JSON.parse(decodeURIComponent(m[1]));
-          if (h.v === 1 && Date.now() - h.at < maxAge * 1000) {
-            window.__handoff = h;
-            document.documentElement.classList.add('from-handoff');
-          }
-        } catch {}
-      }
-    </script>
+    {/* Before first paint: arriving from the bento or another site page? (see SiteHead) */}
+    <SiteHead />
   </Fragment>
 
   <ShapeField preset={defaultPreset} eager />
@@ -223,8 +210,9 @@ const arrow = 'M7 17 17 7M9 7h8v8';
 </Base>
 
 <script>
-  import { runEntrance, watchHeroHeight } from '../../lib/site-shell';
+  import { rememberScene, runEntrance, watchHeroHeight } from '../../lib/site-shell';
 
+  rememberScene();
   const grid = document.querySelector<HTMLElement>('.site')!;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wide = window.matchMedia('(min-width: 760px)');
@@ -306,6 +294,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
 
   // ── Entrance (lib/site-shell.ts) ────────────────────
   runEntrance(() => {
-    if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, reduced ? 'instant' : 'smooth');
+    const quiet = reduced || document.documentElement.classList.contains('from-site');
+    if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, quiet ? 'instant' : 'smooth');
   });
 </script>
