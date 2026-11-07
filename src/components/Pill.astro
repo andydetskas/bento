@@ -51,12 +51,17 @@
 
   const accent = (hex: string | null) => document.dispatchEvent(new CustomEvent('bento:accent', { detail: { hex } }));
 
-  // Cursor pill: eased follow so it trails the pointer slightly.
+  // Cursor pill: eased follow so it trails the pointer slightly. A long pill that would run off
+  // the right edge (a technique's one-line note) flips to the pointer's left.
   let x = 0, y = 0, tx = 0, ty = 0, raf = 0;
   const follow = () => {
     x += (tx - x) * (reduced ? 1 : 0.22);
     y += (ty - y) * (reduced ? 1 : 0.22);
-    if (pill) pill.style.translate = `${x + 16}px ${y + 18}px`;
+    if (pill) {
+      const w = pill.offsetWidth;
+      const left = x + 16 + w > document.documentElement.clientWidth - 8 ? x - 12 - w : x + 16;
+      pill.style.translate = `${left}px ${y + 18}px`;
+    }
     raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(follow) : 0;
   };
 

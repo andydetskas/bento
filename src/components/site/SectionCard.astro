@@ -1,9 +1,10 @@
 ---
-// A section of the site as a card. Closed, it shows a summary and the whole card is a button.
-// Open, it takes over the work area (the right two columns on desktop, the right column on
-// tablet; in place on phones) and shows its panel. The hero and the kit card stay put.
-// The URL hash is the section name (#portfolio) and the element id is card-portfolio, so the
-// browser's own jump-to-anchor doesn't fight the takeover's scroll.
+// A section of the site as a card. Closed, it shows a summary and the whole card is a link to the
+// section's own page (/site/techniques/ and so on). Open, it takes over the work area (the right
+// two columns on desktop, the right column on tablet; in place on phones) and shows its panel.
+// The hero stays put. On the page, the script opens the card in place and swaps the URL; without
+// it, the link loads the section's page, which renders with this card open.
+// Element ids are card-<id>, so the browser's own jump-to-anchor never fights the takeover.
 interface Props {
   id: string;
   eyebrow: string;
@@ -14,63 +15,53 @@ interface Props {
   pill?: string;
   /** Landing order (stagger). */
   index: number;
-  /** Cards without a panel (the kit) are plain cards. */
-  expandable?: boolean;
+  /** This section's page, and the grid's (where the title links while the card is open). */
+  href: string;
+  closeHref: string;
+  /** Page title while open. */
+  pageTitle: string;
+  /** Render open (the section's own page). */
+  open?: boolean;
 }
-const { id, eyebrow, title, accent, pill, index, expandable = true } = Astro.props;
+const { id, eyebrow, title, accent, pill, index, href, closeHref, pageTitle, open = false } = Astro.props;
 const arrow = 'M7 17 17 7M9 7h8v8';
 ---
 
 <section
-  class:list={['card box', `area-${id}`, { 'is-neutral': !accent, 'is-takeover': expandable }]}
+  class:list={['card box is-takeover', `area-${id}`, { 'is-neutral': !accent, 'is-open': open }]}
   id={`card-${id}`}
   data-section={id}
-  data-expandable={expandable ? '' : undefined}
+  data-expandable
+  data-href={href}
+  data-page-title={pageTitle}
   data-accent={accent}
-  data-pill={pill}
+  data-pill={open ? undefined : pill}
+  data-pill-closed={pill}
   aria-labelledby={`${id}-title`}
   style={`${accent ? `--accent:${accent};` : ''}--b:${index};view-transition-name:box-${id}`}
 >
-  {
-    expandable && (
-      <button class="box-close" type="button" aria-label={`Close ${title}`}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <path d="M7 7l10 10M17 7 7 17" />
-        </svg>
-      </button>
-    )
-  }
+  <button class="box-close" type="button" aria-label={`Close ${title}`}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+      <path d="M7 7l10 10M17 7 7 17" />
+    </svg>
+  </button>
   <div class="box-top">
     <p class="eyebrow">{eyebrow}</p>
-    {
-      expandable && (
-        <span class="arrow" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d={arrow} />
-          </svg>
-        </span>
-      )
-    }
+    <span class="arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d={arrow} />
+      </svg>
+    </span>
   </div>
   <h2 class="box-title" id={`${id}-title`}>
-    {
-      expandable ? (
-        <button class="box-hit" type="button" aria-expanded="false" aria-controls={`${id}-panel`}>
-          {title}
-        </button>
-      ) : (
-        title
-      )
-    }
+    <a class="box-hit" href={open ? closeHref : href} aria-expanded={String(open)} aria-controls={`${id}-panel`}>
+      {title}
+    </a>
   </h2>
   <div class="box-summary">
     <slot name="summary" />
   </div>
-  {
-    expandable && (
-      <div class="box-panel" id={`${id}-panel`} hidden>
-        <slot name="panel" />
-      </div>
-    )
-  }
+  <div class="box-panel" id={`${id}-panel`} hidden={!open}>
+    <slot name="panel" />
+  </div>
 </section>
