@@ -1,6 +1,7 @@
 ---
 // A case study inside the Portfolio panel: art, company, title, summary, my role and the public
-// outcome. The whole tile links to the full, passcode-protected case study.
+// outcome. The whole tile links to the work's closer-look page when it has one (public, same
+// tab), otherwise to the full, passcode-protected case study.
 import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
 
@@ -13,6 +14,7 @@ const accent = (tokens.accent as Record<string, string>)[item.accent];
 const [hue, step] = item.tint as [string, string];
 const tint = (tokens.taos.light as Record<string, Record<string, string>>)[hue][step];
 const outcome = 'outcome' in item ? item.outcome : undefined;
+const look = 'look' in item ? item.look : undefined;
 ---
 
 <article class="tile" style={`--accent:${accent};--tint:${tint}`}>
@@ -21,10 +23,18 @@ const outcome = 'outcome' in item ? item.outcome : undefined;
   </div>
   <p class="eyebrow">{item.company}</p>
   <h3 class="tile-title">
-    <a href={item.url} target="_blank" rel="noopener noreferrer" data-accent={accent} data-pill="Full case study · passcode">
-      {item.title}
-      <span class="sr-only">(full case study, opens in a new tab, passcode required)</span>
-    </a>
+    {
+      look ? (
+        <a href={look} data-accent={accent} data-pill="A closer look">
+          {item.title}
+        </a>
+      ) : (
+        <a href={item.url} target="_blank" rel="noopener noreferrer" data-accent={accent} data-pill="Full case study · passcode">
+          {item.title}
+          <span class="sr-only">(full case study, opens in a new tab, passcode required)</span>
+        </a>
+      )
+    }
   </h3>
   <p class="box-body">{item.summary}</p>
   <dl class="facts">

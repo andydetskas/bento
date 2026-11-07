@@ -1,0 +1,67 @@
+---
+// A closer look at one piece of work: the public, ungated version of a case study. It's a page
+// of its own (/site/work/<slug>/) in the site's shell: the hero stays on the left and the work
+// fills the right two columns, like an open card. × (or Escape) goes back to Selected work.
+// What belongs on these pages: the problem in public terms, my role, the key decisions with their
+// artifacts, what shipped and what I learned, plus at most the one public-safe result line from
+// the facts sheet. Call-only numbers, internal tools and colleagues' details stay off.
+import '../../styles/site.css';
+import Base from '../../layouts/Base.astro';
+import Pill from '../Pill.astro';
+import ShapeField from '../ShapeField.astro';
+import SiteCard from './SiteCard.astro';
+import { defaultPreset } from '../../lib/presets';
+
+interface Props {
+  title: string;
+  /** Shown under the title. */
+  subtitle: string;
+  /** Company name; the eyebrow reads "<company> · A closer look". */
+  company: string;
+  pageTitle: string;
+  description: string;
+  accent: string;
+  backHref: string;
+  backLabel: string;
+}
+const { title, subtitle, company, pageTitle, description, accent, backHref, backLabel } = Astro.props;
+---
+
+<Base title={pageTitle} description={description} preset={defaultPreset} noindex>
+  <ShapeField preset={defaultPreset} eager />
+
+  <main class="site has-open">
+    <SiteCard nameAs="p" />
+    <article class="card box is-open is-takeover look" style={`--accent:${accent};--b:0`} aria-labelledby="look-title" data-back={backHref}>
+      <a class="box-close" href={backHref} aria-label={`Back to ${backLabel}`}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M7 7l10 10M17 7 7 17" />
+        </svg>
+      </a>
+      <div class="box-top">
+        <p class="eyebrow">{company} · A closer look</p>
+      </div>
+      <header class="look-head">
+        <h1 class="box-title" id="look-title">{title}</h1>
+        <p class="look-sub">{subtitle}</p>
+      </header>
+      <div class="look-body">
+        <slot />
+      </div>
+    </article>
+  </main>
+
+  <Pill />
+</Base>
+
+<script>
+  import { runEntrance, watchHeroHeight } from '../../lib/site-shell';
+
+  watchHeroHeight(document.querySelector<HTMLElement>('.site')!);
+  runEntrance();
+  // Escape goes back to the work, like closing a card.
+  const back = document.querySelector<HTMLElement>('.look')?.dataset.back;
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && back) location.assign(back);
+  });
+</script>

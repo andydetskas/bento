@@ -4,13 +4,19 @@
 import data from '../content/links.json';
 import Icon from './Icon.astro';
 
+interface Props {
+  /** The name is the page's h1, except where the page has its own (a closer-look page). Type
+      comes from the classes, so either element renders the same pixels. */
+  nameAs?: 'h1' | 'p';
+}
+const { nameAs: Name = 'h1' } = Astro.props;
 const { profile } = data;
 ---
 
 <header class="card-head">
   <Icon name={profile.mark} class="mark" />
   <div class="who">
-    <h1 class="name line trim-sans"><span class="line-inner" style="--i:0">{profile.name}</span></h1>
+    <Name class="name line trim-sans"><span class="line-inner" style="--i:0">{profile.name}</span></Name>
     <p class="role line trim-mono"><span class="line-inner" style="--i:1">{profile.role}</span></p>
   </div>
 </header>
