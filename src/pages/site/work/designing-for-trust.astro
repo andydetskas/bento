@@ -1,0 +1,172 @@
+---
+// Designing for Trust, a closer look (public, ungated). The slide panels carry their own labels,
+// so figures have alt text but no captions. Source: "02 - Trust & Safety Case Study
+// (copy draft).md" in 2027 Strategy and the Figma section "Strava Privacy Controls case study
+// (draft)". Public-safe only (Master Profile 2.2): one result line; reach, open rates and the
+// followers-only shift stay for the call. No dates. Images are the Figma slides' panels; the BBC
+// date and a test account's details are masked, and the slide with colleagues' names is left out.
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+
+const accent = (tokens.accent as Record<string, string>).strava;
+const work = site.work.find((w) => w.id === 'designing-for-trust')!;
+const img = (name: string) => `/site/work/designing-for-trust/${name}.webp`;
+const compass = site.techniques.posts.find((p) => p.icon === 'integrity-compass')!;
+---
+
+<CloserLook
+  title={work.title}
+  subtitle="Strava’s privacy controls after the Heatmap"
+  company={work.company}
+  pageTitle="Designing for Trust · Strava · Andy Detskas"
+  description="How I redesigned Strava’s privacy controls after the Global Heatmap, so athletes could see, and choose, what they share."
+  accent={accent}
+  backHref={`${SITE_BASE}work/`}
+  backLabel="Selected work"
+>
+  <p class="panel-lede">I redesigned Strava’s privacy controls so athletes could see, and choose, what they share.</p>
+
+  <dl class="look-facts">
+    <div>
+      <dt>My role</dt>
+      <dd>Hands-on design lead on the Trust team</dd>
+    </div>
+    <div>
+      <dt>Worked with</dt>
+      <dd>Product, engineering, legal and company leadership</dd>
+    </div>
+    <div>
+      <dt>What I designed</dt>
+      <dd>The controls, onboarding and launch communications, on mobile and web</dd>
+    </div>
+  </dl>
+
+  <p class="outcome">{work.outcome}</p>
+
+  <figure class="look-fig">
+    <img src={img('final-design')} width="1561" height="1139" alt="Four phone screens from the launched design: Privacy Controls, Profile Page, Metro and Heatmap, and the first-upload privacy prompt" loading="eager" decoding="async" />
+  </figure>
+
+  <section class="look-section" aria-labelledby="situation">
+    <h2 id="situation">The situation</h2>
+    <div class="look-split">
+      <div class="look-text">
+        <p>Strava’s Global Heatmap showed where people ran and rode, including on military bases, and the story went around the world. The question underneath was older: Strava had grown up public by default, and not every athlete wanted that.</p>
+        <ul class="look-list" role="list">
+          <li><strong>Public by default.</strong> New athletes started out sharing with everyone.</li>
+          <li><strong>Many entry points.</strong> Privacy settings lived in many places across mobile and web.</li>
+          <li><strong>An answer already in motion.</strong> A three-bucket design (Everyone, Followers, Only You) was underway when I joined.</li>
+        </ul>
+      </div>
+      <figure class="look-fig">
+        <img src={img('heatmap-news')} width="1150" height="1139" alt="BBC News article: Fitness app Strava lights up staff at military bases, with a heatmap of an air base" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="role">
+    <h2 id="role">My role</h2>
+    <div class="look-text">
+      <p>I joined Strava’s new Trust team as its design lead, weeks after the Heatmap story. The team covered privacy, customer support and spam. I grounded the work in athlete research, then designed the controls, onboarding and launch communications with product, engineering, legal and company leadership. Along the way, I brought Privacy Zones to mobile.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="approach">
+    <h2 id="approach">How I approached it</h2>
+    <ol class="look-steps" role="list">
+      <li>
+        <p class="look-num" aria-hidden="true">01</p>
+        <h3>Map every entry point</h3>
+        <p>Privacy settings lived in many places across mobile and web. Before redesigning anything, I mapped every place an athlete met a privacy decision.</p>
+        <figure class="look-fig">
+          <img src={img('entry-points')} width="1561" height="1139" alt="Strava’s web privacy settings page and the mobile Privacy Controls screen before the redesign" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">02</p>
+        <h3>Put it in front of athletes early</h3>
+        <div class="look-split">
+          <p>Before building on the three-bucket design, I tested the current settings and our early prototypes with athletes, and mapped every stakeholder I’d need to bring along.</p>
+          <figure class="look-fig">
+            <img src={img('current-state-testing')} width="780" height="500" alt="A testing session on Strava’s web privacy settings, with the cursor on the Flyby setting" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">03</p>
+        <h3>Listen for what shuts people down</h3>
+        <ul class="look-list" role="list">
+          <li>Walls of text shut people down.</li>
+          <li>Communicate clearly, but concisely.</li>
+          <li>Let athletes set control at their own level of comfort.</li>
+          <li>Comfort with sharing pattern-of-life data differed sharply between men and women.</li>
+        </ul>
+        <figure class="look-fig">
+          <img src={img('what-we-heard')} width="1561" height="1139" alt="Prototype I, a long explainer for the Everyone setting, beside the quote: Walls of text shut people down" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">04</p>
+        <h3>Flexible, not rigid</h3>
+        <p>Three presets tied every setting together, so wanting more privacy in one place cost you something somewhere else. I made the case for a flexible schema, where each athlete sets each control at their own comfort level.</p>
+        <figure class="look-fig">
+          <img src={img('flexible-not-rigid')} width="1561" height="1139" alt="Before: a Visibility screen with three presets. After: Privacy Controls listing Profile Page, Activities, Group Activities and Flybys, each with its own setting" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">05</p>
+        <h3>Plain language, one tap</h3>
+        <p>Feature-first controls, binary choices as a single tap, and explainers short enough that people actually read them.</p>
+        <figure class="look-fig">
+          <img src={img('plain-language')} width="1561" height="1139" alt="Three prototype screens: feature controls, a one-tap choice for group activities, and short copy for the profile page" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">06</p>
+        <h3>Control everywhere it matters</h3>
+        <p>Profile, activities, group activities, flybys, privacy zones, and Metro and Heatmap, plus onboarding and per-activity settings.</p>
+        <figure class="look-fig">
+          <img src={img('control-everywhere')} width="1561" height="1139" alt="Activity controls, the Privacy Center help pages, and the Metro and Heatmap control, as launched" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+    </ol>
+  </section>
+
+  <section class="look-section" aria-labelledby="launch">
+    <h2 id="launch">Launch</h2>
+    <div class="look-text">
+      <p>We launched with every athlete’s existing settings carried over automatically, so nobody had to do anything to stay protected. Athletes heard about the change by email, in the app and on the blog, and a Privacy Center explained every control.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="next">
+    <h2 id="next">What came next</h2>
+    <div class="look-text">
+      <p>Transparency, consent and control carried into the rest of my Trust &amp; Safety work: research on hiding where activities start and end, safer group activities, and <a href={compass.url} target="_blank" rel="noopener noreferrer">Integrity Compass</a>, a pre-launch review of inclusion, privacy and safety risks that I co-created with Seijen Takamura. One session ran nine product teams through it.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="learned">
+    <h2 id="learned">What I learned</h2>
+    <ul class="look-takeaways" role="list">
+      <li>Some research beats none.</li>
+      <li>Launching isn’t leaving.</li>
+      <li>Default settings are a values decision.</li>
+    </ul>
+    <div class="look-text">
+      <p><strong>What I’d do differently:</strong> spend more time in person with the core team in San Francisco (I was in Denver), and push sooner to move the whole settings area higher in the app’s information architecture.</p>
+    </div>
+  </section>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>The full story, with what we measured after launch, is a 30-minute walkthrough.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+</CloserLook>

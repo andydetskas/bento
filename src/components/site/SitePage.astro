@@ -223,7 +223,8 @@ const arrow = 'M7 17 17 7M9 7h8v8';
 </Base>
 
 <script>
-  const root = document.documentElement;
+  import { runEntrance, watchHeroHeight } from '../../lib/site-shell';
+
   const grid = document.querySelector<HTMLElement>('.site')!;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wide = window.matchMedia('(min-width: 760px)');
@@ -237,9 +238,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
   // leaves the page. A new-tab click on a card loads that section's own page.
   const cards = [...document.querySelectorAll<HTMLElement>('[data-expandable]')];
 
-  // The hero's height, for its sticky offset during a takeover (see site.css).
-  const hero = document.querySelector<HTMLElement>('.area-hero');
-  if (hero) new ResizeObserver(() => grid.style.setProperty('--hero-h', `${hero.offsetHeight}px`)).observe(hero);
+  watchHeroHeight(grid);
   const openCard = () => cards.find((c) => c.classList.contains('is-open'));
 
   const setOpen = (card: HTMLElement, open: boolean) => {
@@ -305,39 +304,8 @@ const arrow = 'M7 17 17 7M9 7h8v8';
     if (card && card !== openCard()) show(card);
   });
 
-  // ── Entrance ────────────────────────────────────────
-  // Background first. Fonts in (or a short wait on a slow connection): the masthead reveals over
-  // the scene's color (is-ready). Then the hero opens and the cards land (is-landing). On a direct
-  // visit: if the scene arrives within ARRIVE_BY, its glyphs get SCENE_BEAT to grow in before the
-  // cards cover them; if it's late (a slow phone), the work doesn't wait for it. After a hand-off
-  // it follows straight on (the bento already showed the scene); with reduced motion there's
-  // nothing to wait for.
-  const ARRIVE_BY = 1200; // ms after navigation start
-  const SCENE_BEAT = 900; // ms of scene before the cards cover it
-  const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));
-  const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
-
-  const sceneArrived = new Promise<boolean>((resolve) => {
-    if (document.querySelector('canvas.scene.is-live')) return resolve(true);
-    document.addEventListener('shapefield:firstframe', (e) => resolve(e.detail.live), { once: true });
+  // ── Entrance (lib/site-shell.ts) ────────────────────
+  runEntrance(() => {
+    if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, reduced ? 'instant' : 'smooth');
   });
-  const sceneFirst = () =>
-    Promise.race([sceneArrived, wait(ARRIVE_BY - performance.now()).then(() => false)]).then((live) => (live ? wait(SCENE_BEAT) : undefined));
-  const fontsIn = Promise.race([document.fonts?.ready ?? Promise.resolve(), wait(400)]);
-  const leadWithScene = !root.classList.contains('from-handoff') && !reduced;
-
-  fontsIn
-    .then(nextFrame)
-    .then(() => {
-      root.classList.add('is-ready');
-      return leadWithScene ? sceneFirst() : undefined;
-    })
-    .then(nextFrame)
-    .then(() => {
-      root.classList.add('is-landing');
-      setTimeout(() => {
-        root.classList.add('is-settled');
-        if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, reduced ? 'instant' : 'smooth');
-      }, 1400);
-    });
 </script>

@@ -10,13 +10,18 @@ import { tokens } from '../../lib/tokens';
 import CardHead from '../CardHead.astro';
 import Icon from '../Icon.astro';
 
+interface Props {
+  /** See CardHead: 'p' on pages with their own h1. */
+  nameAs?: 'h1' | 'p';
+}
+const { nameAs = 'h1' } = Astro.props;
 const { intro } = site;
 const accents = tokens.accent as Record<string, string>;
 const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 ---
 
 <section class="card site-card area-hero" aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
-    <CardHead />
+    <CardHead nameAs={nameAs} />
     <div class="card-more">
       <div class="card-more-inner">
         <p class="headline">{intro.headline}</p>

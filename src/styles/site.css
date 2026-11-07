@@ -770,6 +770,218 @@
   color: var(--color-text-muted);
 }
 
+/* ── A closer look (ungated case-study pages) ────────── */
+/* The page is one open card beside the hero. Its × is a link back to Selected work, so it
+   keeps the close button's sticky place even though links in a card sit above the card link. */
+.box a.box-close {
+  position: sticky;
+  z-index: 2;
+}
+.look-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.look-sub {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+.look-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+.look-facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-4) var(--space-6);
+}
+.look-facts div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-line);
+}
+.look-facts dt {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.look-facts dd {
+  margin: 0;
+  font-weight: var(--weight-medium);
+  text-wrap: pretty;
+}
+.look .outcome {
+  max-width: 40em;
+}
+.look-fig {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.look-fig img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--space-3);
+}
+.look-fig figcaption {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+.look-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--color-line);
+}
+.look-section h2 {
+  margin: 0;
+  font-size: var(--step-3);
+  line-height: 1.1;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+.look-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 40em;
+}
+.look-text p,
+.look-steps p:not(.look-num) {
+  margin: 0;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.look-text a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.look-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 40em;
+}
+.look-list li {
+  position: relative;
+  padding-left: 1.1em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.look-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.look-split {
+  display: grid;
+  gap: var(--space-6);
+}
+@container (min-width: 720px) {
+  .look-split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.look-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+.look-steps > li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.look-steps h3 {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+.look-steps > li > p:not(.look-num),
+.look-steps .look-list {
+  max-width: 40em;
+}
+.look-num {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-text-muted);
+}
+.look-takeaways {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: var(--space-4) var(--space-6);
+}
+.look-takeaways li {
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--accent);
+  font-size: var(--step-1);
+  line-height: 1.25;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+.look-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6);
+  padding: var(--space-6);
+  border-radius: var(--space-3);
+  background: var(--color-page);
+}
+.look-cta p {
+  margin: 0;
+  max-width: 26em;
+  font-size: var(--step-1);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+.look-back {
+  margin: 0;
+}
+.look-back a {
+  color: inherit;
+  font-weight: var(--weight-medium);
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 0.2em;
+}
+
 /* ── Entrance ───────────────────────────────────────── */
 /* Two steps, set by the page script:
    is-ready    fonts are in: the masthead's lines reveal over the scene (as on the bento).

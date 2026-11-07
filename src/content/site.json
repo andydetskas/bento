@@ -110,7 +110,8 @@
         "alt": "Strava privacy controls: the privacy settings list, profile page visibility, and the Heatmap opt-out"
       },
       "fit": "contain",
-      "url": "https://www.andydetskas.com/design-strava-privacy-controls"
+      "url": "https://www.andydetskas.com/design-strava-privacy-controls",
+      "look": "/site/work/designing-for-trust/"
     },
     {
       "id": "agentic-design-system",
