@@ -2,7 +2,8 @@
 // The site's hero card: the bento card, grown up. Same masthead in the same spot (top-left, one
 // gutter in, one site column wide), so the bento's exit, the card folded to its masthead, is
 // this card's first frame. Below the masthead: the positioning line, follow links and the one
-// call to action.
+// call to action. No mouseovers here (Andy): no pills, no scene tint, no row dimming. Keyboard
+// focus still shows.
 import links from '../../content/links.json';
 import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
@@ -30,8 +31,6 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
                   href={l.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  data-accent={accents[l.id]}
-                  data-pill={l.tooltip}
                   style={`--accent:${accents[l.id]}`}
                 >
                   <Icon name={l.icon} class="frow-icon" />
@@ -51,7 +50,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 
         <div class="cta-row">
           <p class="status"><span class="dot" aria-hidden="true"></span>{intro.status}</p>
-          <a class="btn" href={intro.cta.url} target="_blank" rel="noopener noreferrer" data-accent={accents.contact} data-pill="Pick a time that works" style={`--accent:${accents.contact}`}>
+          <a class="btn" href={intro.cta.url} target="_blank" rel="noopener noreferrer">
             {intro.cta.label}
             <span class="sr-only">(opens in a new tab)</span>
           </a>
@@ -92,7 +91,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
   :global(html.js:not(.is-landing)) .card-more-inner {
     opacity: 0;
   }
-  /* Once open, let focus rings and hover lifts out of the clip. */
+  /* Once open, let focus rings out of the clip. */
   :global(html.is-settled) .card-more-inner {
     overflow: visible;
   }
@@ -131,12 +130,10 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     color: inherit;
     text-decoration: none;
     outline: none;
-    transition: opacity var(--motion-base) var(--motion-ease-standard);
   }
   .frow :global(.frow-icon) {
     width: 20px;
     height: 20px;
-    transition: color var(--motion-quick) var(--motion-ease-standard);
   }
   .frow-label {
     font-size: var(--step-1);
@@ -151,22 +148,12 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     text-transform: uppercase;
     color: var(--color-text-muted);
   }
-  .follow:has(.frow:focus-visible) .frow:not(:focus-visible) {
-    opacity: 0.28;
-  }
+  /* Keyboard focus only: underline the label and fill the arrow (site.css). */
   .frow:focus-visible .frow-label {
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 0.15em;
     text-decoration-color: var(--color-focus);
-  }
-  @media (hover: hover) {
-    .follow:has(.frow:hover) .frow:not(:hover) {
-      opacity: 0.28;
-    }
-    .frow:hover :global(.frow-icon) {
-      color: var(--accent);
-    }
   }
 
   /* ── Call to action ─────────────────────────────────── */
@@ -200,8 +187,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
   @media (prefers-reduced-motion: reduce) {
     .site-card,
     .card-more,
-    .card-more-inner,
-    .frow {
+    .card-more-inner {
       transition: none;
     }
   }
