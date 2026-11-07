@@ -311,9 +311,22 @@
         "url": "https://www.andydetskas.com/techniques/the-design-dojo",
         "icon": "design-dojo",
         "image": "/site/techniques/design-dojo.webp"
+      },
+      {
+        "title": "Group Critique",
+        "note": "Bring the team together for feedback and collaboration",
+        "url": "https://www.andydetskas.com/techniques/the-group-critique",
+        "icon": "group-critique",
+        "image": "/site/techniques/group-critique.webp"
+      },
+      {
+        "title": "Designed Alliance",
+        "note": "A more intentional approach to relationship building",
+        "url": "https://www.andydetskas.com/techniques/the-designed-alliance",
+        "icon": "designed-alliance",
+        "image": "/site/techniques/designed-alliance.webp"
       }
     ],
-    "all": "https://www.andydetskas.com/techniques",
     "eyebrow": "Techniques",
     "title": "Pixels and people."
   },
