@@ -1,11 +1,13 @@
 /*
-  Main site (prototype). Six cards over the bento's scene, two rows of three on desktop:
-    hero       portfolio   leadership
-    kit        techniques  about
-  Opening a work card (portfolio, leadership, techniques, about) takes over the right two
-  columns; the hero and the kit stay put. Tablet: hero and kit on the left, the work cards
-  stacked on the right, and the takeover fills the right column. Phones: one column, cards
-  open in place. Column one is --site-col (global.css), which the bento's exit also narrows to.
+  Main site (prototype). Cards over the bento's scene. Desktop:
+    hero   portfolio   leadership
+    .      techniques  about
+    .      kit         kit
+  The left column below the hero stays open, so the scene shows there. Opening a work card
+  (portfolio, leadership, techniques, about) takes over the right two columns; the other cards
+  and the kit step out, and the hero stays put. Tablet: the hero on the left, every other card
+  stacked on the right, and the takeover fills the right column. Phones: one column, cards open
+  in place. Column one is --site-col (global.css), which the bento's exit also narrows to.
 */
 
 .site {
@@ -26,32 +28,38 @@
     grid-template-areas:
       'hero portfolio'
       'hero leadership'
-      'kit  techniques'
-      'kit  about';
+      '.    techniques'
+      '.    about'
+      '.    kit';
     align-items: start;
   }
   .site.has-open {
     grid-template-areas:
       'hero panel'
-      'kit  panel'
       '.    panel';
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr;
   }
 }
 @media (min-width: 1100px) {
   .site {
     grid-template-columns: var(--site-col) repeat(2, minmax(0, 1fr));
     grid-template-areas:
-      'hero portfolio  leadership'
-      'kit  techniques about';
+      'hero portfolio   leadership'
+      '.    techniques  about'
+      '.    kit         kit';
     align-items: stretch;
   }
   .site.has-open {
     grid-template-areas:
       'hero panel panel'
-      'kit  panel panel'
       '.    panel panel';
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .area-kit .kit-tools {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .area-kit .box-body {
+    max-width: 36em;
   }
 }
 @media (min-width: 760px) {
@@ -61,10 +69,6 @@
   .area-kit { grid-area: kit; }
   .area-techniques { grid-area: techniques; }
   .area-about { grid-area: about; }
-  .site.has-open > .area-hero,
-  .site.has-open > .area-kit {
-    align-self: start;
-  }
   /* The hero hugs its content while it opens; stretched to the row from the start, it showed
      as a tall blank card before its content arrived. */
   html.js:not(.is-settled) .area-hero {
@@ -73,9 +77,17 @@
   .site.has-open > .is-open {
     grid-area: panel;
   }
-  /* The other work cards step out while one is open. */
-  .site.has-open > .is-takeover:not(.is-open) {
+  /* The other cards and the kit step out while one is open. */
+  .site.has-open > .is-takeover:not(.is-open),
+  .site.has-open > .area-kit {
     display: none;
+  }
+  /* The hero stays put while an open panel scrolls (Bohdana). If it's taller than the screen,
+     it scrolls until its bottom is in view, then holds (--hero-h is set by the page script). */
+  .site.has-open > .area-hero {
+    align-self: start;
+    position: sticky;
+    top: min(var(--gutter), calc(100svh - var(--hero-h, 0px) - var(--gutter)));
   }
 }
 
