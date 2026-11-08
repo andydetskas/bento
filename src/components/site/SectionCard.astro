@@ -1,9 +1,10 @@
 ---
 // A section of the site as a card. Closed, it shows a summary and the whole card is a link to the
 // section's own page (/site/techniques/ and so on). Open, it takes over the work area (the right
-// two columns on desktop, the right column on tablet; in place on phones) and shows its panel.
-// The hero stays put. On the page, the script opens the card in place and swaps the URL; without
-// it, the link loads the section's page, which renders with this card open.
+// two columns on desktop, the right column on tablet; in place on phones) and shows its panel,
+// with a Back pill at its top like the closer looks (Andy). The hero stays put. On the page, the
+// script opens the card in place as a new history entry, so the browser's Back closes it too;
+// without the script, the links load the section's page (rendered open) and the grid.
 // Element ids are card-<id>, so the browser's own jump-to-anchor never fights the takeover.
 interface Props {
   id: string;
@@ -40,11 +41,12 @@ const arrow = 'M7 17 17 7M9 7h8v8';
   aria-labelledby={`${id}-title`}
   style={`${accent ? `--accent:${accent};` : ''}--b:${index};view-transition-name:box-${id}`}
 >
-  <button class="box-close" type="button" aria-label={`Close ${title}`}>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-      <path d="M7 7l10 10M17 7 7 17" />
+  <a class="backlink box-back" href={closeHref} aria-label="Back to all sections">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M19 12H5M11 6l-6 6 6 6" />
     </svg>
-  </button>
+    Back
+  </a>
   <div class="box-top">
     <p class="eyebrow">{eyebrow}</p>
     <span class="arrow" aria-hidden="true">

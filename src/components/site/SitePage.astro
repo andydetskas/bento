@@ -219,13 +219,42 @@ const arrow = 'M7 17 17 7M9 7h8v8';
   // ── Takeover ────────────────────────────────────────
   // One card open at a time. On tablet and desktop it takes over the work area and the other
   // work cards step out; on phones it opens in place. A same-document view transition moves
-  // everything (browsers without it just switch). The URL follows: /site/techniques/ while
-  // Techniques is open, /site/ when closed. It's swapped in place (replaceState), so Back still
-  // leaves the page. A new-tab click on a card loads that section's own page.
+  // everything (browsers without it just switch). Opening a card adds a history entry with the
+  // section's URL (/site/techniques/), so the browser's Back closes it and Forward opens it again,
+  // as with a closer look (Andy). The card's Back pill steps back through history too when the
+  // entry behind it is the grid, so the two Backs agree; on a section page reached directly, it
+  // closes the card and adds the grid's entry instead. A new-tab click loads the section's page.
+  interface Entry {
+    site: 1;
+    /** The open card's section, or null for the grid. */
+    open: string | null;
+    /** The entry behind this one is the grid, on this page. */
+    back?: boolean;
+    /** Scroll position, kept as the visitor scrolls. */
+    y?: number;
+  }
   const cards = [...document.querySelectorAll<HTMLElement>('[data-expandable]')];
 
   watchHeroHeight(grid);
   const openCard = () => cards.find((c) => c.classList.contains('is-open'));
+  const state = (): Partial<Entry> => (history.state?.site === 1 ? history.state : {});
+  const urlOf = (card?: HTMLElement) => (card ? card.dataset.href! : base) + location.search;
+  const cardAt = (path: string) => cards.find((c) => new URL(c.dataset.href!, location.href).pathname === path);
+
+  // Scroll is ours to put back: the view transition updates the page after the browser would have
+  // restored it. Each entry keeps its own position; a reload, or a Back that reloads, gets it too.
+  history.scrollRestoration = 'manual';
+  let saveTimer = 0;
+  const remember = () => {
+    clearTimeout(saveTimer);
+    history.replaceState({ ...state(), site: 1, y: Math.round(scrollY) }, '');
+  };
+  addEventListener('scroll', () => {
+    clearTimeout(saveTimer);
+    saveTimer = window.setTimeout(remember, 200);
+  }, { passive: true });
+  // And right before any link leaves (a closer look), in case the last scroll hasn't been saved.
+  document.addEventListener('click', (e) => (e.target as Element).closest?.('a[href]') && remember(), true);
 
   const setOpen = (card: HTMLElement, open: boolean) => {
     const hit = card.querySelector<HTMLAnchorElement>('.box-hit')!;
@@ -237,61 +266,114 @@ const arrow = 'M7 17 17 7M9 7h8v8';
     else if (card.dataset.pillClosed) card.dataset.pill = card.dataset.pillClosed;
   };
 
-  // Takeover starts at the top row; on phones, bring the opened card's top to the gutter line.
+  // Takeover starts at the top row; on phones, bring the card's top to the gutter line.
   const bringIntoView = (card: HTMLElement, behavior: ScrollBehavior = 'instant') => {
     if (wide.matches) return window.scrollTo({ top: 0, behavior });
     const line = parseFloat(getComputedStyle(grid).paddingTop) || 16;
     window.scrollBy({ top: card.getBoundingClientRect().top - line, behavior });
   };
 
-  const show = (card: HTMLElement | undefined, { animate = true, scroll = true } = {}) => {
+  /** The card being closed from inside it; its title gets focus back. */
+  let refocus: HTMLElement | undefined;
+
+  /** Show a card open (or none), then scroll to a saved position or to a card. */
+  const show = (card: HTMLElement | undefined, { animate = true, to }: { animate?: boolean; to?: number | HTMLElement } = {}) => {
+    const was = openCard();
     const update = () => {
       for (const c of cards) if (c !== card && c.classList.contains('is-open')) setOpen(c, false);
       if (card) setOpen(card, true);
       grid.classList.toggle('has-open', !!card);
-      history.replaceState(null, '', (card ? card.dataset.href! : base) + location.search);
       document.title = (card ?? grid).dataset.pageTitle ?? document.title;
-      if (card && scroll) bringIntoView(card);
+      if (typeof to === 'number') window.scrollTo({ top: to, behavior: 'instant' });
+      else if (to) bringIntoView(to);
+      // Closed from inside the card (its Back pill, its title, Escape), or with focus inside it:
+      // focus goes back to its title.
+      if (was && was !== card && (was === refocus || was.contains(document.activeElement))) was.querySelector<HTMLElement>('.box-hit')?.focus({ preventScroll: true });
+      refocus = undefined;
     };
     if (animate && !reduced && 'startViewTransition' in document) document.startViewTransition(update);
     else update();
     document.dispatchEvent(new CustomEvent('pill:clear'));
   };
 
+  const open = (card: HTMLElement) => {
+    // From the grid, a new entry; from another open card (phones), swap entries so Back still
+    // lands on the grid.
+    const switching = !!openCard();
+    remember();
+    const entry: Entry = { site: 1, open: card.dataset.section!, back: switching ? !!state().back : true };
+    if (switching) history.replaceState(entry, '', urlOf(card));
+    else history.pushState(entry, '', urlOf(card));
+    show(card, { to: card });
+  };
+
+  const close = () => {
+    const card = openCard();
+    if (!card) return;
+    refocus = card;
+    if (state().back) return history.back(); // popstate closes it
+    history.pushState({ site: 1, open: null } satisfies Entry, '', urlOf());
+    show(undefined, { to: wide.matches ? 0 : card });
+  };
+
   for (const card of cards) {
     card.querySelector('.box-hit')!.addEventListener('click', (e) => {
       const m = e as MouseEvent;
-      // New-tab and new-window clicks load the section's own page.
+      // New-tab and new-window clicks load the section's own page (or the grid).
       if (m.button !== 0 || m.metaKey || m.ctrlKey || m.shiftKey || m.altKey) return;
       e.preventDefault();
-      show(card.classList.contains('is-open') ? undefined : card);
+      if (card.classList.contains('is-open')) close();
+      else open(card);
     });
-    card.querySelector('.box-close')!.addEventListener('click', () => {
-      show(undefined);
-      card.querySelector<HTMLElement>('.box-hit')?.focus();
+    card.querySelector('.box-back')!.addEventListener('click', (e) => {
+      const m = e as MouseEvent;
+      if (m.button !== 0 || m.metaKey || m.ctrlKey || m.shiftKey || m.altKey) return;
+      e.preventDefault();
+      close();
     });
   }
   document.addEventListener('keydown', (e) => {
-    const open = openCard();
-    if (e.key !== 'Escape' || !open) return;
-    show(undefined);
-    open.querySelector<HTMLElement>('.box-hit')?.focus();
+    if (e.key === 'Escape') close();
   });
 
-  // Old hash links (/site/#portfolio, #techniques) still open their card, and move to its URL.
+  // Back and Forward between the grid and an open card.
   const fromHash = () => cards.find((c) => `#${c.dataset.section}` === location.hash);
+  window.addEventListener('popstate', () => {
+    if (fromHash()) return; // an old hash link (below)
+    const card = cardAt(location.pathname);
+    const was = openCard();
+    if (card === was) return;
+    show(card, { to: card ?? state().y ?? was });
+  });
+
+  // This page's own entry: what's open, keeping what a reload carried over.
+  history.replaceState({ ...state(), site: 1, open: openCard()?.dataset.section ?? null } satisfies Entry, '');
+  const navType = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type;
+  const savedY = navType === 'back_forward' || navType === 'reload' ? state().y : undefined;
+  let userScrolled = false;
+  for (const t of ['wheel', 'touchstart', 'keydown'] as const) addEventListener(t, () => (userScrolled = true), { once: true, passive: true });
+  if (savedY) window.scrollTo({ top: savedY, behavior: 'instant' });
+
+  // Old hash links (/site/#portfolio, #techniques) still open their card, and move to its URL.
   // A section's own page arrives with its card open. On phones the scroll to it waits for the
   // entrance, since the hero is still opening above it.
   const hashed = fromHash();
-  if (hashed) show(hashed, { animate: false, scroll: wide.matches });
+  if (hashed) {
+    history.replaceState({ site: 1, open: hashed.dataset.section! } satisfies Entry, '', urlOf(hashed));
+    show(hashed, { animate: false, to: wide.matches ? hashed : undefined });
+  }
   const linked = openCard();
   window.addEventListener('hashchange', () => {
     const card = fromHash();
-    if (card && card !== openCard()) show(card);
+    if (!card || card === openCard()) return;
+    history.replaceState({ site: 1, open: card.dataset.section!, back: false } satisfies Entry, '', urlOf(card));
+    show(card, { to: card });
   });
 
   // ── Entrance (lib/site-shell.ts) ────────────────────
   runEntrance(() => {
+    // A reload or a Back that reloaded: the saved position again, now the hero has opened.
+    if (savedY) return userScrolled || window.scrollTo({ top: savedY, behavior: 'instant' });
     const quiet = reduced || document.documentElement.classList.contains('from-site');
     if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, quiet ? 'instant' : 'smooth');
   });
