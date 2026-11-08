@@ -1072,6 +1072,49 @@ html.from-site .scene {
     navigation: none;
   }
 }
+/* The scene gets a layer of its own during these (named in lib/site-shell.ts and SiteHead.astro).
+   The new page needs a moment to boot its scene, so the last page's frame holds underneath
+   (scene-hold) and the new scene fades in over it; once it's in, html.scene-arrived drops the old
+   frame. If the new scene never shows, the hold fades out on its own after 1.6 s. */
+::view-transition-group(scene) {
+  animation: none;
+}
+::view-transition-image-pair(scene) {
+  isolation: auto;
+}
+::view-transition-old(scene),
+::view-transition-new(scene) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(scene) {
+  animation: scene-hold 2s linear both;
+}
+html.scene-arrived::view-transition-old(scene) {
+  animation: none;
+  opacity: 0;
+}
+/* A card that's on both pages fades out on the same curve its new self fades in on, so the two add
+   up to a solid card all the way (the browser's plus-lighter crossfade). With the takeover's
+   200 ms fade-out against the 560 ms fade-in, a card would turn see-through mid-morph and the
+   scene would show through it. The swap takes 300 ms, so old and new text barely overlap, and the
+   card's shape settles over the full 560. Cards that only step out keep the quick fade. */
+html.page-transition::view-transition-old(*.box),
+html.page-transition::view-transition-new(*.box) {
+  animation-duration: 300ms;
+}
+html.page-transition::view-transition-old(*.box):only-child {
+  animation-duration: 200ms;
+}
+@keyframes scene-hold {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
 /* ── Takeover (same-document view transition) ────────── */
 /* Each card animates from its old spot and size to its new one. Snapshots keep their natural

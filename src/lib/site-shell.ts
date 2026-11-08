@@ -5,6 +5,15 @@
 export const SITE_SCENE_KEY = 'ad_site_scene';
 /** How long a left-behind clock stays good. SiteHead uses the same window. */
 const SCENE_FRESH_MS = 10000;
+/** The scene's fade-in on a page reached from another site page (site.css, html.from-site .scene). */
+const SCENE_FADE_MS = 320;
+
+declare global {
+  interface Window {
+    /** A cross-document view transition is holding the last page's scene frame (SiteHead.astro). */
+    __sceneHeld?: boolean;
+  }
+}
 
 interface SceneRecord {
   v: 1;
@@ -25,8 +34,13 @@ interface SceneRecord {
  * the clock of the page they're coming from.
  * The clock is written on pageswap as well as pagehide: on a restore, Chrome shows the restored
  * page (pageshow) before the page being left gets its pagehide, but pageswap comes first.
+ * Where the browser runs a cross-document view transition, the scene also gets a layer of its own
+ * for it (named here on pageswap for the page being left, in SiteHead on pagereveal for the page
+ * arriving): the last page's frame holds under the new page's scene until that's showing, so the
+ * background never drops to its flat color while the new page boots its scene (holdScene below).
  */
 export function rememberScene() {
+  const canvas = document.querySelector<HTMLCanvasElement>('canvas.scene');
   const leave = () => {
     const field = window.shapeField;
     if (!field) return;
@@ -38,11 +52,17 @@ export function rememberScene() {
       // Private mode or storage off: the next page plays its entrance instead.
     }
   };
-  window.addEventListener('pageswap', leave);
+  window.addEventListener('pageswap', (e) => {
+    leave();
+    if ((e as Event & { viewTransition?: ViewTransition | null }).viewTransition && canvas) canvas.style.viewTransitionName = 'scene';
+  });
   window.addEventListener('pagehide', leave);
+  holdScene(canvas);
 
   window.addEventListener('pageshow', (e) => {
     if (!e.persisted) return;
+    // Named for leaving; SiteHead names it again if this restore runs a view transition.
+    if (canvas) canvas.style.viewTransitionName = '';
     // The pointer isn't on the link that was clicked any more (pill:clear also clears the tint).
     document.dispatchEvent(new CustomEvent('pill:clear'));
     let s: SceneRecord | null = null;
@@ -59,6 +79,22 @@ export function rememberScene() {
     // seek() also settles the tint, so the cleared hover tint is gone in the first frame back.
     field.seek(s.t + (Math.max(0, Date.now() - s.at) / 1000) * params.speed);
   });
+}
+
+/**
+ * Arriving through a cross-document view transition, the last page's scene frame holds under this
+ * page's scene (site.css). Let go of it once this page's scene has faded in: at once when it's
+ * already showing (a Back or Forward restore), else after its first frame and fade. If it never
+ * comes, the hold runs out on its own.
+ */
+function holdScene(canvas: HTMLCanvasElement | null) {
+  const release = () => document.documentElement.classList.add('scene-arrived');
+  const whenLive = () => {
+    if (!canvas || canvas.classList.contains('is-live')) release();
+    else document.addEventListener('shapefield:firstframe', () => setTimeout(release, SCENE_FADE_MS), { once: true });
+  };
+  document.addEventListener('site:pagereveal', whenLive);
+  if (window.__sceneHeld) whenLive(); // pagereveal came before this script ran
 }
 
 /** Keep --hero-h on the grid current, for the hero's sticky offset during a takeover. */

@@ -26,6 +26,25 @@ import { SITE_SCENE_KEY } from '../../lib/site-shell';
       }
     } catch {}
   }
+  // A cross-document view transition from another site page: the scene gets a layer of its own,
+  // so the last page's frame holds under this page's scene until it's showing (site.css holds it,
+  // lib/site-shell.ts lets go). Set here because pagereveal fires before first paint. It fires again
+  // when Back or Forward restores the page from the back/forward cache.
+  addEventListener('pagereveal', (e) => {
+    const vt = e.viewTransition;
+    const canvas = document.querySelector('canvas.scene');
+    if (!vt || !canvas) return;
+    canvas.style.viewTransitionName = 'scene';
+    root.classList.remove('scene-arrived');
+    root.classList.add('page-transition');
+    window.__sceneHeld = true;
+    document.dispatchEvent(new Event('site:pagereveal'));
+    vt.finished.finally(() => {
+      canvas.style.viewTransitionName = '';
+      root.classList.remove('scene-arrived', 'page-transition');
+      window.__sceneHeld = false;
+    });
+  });
   if (!window.__handoff) {
     try {
       const nav = performance.getEntriesByType('navigation')[0];
