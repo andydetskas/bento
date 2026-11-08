@@ -173,8 +173,10 @@
 }
 
 /* Closed, the whole card is a link to its section: the title's link stretches over it, and links
-   inside the card (each technique) sit above it. Open, only the title and the close button act,
-   so links and text in the panel work normally. */
+   inside the card (each technique) sit above it. Open, only the title and the Back pill act, so
+   links and text in the panel work normally. The overlay needs its z-index: the hover zoom on the
+   Portfolio previews gives them a layer of their own, which otherwise paints over it and eats
+   the click. */
 .box-hit {
   all: unset;
   cursor: pointer;
@@ -187,6 +189,7 @@
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 1;
   border-radius: inherit;
 }
 .box.is-open .box-hit::after {
@@ -201,51 +204,54 @@
   z-index: 1;
 }
 
-/* Close: stays in reach while a long panel scrolls (sticky, without taking up a row). */
-.box-close {
-  all: unset;
-  box-sizing: border-box;
+/* Back (open cards and closer looks): a pill at the top of the card that stays in reach while a
+   long panel scrolls (Bohdana). (.box a lifts card links to position: relative; this keeps it
+   sticky.) Closed cards hide it. */
+.box a.backlink {
   position: sticky;
   top: var(--gutter);
   z-index: 2;
-  align-self: flex-end;
-  width: 40px;
+}
+.backlink {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   height: 40px;
-  margin-bottom: -40px;
+  padding: 0 var(--space-4) 0 var(--space-3);
   border-radius: var(--radius-pill);
   border: 1px solid var(--color-line);
   background: var(--color-card);
-  display: none;
-  place-items: center;
-  cursor: pointer;
+  color: inherit;
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  outline: none;
   transition:
     background-color var(--motion-quick) var(--motion-ease-standard),
+    border-color var(--motion-quick) var(--motion-ease-standard),
     color var(--motion-quick) var(--motion-ease-standard);
 }
-.box-close svg {
+.backlink svg {
   width: 18px;
   height: 18px;
 }
-.box.is-open .box-close {
-  display: grid;
-}
-/* The close button takes no row, so the eyebrow keeps its closed position. */
-.box.is-open .box-close + .box-top {
-  margin-top: calc(var(--space-6) * -1);
-}
-.box.is-open .box-top .arrow {
-  visibility: hidden;
-}
-.box-close:focus-visible {
+.backlink:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
 @media (hover: hover) {
-  .box-close:hover {
+  .backlink:hover {
     background: var(--color-text-primary);
     border-color: var(--color-text-primary);
     color: var(--color-card);
   }
+}
+.box:not(.is-open) a.box-back {
+  display: none;
+}
+/* Open, the arrow circle goes, so the eyebrow sits under Back as on a closer look. */
+.box.is-open .box-top .arrow {
+  display: none;
 }
 
 /* ── Arrow circle ───────────────────────────────────── */
@@ -437,23 +443,6 @@
   object-fit: cover;
 }
 
-.facts {
-  margin: var(--space-1) 0 0;
-  display: grid;
-  gap: 2px;
-}
-.facts dt {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: var(--weight-mono);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-.facts dd {
-  margin: 0;
-  font-weight: var(--weight-medium);
-}
 .outcome {
   margin: var(--space-1) 0 0;
   padding-left: var(--space-4);
@@ -763,48 +752,7 @@
 }
 
 /* ── A closer look (ungated case-study pages) ────────── */
-/* The page is one open card beside the hero, with a Back link at its top (Bohdana) that stays in
-   reach while the page scrolls. (.box a lifts card links to position: relative; this keeps it
-   sticky.) */
-.box a.look-backlink {
-  position: sticky;
-  top: var(--gutter);
-  z-index: 2;
-}
-.look-backlink {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  height: 40px;
-  padding: 0 var(--space-4) 0 var(--space-3);
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-line);
-  background: var(--color-card);
-  color: inherit;
-  font-weight: var(--weight-medium);
-  text-decoration: none;
-  outline: none;
-  transition:
-    background-color var(--motion-quick) var(--motion-ease-standard),
-    border-color var(--motion-quick) var(--motion-ease-standard),
-    color var(--motion-quick) var(--motion-ease-standard);
-}
-.look-backlink svg {
-  width: 18px;
-  height: 18px;
-}
-.look-backlink:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 3px;
-}
-@media (hover: hover) {
-  .look-backlink:hover {
-    background: var(--color-text-primary);
-    border-color: var(--color-text-primary);
-    color: var(--color-card);
-  }
-}
+/* The page is one open card beside the hero, with the Back pill (above) at its top. */
 .look-head {
   display: flex;
   flex-direction: column;

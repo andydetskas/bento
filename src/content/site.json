@@ -39,8 +39,8 @@
         "body": "Research, critique and design systems that help everyone make good calls without me in the room."
       },
       {
-        "title": "A lubricant, not a tollbooth",
-        "body": "Design should speed teams up, not gate them. I keep a fast, informal SLA on questions and reviews, with feedback in open threads."
+        "title": "Unblock the team",
+        "body": "Design should be a lubricant, not a tollbooth. I keep a fast, informal SLA on questions and reviews, with feedback in open threads."
       },
       {
         "title": "Build trust in early",
@@ -102,6 +102,7 @@
       ],
       "summary": "Redesigned Strava’s privacy controls so athletes could understand, and choose, what they share.",
       "role": "Hands-on design lead",
+      "roleShort": "Hands-on design lead",
       "outcome": "Within a month, more than a quarter of active athletes reviewed the new controls, and 27% of them changed a setting.",
       "image": {
         "src": "/site/work/designing-for-trust.webp",
@@ -124,6 +125,7 @@
       ],
       "summary": "Made SuppCo’s design system AI-native, so designers, engineers, and agents build from one source of truth.",
       "role": "Hands-on owner",
+      "roleShort": "Hands-on owner",
       "outcome": "Raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills inside the product repo, at a company where roughly a third of commits came from coding agents.",
       "image": {
         "src": "/site/work/agentic-design-system.webp",
@@ -145,6 +147,7 @@
       ],
       "summary": "Strategic redesign of Strava’s information architecture and navigation for improved clarity, scale, and growth.",
       "role": "Facilitator and design leader",
+      "roleShort": "Facilitator and design leader",
       "outcome": "I facilitated the redesign sprint and led design direction. 84% of subscribers rated the new navigation better, and the experiment modeled +$3.3M a year in net bookings.",
       "image": {
         "src": "/site/work/surfacing-value.webp",
@@ -166,6 +169,7 @@
       ],
       "summary": "Re-oriented the team around the core value prop of the AXS App: battery status, firmware, and connectivity.",
       "role": "Strategy lead and facilitator",
+      "roleShort": "Strategy lead and facilitator",
       "outcome": "Re-centered the app strategy on reliability (battery, firmware, connection) using a 10,000-rider survey, community vote data and 25 stakeholder interviews. It became the Digital Product Group’s plan for the year.",
       "image": {
         "src": "/site/work/crushing-the-basics.webp",
@@ -187,6 +191,7 @@
       ],
       "summary": "Redesigned SuppCo’s signature score into a hub that explains itself and tells you what to do next.",
       "role": "Designer (product and engineering owned the scoring logic)",
+      "roleShort": "Designer",
       "outcome": "An A/B-tested update prompt raised score updates 24% for free and Pro members.",
       "image": {
         "src": "/site/work/stackscore.webp",
@@ -208,6 +213,7 @@
       ],
       "summary": "Designed SuppCo’s first commerce product: a members-only club that sells trusted supplements without discounting.",
       "role": "Responsible for design, alongside the Head of Product",
+      "roleShort": "Shared design ownership",
       "outcome": "Credits, not discounts. In alpha, 56% of carts became orders, 41% of purchases were subscriptions, and 54% of buyers reordered within 45 days.",
       "image": {
         "src": "/site/work/buying-club.webp",
@@ -229,6 +235,7 @@
       ],
       "summary": "Redesigned battery status so riders can see how much time their SRAM batteries have left.",
       "role": "Manager and sponsor. Two designers on my team designed it.",
+      "roleShort": "Manager and sponsor",
       "outcome": "My team discovered riders believed in a yellow battery light that doesn’t exist.",
       "image": {
         "src": "/site/work/battery-ui.webp",
@@ -250,6 +257,7 @@
       ],
       "summary": "Turned an onboarding questionnaire into a conversation where answers are rewarded with facts.",
       "role": "My concept",
+      "roleShort": "My concept",
       "image": {
         "src": "/site/work/call-and-response.webp",
         "width": 1200,

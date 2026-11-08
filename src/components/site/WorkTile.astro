@@ -1,6 +1,7 @@
 ---
-// A case study inside the Portfolio panel: art, company, title, summary, my role and the public
-// outcome. The whole tile links to the work's closer-look page when it has one (public, same
+// A case study inside the Portfolio panel: art, company and my role, title, summary and the public
+// outcome. The role rides in the eyebrow (Andy dropped the separate My role row, which made the
+// tiles uneven), so it still sits next to every outcome. The whole tile links to the work's closer-look page when it has one (public, same
 // tab), otherwise to the full, passcode-protected case study.
 import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
@@ -21,7 +22,7 @@ const look = 'look' in item ? item.look : undefined;
   <div class="work-art" data-fit={item.fit}>
     <img src={item.image.src} width={item.image.width} height={item.image.height} alt={item.image.alt} loading="lazy" decoding="async" />
   </div>
-  <p class="eyebrow">{item.company}</p>
+  <p class="eyebrow">{item.company} · {item.roleShort}</p>
   <h3 class="tile-title">
     {
       look ? (
@@ -37,9 +38,5 @@ const look = 'look' in item ? item.look : undefined;
     }
   </h3>
   <p class="box-body">{item.summary}</p>
-  <dl class="facts">
-    <dt>My role</dt>
-    <dd>{item.role}</dd>
-  </dl>
   {outcome && <p class="outcome">{outcome}</p>}
 </article>

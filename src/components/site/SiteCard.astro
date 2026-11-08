@@ -165,19 +165,26 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
   }
 
   /* ── Call to action ─────────────────────────────────── */
+  /* One row (Andy): the status beside the button. Where the hero is too narrow for both on one
+     line, the status folds onto two short lines rather than dropping under the button. */
   .cta-row {
     margin-top: auto;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: var(--space-3) var(--space-4);
+    gap: var(--space-3);
+  }
+  .cta-row .btn {
+    flex: none;
   }
   .status {
     margin: 0;
+    min-width: 0;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
+    line-height: 1.35;
+    text-wrap: balance;
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: var(--weight-mono);
@@ -186,6 +193,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     color: var(--color-text-muted);
   }
   .dot {
+    flex: none;
     width: 8px;
     height: 8px;
     border-radius: 50%;
