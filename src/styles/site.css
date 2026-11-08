@@ -409,6 +409,20 @@
   }
 }
 
+/* Selected work: tiles side by side share their rows (art, eyebrow, title, summary, outcome), so
+   each part starts at the same height across a row and the grid stays even (Andy). The copy is
+   kept to about the same length too. */
+.work-tiles .tile {
+  grid-row: span 5;
+  display: grid;
+  grid-template-rows: subgrid;
+  row-gap: var(--space-3);
+  align-content: start;
+}
+.work-tiles .tile > * {
+  align-self: start;
+}
+
 .work-art {
   aspect-ratio: 16 / 10;
   border-radius: var(--space-3);
