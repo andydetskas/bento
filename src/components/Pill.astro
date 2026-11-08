@@ -42,6 +42,10 @@
       transition: none;
     }
   }
+  /* After Back or Forward restores the page: no hovers until the mouse moves (see the script). */
+  :global(html.hover-paused body) {
+    pointer-events: none;
+  }
 </style>
 
 <script>
@@ -118,5 +122,25 @@
     // Keyboard focus mirrors hover for the scene tint; the focus a tap gives a link doesn't.
     el.addEventListener('focus', () => el.matches(':focus-visible') && el.dataset.accent && accent(el.dataset.accent));
     el.addEventListener('blur', () => accent(null));
+  });
+
+  // Back and Forward can restore the page exactly as it was left (the back/forward cache): mid-hover
+  // on the link that was clicked. Chrome then replays that hover from the old pointer position
+  // (pill, scene tint, hover styles), wherever the pointer really is now. So a restored page
+  // starts with no hover, and hovers stay off until the mouse really moves (a replayed move has
+  // no movement). A click, key or scroll turns them back on too. Touch never needed this.
+  const resumeOn = ['pointermove', 'pointerdown', 'keydown', 'wheel'] as const;
+  const resumeHover = (e: Event) => {
+    if (e.type === 'pointermove' && !(e as PointerEvent).movementX && !(e as PointerEvent).movementY) return;
+    document.documentElement.classList.remove('hover-paused');
+    resumeOn.forEach((type) => window.removeEventListener(type, resumeHover, true));
+  };
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    stack.length = 0;
+    show();
+    if (!finePointer) return;
+    document.documentElement.classList.add('hover-paused');
+    resumeOn.forEach((type) => window.addEventListener(type, resumeHover, { capture: true, passive: true }));
   });
 </script>
