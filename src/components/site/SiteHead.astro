@@ -6,6 +6,8 @@
 //     picks up where the last page left it, and the page shows at once with no intro
 //     (html.from-site). The last page leaves its scene clock in sessionStorage on pagehide
 //     (lib/site-shell.ts rememberScene). A reload plays the full entrance again.
+//     When Back or Forward restores a page from the back/forward cache, nothing here runs;
+//     rememberScene's pageshow handler picks up the clock in that case.
 import { HANDOFF_COOKIE, HANDOFF_MAX_AGE_S } from '../../lib/handoff';
 import { SITE_SCENE_KEY } from '../../lib/site-shell';
 ---

@@ -16,7 +16,7 @@ export interface ShapeField {
   readonly preset: Preset;
   /** Scene seconds since the last build (what a hand-off passes on, so the next page picks up the same moment). */
   readonly time: number;
-  /** Jump to scene time t and render. */
+  /** Jump to scene time t and render, with color and tint easings settled (as if it had been running). */
   seek(t: number): void;
   setPreset(preset: Preset): void;
   setPalette(palette: ScenePalette): void;
@@ -243,6 +243,10 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
         }
       }
       shared.uTime.value = t;
+      // A jump in time skips the easing too: no tint or color left half-faded from before.
+      bg.step(1);
+      accent.step(1);
+      shared.uAccentAmt.value = accentTarget;
       dirty = Math.max(dirty, 2);
     },
     setPreset(next) {

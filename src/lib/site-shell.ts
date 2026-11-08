@@ -3,18 +3,61 @@
 
 /** sessionStorage key for the scene clock handed between site pages (read in SiteHead.astro). */
 export const SITE_SCENE_KEY = 'ad_site_scene';
+/** How long a left-behind clock stays good. SiteHead uses the same window. */
+const SCENE_FRESH_MS = 10000;
 
-/** On leaving the page, leave the scene's clock for the next site page to pick up. */
+interface SceneRecord {
+  v: 1;
+  /** Date.now() when the last page left. */
+  at: number;
+  /** Its scene time. */
+  t: number;
+  preset: string;
+}
+
+/**
+ * Keep the scene continuous from page to page. On leaving, the page leaves its scene's clock for
+ * the next site page; on a normal load SiteHead picks it up before first paint.
+ * Back and Forward usually skip the load: the browser restores the page exactly as it was left
+ * (the back/forward cache), with its scene clock stopped at the moment the visitor clicked away,
+ * and the hover tint and pill of that click still on. Left alone, the scene would jump back by
+ * however long they spent on the other page. So on a restore: drop the hover state, and pick up
+ * the clock of the page they're coming from.
+ * The clock is written on pageswap as well as pagehide: on a restore, Chrome shows the restored
+ * page (pageshow) before the page being left gets its pagehide, but pageswap comes first.
+ */
 export function rememberScene() {
-  window.addEventListener('pagehide', () => {
+  const leave = () => {
     const field = window.shapeField;
     if (!field) return;
     try {
       const preset = document.documentElement.dataset.preset ?? '';
-      sessionStorage.setItem(SITE_SCENE_KEY, JSON.stringify({ v: 1, at: Date.now(), t: field.time, preset }));
+      const record: SceneRecord = { v: 1, at: Date.now(), t: field.time, preset };
+      sessionStorage.setItem(SITE_SCENE_KEY, JSON.stringify(record));
     } catch {
       // Private mode or storage off: the next page plays its entrance instead.
     }
+  };
+  window.addEventListener('pageswap', leave);
+  window.addEventListener('pagehide', leave);
+
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    // The pointer isn't on the link that was clicked any more (pill:clear also clears the tint).
+    document.dispatchEvent(new CustomEvent('pill:clear'));
+    let s: SceneRecord | null = null;
+    try {
+      s = JSON.parse(sessionStorage.getItem(SITE_SCENE_KEY) || 'null');
+      sessionStorage.removeItem(SITE_SCENE_KEY);
+    } catch {
+      return;
+    }
+    const field = window.shapeField;
+    if (!field || !s || s.v !== 1 || Date.now() - s.at > SCENE_FRESH_MS) return;
+    const { id, params } = field.preset;
+    if (s.preset !== id) return;
+    // seek() also settles the tint, so the cleared hover tint is gone in the first frame back.
+    field.seek(s.t + (Math.max(0, Date.now() - s.at) / 1000) * params.speed);
   });
 }
 
