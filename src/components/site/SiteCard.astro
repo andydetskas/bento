@@ -73,8 +73,11 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
       background-color var(--motion-base) var(--motion-ease-standard);
   }
 
-  /* Collapsed to the masthead (the hand-off's first frame) until the cards land, then it opens. */
+  /* Collapsed to the masthead (the hand-off's first frame) until the cards land, then it opens.
+     Open, it fills the card, so when the card stretches to a taller row, the call to action
+     sits at the bottom (Andy) rather than under the follow rows with space below it. */
   .card-more {
+    flex: 1 1 auto;
     display: grid;
     grid-template-rows: 1fr;
     transition: grid-template-rows var(--motion-settle) var(--motion-ease-settle) 160ms;
@@ -163,6 +166,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 
   /* ── Call to action ─────────────────────────────────── */
   .cta-row {
+    margin-top: auto;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
