@@ -318,37 +318,31 @@
 }
 
 /* ── Portfolio ──────────────────────────────────────── */
-.mosaic {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
+/* One screen, close up (Andy: the four small previews read as far away), centered on its tint.
+   The panel grows to fill the card when the row is taller than the card's content. */
+.feature {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  aspect-ratio: 5 / 4;
   margin-top: var(--space-1);
-}
-.mosaic-cell {
-  aspect-ratio: 4 / 3;
-  border-radius: var(--space-2);
+  border-radius: var(--space-3);
   background: var(--tint);
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  padding: 8%;
 }
-.mosaic-cell img {
-  width: 100%;
-  height: 100%;
+.feature img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  height: 84%;
+  width: auto;
+  max-width: 84%;
   object-fit: contain;
   transition: scale var(--motion-settle) var(--motion-ease-settle);
 }
-.mosaic-cell[data-fit='rise'] {
-  place-items: start center;
-  padding: 10% 0 0;
-}
-.mosaic-cell[data-fit='rise'] img {
-  width: 44%;
-  height: auto;
-}
 @media (hover: hover) {
-  .area-portfolio:not(.is-open):hover .mosaic-cell img {
+  .area-portfolio:not(.is-open):hover .feature img {
     scale: 1.04;
   }
 }
@@ -423,29 +417,37 @@
   align-self: start;
 }
 
+/* The art sits centered in its tint with the same margin on every side (6% of the width; 9.6% of
+   the height at 16:10), so phone screens never sit on the bottom edge (Andy). */
 .work-art {
+  position: relative;
   aspect-ratio: 16 / 10;
   border-radius: var(--space-3);
   background: var(--tint);
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  padding: 6%;
 }
-.work-art img,
+.work-art img {
+  position: absolute;
+  top: 9.6%;
+  left: 6%;
+  width: 88%;
+  height: 80.8%;
+  object-fit: contain;
+  transition: scale var(--motion-settle) var(--motion-ease-settle);
+}
+/* A single bare screenshot: shown whole and centered, with a screen's rounded corners. */
+.work-art[data-fit='screen'] img {
+  left: 50%;
+  translate: -50% 0;
+  width: auto;
+  border-radius: 7% / 3.2%;
+  box-shadow: 0 12px 30px -16px rgb(20 20 30 / 0.45);
+}
 .post-art img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   transition: scale var(--motion-settle) var(--motion-ease-settle);
-}
-.work-art[data-fit='rise'] {
-  place-items: start center;
-  padding: 7% 0 0;
-}
-.work-art[data-fit='rise'] img {
-  width: 42%;
-  height: auto;
 }
 .post-art {
   aspect-ratio: 800 / 448;
@@ -1109,7 +1111,7 @@ html.page-transition::view-transition-old(*.box):only-child {
   .box > *,
   .arrow,
   .tile,
-  .mosaic-cell img,
+  .feature img,
   .work-art img,
   .post-art img,
   .post-title,

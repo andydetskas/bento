@@ -18,12 +18,12 @@
     "eyebrow": "Portfolio",
     "title": "Selected work",
     "lede": "Case studies from Strava, SRAM and SuppCo, each with my role and what changed.",
-    "preview": [
-      "designing-for-trust",
-      "agentic-design-system",
-      "surfacing-value",
-      "stackscore"
-    ]
+    "feature": {
+      "work": "stackscore",
+      "src": "/site/work/stackscore-screen.webp",
+      "width": 375,
+      "height": 763
+    }
   },
   "leadership": {
     "eyebrow": "Leadership",
@@ -155,7 +155,7 @@
         "height": 1200,
         "alt": "Strava redesigned home screen"
       },
-      "fit": "rise",
+      "fit": "screen",
       "url": "https://www.andydetskas.com/strategy-strava-navigation-for-clarity-retention-scale"
     },
     {
