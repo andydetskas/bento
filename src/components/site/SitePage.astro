@@ -335,6 +335,15 @@ const arrow = 'M7 17 17 7M9 7h8v8';
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') close();
   });
+  // The hero's name links home (Andy). Here that's this page: it closes an open card like Back,
+  // or goes back to the top.
+  document.querySelector('.head-link')?.addEventListener('click', (e) => {
+    const m = e as MouseEvent;
+    if (m.button !== 0 || m.metaKey || m.ctrlKey || m.shiftKey || m.altKey) return;
+    e.preventDefault();
+    if (openCard()) close();
+    else window.scrollTo({ top: 0, behavior: reduced ? 'instant' : 'smooth' });
+  });
 
   // Back and Forward between the grid and an open card.
   const fromHash = () => cards.find((c) => `#${c.dataset.section}` === location.hash);

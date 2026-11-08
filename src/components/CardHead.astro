@@ -8,15 +8,18 @@ interface Props {
   /** The name is the page's h1, except where the page has its own (a closer-look page). Type
       comes from the classes, so either element renders the same pixels. */
   nameAs?: 'h1' | 'p';
+  /** Make the masthead a link (the site's hero links home). The link wraps only the name and
+      stretches over the globe and role, so the layout, and the bento's pixels, don't change. */
+  href?: string;
 }
-const { nameAs: Name = 'h1' } = Astro.props;
+const { nameAs: Name = 'h1', href } = Astro.props;
 const { profile } = data;
 ---
 
-<header class="card-head">
+<header class:list={['card-head', { 'is-link': !!href }]}>
   <Icon name={profile.mark} class="mark" />
   <div class="who">
-    <Name class="name line trim-sans"><span class="line-inner" style="--i:0">{profile.name}</span></Name>
+    <Name class="name line trim-sans"><span class="line-inner" style="--i:0">{href ? <a class="head-link" href={href} aria-label={`${profile.name}, home`}>{profile.name}</a> : profile.name}</span></Name>
     <p class="role line trim-mono"><span class="line-inner" style="--i:1">{profile.role}</span></p>
   </div>
 </header>
@@ -49,6 +52,26 @@ const { profile } = data;
     --cap: var(--name-cap);
     font-weight: var(--weight-medium);
     letter-spacing: var(--tracking-title);
+  }
+  /* Linked masthead: the whole masthead is the hit area; no hover change (the hero has no
+     mouseovers), keyboard focus outlines it. */
+  .card-head.is-link {
+    position: relative;
+  }
+  .head-link {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+  .head-link::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: var(--space-2);
+  }
+  .head-link:focus-visible::after {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
   }
   .role {
     --cap: var(--role-cap);

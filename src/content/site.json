@@ -22,7 +22,7 @@
       "designing-for-trust",
       "agentic-design-system",
       "surfacing-value",
-      "battery-ui"
+      "stackscore"
     ]
   },
   "leadership": {
@@ -43,7 +43,7 @@
         "body": "Design should be a lubricant, not a tollbooth. I keep a fast, informal SLA on questions and reviews, with feedback in open threads."
       },
       {
-        "title": "Judgment",
+        "title": "Judgment is the job",
         "body": "Making the hard calls early. Integrity Compass, which I co-created, is one example: it brings privacy, safety and inclusion into the room before launch."
       }
     ],
@@ -223,50 +223,6 @@
       },
       "fit": "contain",
       "url": "https://www.andydetskas.com/design-suppco-buying-club"
-    },
-    {
-      "id": "battery-ui",
-      "title": "Battery UI",
-      "company": "SRAM",
-      "accent": "sram",
-      "tint": [
-        "indigo",
-        "200"
-      ],
-      "summary": "Redesigned battery status so riders can see at a glance how much ride time their SRAM batteries have left.",
-      "role": "Manager and sponsor. Two designers on my team designed it.",
-      "roleShort": "Manager and sponsor",
-      "outcome": "My team discovered riders believed in a yellow battery light that doesn’t exist. That gap became the design brief.",
-      "image": {
-        "src": "/site/work/battery-ui.webp",
-        "width": 548,
-        "height": 1200,
-        "alt": "SRAM AXS app battery status screen"
-      },
-      "fit": "rise",
-      "url": "https://www.andydetskas.com/design-sram-battery-improvements"
-    },
-    {
-      "id": "call-and-response",
-      "title": "Call-and-Response",
-      "company": "SuppCo",
-      "accent": "suppco",
-      "tint": [
-        "verde",
-        "200"
-      ],
-      "summary": "Turned an onboarding questionnaire into a conversation where every answer is rewarded with a useful fact.",
-      "role": "My concept",
-      "roleShort": "My concept",
-      "outcome": "I proposed it as an experiment, not a launch, so an A/B test with members measured what it actually changed.",
-      "image": {
-        "src": "/site/work/call-and-response.webp",
-        "width": 1200,
-        "height": 763,
-        "alt": "SuppCo onboarding responses: trusted products, staying consistent, and best value"
-      },
-      "fit": "contain",
-      "url": "https://www.andydetskas.com/design-suppco-call-and-response"
     }
   ],
   "kit": {

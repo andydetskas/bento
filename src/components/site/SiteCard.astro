@@ -2,13 +2,14 @@
 // The site's hero card: the bento card, grown up. Same masthead in the same spot (top-left, one
 // gutter in, one site column wide), so the bento's exit, the card folded to its masthead, is
 // this card's first frame. Below the masthead: the positioning line, follow links and the one
-// call to action. No mouseovers here (Andy): no pills, no scene tint, no row dimming. Keyboard
-// focus still shows.
+// call to action. The masthead links home (Andy). No mouseovers here (Andy): no pills, no scene
+// tint, no row dimming. Keyboard focus still shows.
 import links from '../../content/links.json';
 import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
 import CardHead from '../CardHead.astro';
 import Icon from '../Icon.astro';
+import { SITE_BASE } from '../../lib/site-sections';
 
 interface Props {
   /** See CardHead: 'p' on pages with their own h1. */
@@ -21,7 +22,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 ---
 
 <section class="card site-card area-hero" aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
-    <CardHead nameAs={nameAs} />
+    <CardHead nameAs={nameAs} href={SITE_BASE} />
     <div class="card-more">
       <div class="card-more-inner">
         <p class="headline">{intro.headline}</p>
