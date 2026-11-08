@@ -57,7 +57,7 @@ hero    portfolio   leadership
         techniques  about
 ```
 
-The left column below the hero stays open, so the scene shows there as you scroll. The hero links to LinkedIn and Figma. Leadership's card lists four practices (the numbers are in its panel). About leads with a photo, and My working kit lives there: one line on the card, and the full kit beside the experience list when it's open.
+The left column below the hero stays open, so the scene shows there as you scroll. The hero links to LinkedIn and Figma, and its Schedule a call button sits at the bottom of the card when the row is taller than its content. Leadership's card lists four practices (the numbers are in its panel). About leads with the photo from the old About page, and My working kit lives there: one line on the card, and the full kit beside the experience list when it's open. The experience list matches the live About page's, without years. Cards carry no item counts.
 
 - **Takeover.** Opening Portfolio, Leadership, Techniques or About takes over the right two columns, like Bohdana. The other cards step out, and the hero stays put while the panel scrolls. A same-document view transition moves everything. Close with × (it stays in reach while a long panel scrolls), Escape, or the card's title.
 - **Smaller screens.** Tablet: the hero on the left, the other cards stacked on the right, and the takeover fills the right column. Phones: one column, and cards open in place.

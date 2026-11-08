@@ -171,15 +171,6 @@
   line-height: 1.45;
   text-wrap: pretty;
 }
-.meta {
-  margin: auto 0 0;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: var(--weight-mono);
-  letter-spacing: var(--tracking-eyebrow);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
 
 /* Closed, the whole card is a link to its section: the title's link stretches over it, and links
    inside the card (each technique) sit above it. Open, only the title and the close button act,
@@ -679,14 +670,15 @@
 }
 
 /* ── About (with My working kit) ────────────────────── */
-/* The photo crops to the face on the card; open, it sits beside the intro. */
+/* The photo (from the old About page) crops to the courtyard and stairs on the card; open, it
+   sits whole beside the intro. */
 .about-photo {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 2;
   object-fit: cover;
-  object-position: 50% 24%;
+  object-position: 50% 62%;
   border-radius: var(--space-2);
   background: var(--color-page);
 }
@@ -707,7 +699,7 @@
 }
 .about-intro .about-photo {
   max-width: 320px;
-  aspect-ratio: 576 / 650;
+  aspect-ratio: 760 / 1009;
   border-radius: var(--space-3);
 }
 @container (min-width: 640px) {

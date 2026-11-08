@@ -64,7 +64,6 @@ const arrow = 'M7 17 17 7M9 7h8v8';
           })}
         </div>
         <p class="box-body">{portfolio.lede}</p>
-        <p class="meta">{work.length} case studies</p>
       </Fragment>
       <Fragment slot="panel">
         <p class="panel-lede">{portfolio.lede}</p>
@@ -137,7 +136,6 @@ const arrow = 'M7 17 17 7M9 7h8v8';
             </li>
           ))}
         </ul>
-        <p class="meta">{techniques.posts.length} techniques</p>
       </Fragment>
       <Fragment slot="panel">
         <p class="panel-lede">{techniques.lede}</p>
@@ -196,7 +194,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
               {about.experience.map((x) => (
                 <li>
                   <strong>{x.role}</strong>
-                  <span>{x.org}</span>
+                  {'org' in x && <span>{x.org}</span>}
                 </li>
               ))}
             </ul>

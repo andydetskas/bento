@@ -39,8 +39,8 @@
         "body": "Research, critique and design systems that help everyone make good calls without me in the room."
       },
       {
-        "title": "Grow people on purpose",
-        "body": "Clear career levels and honest critique. I’ve promoted designers into staff and management roles."
+        "title": "A lubricant, not a tollbooth",
+        "body": "Design should speed teams up, not gate them. I keep a fast, informal SLA on questions and reviews, with feedback in open threads."
       },
       {
         "title": "Build trust in early",
@@ -351,10 +351,10 @@
   "about": {
     "title": "Hi, I’m Andy.",
     "photo": {
-      "src": "/site/about/andy.webp",
-      "width": 576,
-      "height": 650,
-      "alt": "Andy Detskas, outdoors under a tree, in a denim shirt"
+      "src": "/site/about/andy-courtyard.webp",
+      "width": 760,
+      "height": 1009,
+      "alt": "Andy Detskas walking up the steps of a sunlit, whitewashed courtyard"
     },
     "body": "I lead design for products people have to trust: privacy and safety at Strava, connected bikes at SRAM, and supplement trust at SuppCo (acquired by Function Health). I’m a player-coach who does the work alongside my team and builds the systems around it.",
     "more": "For inspiration, I love to watch movies, travel and shoot photos, and spend time learning about the craftsmanship that goes into building watches and bikes. I love creative endeavors that blend the technical and creative.",
@@ -362,6 +362,9 @@
       {
         "role": "Head of Product Design",
         "org": "SuppCo (acquired by Function Health)"
+      },
+      {
+        "role": "Sabbatical"
       },
       {
         "role": "UX Manager (Product Design & Research)",
