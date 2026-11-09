@@ -71,8 +71,8 @@
         ]
       },
       {
-        "title": "Enable others",
-        "body": "Research, critique and design systems that help everyone make good calls without me in the room.",
+        "title": "Unblock the team",
+        "body": "Design should be a lubricant, not a tollbooth. I keep reviews fast and informal, and build the research, critique and design systems that let people make good calls without me.",
         "evidence": [
           {
             "org": "Strava",
@@ -85,13 +85,7 @@
           {
             "org": "SRAM",
             "text": "Stood up a research practice: field A/B testing at Sea Otter, and a Dovetail repository that product and engineering adopted."
-          }
-        ]
-      },
-      {
-        "title": "Unblock the team",
-        "body": "Design should be a lubricant, not a tollbooth. I keep a fast, informal SLA on questions and reviews, with feedback in open threads.",
-        "evidence": [
+          },
           {
             "org": "SuppCo",
             "text": "Made the design system AI-native and packaged it as agent skills in the repo, so designers, engineers and agents build from one source of truth and following the system no longer runs through me.",
