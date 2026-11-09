@@ -6,7 +6,8 @@
 // "Call-and-Response case study" slides, whose own copy this follows. Left out: the "What it moved"
 // slide (all but the +24% A/B result are call-only: refresh rate, email click rate, retention, Pro
 // likelihood, return rate), the share card naming a colleague (cropped from the original-score
-// figure), and every Call-and-Response test number and result (call-only). No dates.
+// figure), and every Call-and-Response test number (call-only). Its result direction, “activation, not
+// monetization,” is public by Andy’s call (Nov 9). No dates.
 import CloserLook from '../../../components/site/CloserLook.astro';
 import site from '../../../content/site.json';
 import { SITE_BASE } from '../../../lib/site-sections';
@@ -54,7 +55,7 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
         <p>The score moved for reasons no one could see, and when members followed our advice, they didn’t always understand why it changed. It became the top issue in member feedback.</p>
       </div>
       <figure class="look-fig">
-        <img src={img('original-score')} width="960" height="970" alt="The original score: one number on an orange or green card, followed by a long written analysis" loading="lazy" decoding="async" />
+        <img src={img('original-score')} width="949" height="1013" alt="The original score: one number on an orange or green card, followed by a long written analysis" loading="lazy" decoding="async" />
       </figure>
     </div>
   </section>
@@ -116,7 +117,7 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
     <h2 id="related">A related experiment: call and response</h2>
     <div class="look-text">
       <p>SuppCo’s onboarding asked new members about their goals, age, budget and stack without saying what they’d get back. My concept was to treat every question as a call that earns a response: answer, and SuppCo answers back with a small, specific fact about you or people like you, proof of value before the paywall instead of a pitch.</p>
-      <p>Onboarding was about to change again, so I built it to test, not to keep. One template (an icon, a headline, two proof points) turned every new response into copy and data rather than new screens, and we shipped it as an A/B test so the data decided what happened next.</p>
+      <p>Onboarding was about to change again, so I built it to test, not to keep. One template (an icon, a headline, two proof points) turned every new response into copy and data rather than new screens, and we shipped it as an A/B test. It moved activation, not monetization: more new members committed their stack, which the rest of SuppCo builds on, but it didn’t sell Pro on its own.</p>
     </div>
     <figure class="look-fig">
       <img src={img('call-and-response')} width="1561" height="1139" alt="Call and response: the question “Where do you need the most help?” with “Track my supplements” selected, answered by a screen on staying consistent with your routine" loading="lazy" decoding="async" />

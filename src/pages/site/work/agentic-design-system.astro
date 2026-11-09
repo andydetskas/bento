@@ -1,12 +1,12 @@
 ---
-// Agentic Design System, a closer look (public, ungated). Kept generic (Andy, Nov 8): the approach
-// and its principles, shipped UI, and the one public-safe result line (Master Profile 2.2). Left out
-// on purpose: internal repo and skill names, the tools behind it, screenshots of internal artifacts
-// (the skills, the service-layer diagram, the Figma library, dashboards), colleagues' names, and the
-// negotiation with front-end engineering. Sources: the Capsule article draft
-// (2026 Portfolio/framer/drafts/agentic-design-system-article.md), story kit §4.2, and the Figma
-// 2026 Portfolio › Case Studies › "SuppCo Agentic Design System case study" slides (only the
-// shipped-screens panel of slide 01 is used). No dates.
+// Agentic Design System, a closer look (public, ungated). Andy, Nov 9: the original slides are fine and
+// the first, generic version was "too pulled back", so this uses the Figma 2026 Portfolio › Case Studies
+// › "SuppCo Agentic Design System case study" slides 01–07 and the specifics from the Capsule article
+// draft (2026 Portfolio/framer/drafts/agentic-design-system-article.md). Still off the page: a
+// colleague's name (masked on the service-layer slide), dates (masked on the parity and skills slides),
+// the internal Buying Club dashboard numbers (blurred: internal metrics stay off public pages), the
+// skill-eval figures (call-only in Master Profile §2.2), and slide 08 (internal docs and partner
+// screens). The design team was two: Andy and the product designer he managed (§2.2). No dates.
 import CloserLook from '../../../components/site/CloserLook.astro';
 import site from '../../../content/site.json';
 import { SITE_BASE } from '../../../lib/site-sections';
@@ -27,7 +27,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
   backHref={`${SITE_BASE}work/`}
   backLabel="Selected work"
 >
-  <p class="panel-lede">I made SuppCo’s design system AI-native, so designers, engineers, PMs and coding agents could all build on-system work from one source of truth.</p>
+  <p class="panel-lede">I made Capsule, SuppCo’s design system, AI-native, so designers, engineers, PMs and coding agents could all build on-system work from one source of truth.</p>
   <dl class="look-facts">
     <div>
       <dt>My role</dt>
@@ -35,11 +35,11 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
     </div>
     <div>
       <dt>Worked with</dt>
-      <dd>Front-end engineering, product and our CEO, with a design team of two</dd>
+      <dd>Front-end engineering, product and our CEO, on a design team of two: me and the product designer I managed</dd>
     </div>
     <div>
       <dt>What I did</dt>
-      <dd>Brought Figma and code into parity, wrote the decisions down as rules, and put the system where the work happens</dd>
+      <dd>Brought Figma and code into parity, wrote the decisions down as skills, and put the system where the work happens</dd>
     </div>
   </dl>
   <p class="outcome">I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills inside the product repo, at a company where roughly a third of commits came from coding agents.</p>
@@ -51,15 +51,22 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
     <h2 id="situation">The situation</h2>
     <div class="look-text">
       <p>AI made output cheap and judgment scarce. At SuppCo, PMs and engineers were already doing design-shaped work with AI: spinning up prototypes, generating screens from tickets, building their own decks and dashboards. None of that was going to slow down because a designer asked nicely.</p>
-      <p>Meanwhile, Figma and code had grown up separately: similar components under different names, and no agreed rules for when to use what. Even our lightest gray had two names, one in Figma and one in code, and nobody could say which was the gray. Following the system was a matter of persuasion, one person at a time, and most of that persuasion ran through me.</p>
-      <p>So the question changed. Not “how do we get people to follow the docs?” but “how do we make the right decision the easiest one to make, for people and for agents?” We didn’t have a documentation problem. We had a distribution problem.</p>
+      <p>Meanwhile, Figma and code had grown up separately: similar components under different names, and no agreed rules for when to use what. My favorite example: our Figma library had a “gray-lightest” and our codebase had a “seasalt.” Nearly the same color, two names, and no one could tell you which gray was <em>the</em> gray. Following the system was a matter of persuasion, one person at a time, and most of that persuasion ran through me.</p>
+    </div>
+    <div class="look-split">
+      <div class="look-text">
+        <p>So the question changed. Not “how do we get people to follow the docs?” but “how do we make the right decision the easiest one to make, for people and for agents?” We didn’t have a documentation problem. We had a distribution problem.</p>
+      </div>
+      <figure class="look-fig">
+        <img src={img('which-gray')} width="1561" height="1139" alt="Which gray is the gray? Two swatches: gray-lightest, F6F6F6, and seasalt, F9F9F5" loading="lazy" decoding="async" />
+      </figure>
     </div>
   </section>
 
   <section class="look-section" aria-labelledby="role">
     <h2 id="role">My role</h2>
     <div class="look-text">
-      <p>As Head of Product Design, leading a design team of two, I owned the system hands-on: reconciling Figma with what was actually in production, writing the rules, and making the case for where the system should live. I agreed decision rights with front-end engineering and our CEO, so everyone knew which source won when Figma and code disagreed.</p>
+      <p>As Head of Product Design, I was a player-coach on a design team of two: me and the product designer I managed. I owned the system hands-on, from reconciling Figma with what was actually in production to writing the skills, and I made the case to front-end engineering and our CEO for where the system should live.</p>
     </div>
   </section>
 
@@ -77,22 +84,39 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <li>
         <p class="look-num" aria-hidden="true">01</p>
         <h3>Get to parity first</h3>
-        <p>Figma was behind code, so the first job was catching it up. Reconciling color and type gave us a Figma library that matched production, and with design tokens in place, redrawing the components to match was straightforward. It’s the unglamorous part, and it’s where governance becomes enforceable: you can’t write a rule about which gray to use until there’s one set of facts about what the grays are.</p>
+        <p>Figma was behind code, so the first job was catching it up. Reconciling color and type gave us a code-accurate Figma library, and with tokens in place, redrawing our components to match code and Storybook was straightforward. It’s the unglamorous part, and it’s where governance becomes enforceable: you can’t write a rule about which gray to use until there’s one set of facts about what the grays are.</p>
+        <figure class="look-fig">
+          <img src={img('parity')} width="1561" height="1139" alt="The Products sticker sheet in Figma: product cards redrawn to match the coded components, with their code paths noted" loading="lazy" decoding="async" />
+        </figure>
       </li>
       <li>
         <p class="look-num" aria-hidden="true">02</p>
-        <h3>Write decisions down as rules</h3>
-        <p>Next, I captured when to use what as written rules for people and agents alike. The trick that made them work was keeping every rule binary and checkable. “Use the right type size” isn’t a rule; “screen titles use this style, never a raw font size” is. That gave the team a way to contribute without asking me, and it gave coding agents the same rules the designers used.</p>
+        <h3>Write decisions down as skills</h3>
+        <p>Next, I wrote decisions down as skills: when to use what, which type style goes on a screen title, and what to do when the system disagrees with itself. The trick that made them work was keeping every rule binary and checkable. “Use the right type size” isn’t a rule; “screen titles use this style, never a raw font size” is. That gave people a contribution model to build against instead of asking me, and once the skills reached Claude and Devin, our coding agent, the decisions stuck for people who aren’t designers.</p>
+        <figure class="look-fig">
+          <img src={img('skills')} width="1561" height="1139" alt="A Capsule skill open in Claude: Figma Console MCP guardrails, where every rule is binary and checkable, including how to handle a disagreement between the token JSON and Figma" loading="lazy" decoding="async" />
+        </figure>
       </li>
       <li>
         <p class="look-num" aria-hidden="true">03</p>
         <h3>Put the system where the work happens</h3>
-        <p>A documentation site only works if people remember to open it. So the system moved into the code, where people and agents were already working: the design tokens and the rules side by side, readable by any agent and searchable by anyone. Parity is what made that safe. An agent reading two different stories would faithfully reproduce both.</p>
+        <p>This is where the most important conversation happened. Front-end engineering wanted the web app’s code to be the source of truth, a reasonable instinct. I argued that the system had to be global and agent-permeable, supporting every artifact the company makes, not just the app. We landed on a trade: web tokens define Figma, and in exchange the system gets a third place any agent can reach, a design system repo holding the token JSON alongside the skills.</p>
+        <figure class="look-fig">
+          <img src={img('repo')} width="1561" height="1139" alt="The design system repo: tokens and the agent skills side by side, a third place any agent can reach" loading="lazy" decoding="async" />
+        </figure>
+        <p>Parity is what made that safe. It turned the repo into a design service layer that agents can read and people can query. Without it, an agent reading our tokens would have been reading two different stories.</p>
+        <figure class="look-fig">
+          <img src={img('service-layer')} width="1561" height="1139" alt="The design service layer: Figma and the codebase in parity feed token JSON and skills into one repo, which unlocks prototypes, Figma designs from prompts, Figma-to-code, and non-product artifacts" loading="lazy" decoding="async" />
+        </figure>
       </li>
       <li>
         <p class="look-num" aria-hidden="true">04</p>
         <h3>Let it compound</h3>
-        <p>Once the rules traveled with the agents, on-system work started showing up from people who never asked a designer: town hall decks, dashboards and marketing pieces. Prototypes built on the system came out repeatable and shareable, and prompt-based workflows let us move in every direction, from code to Figma and back.</p>
+        <p>Once the system lived where design-shaped work actually happens, the results compounded. Non-designers started producing on-system work, from town hall decks to dashboards and marketing pieces, with just the skills and no design oversight. Prototyping skills built on the repo produced repeatable, shippable prototypes with shareable links, and prompt-based workflows let us move in every direction: code to Figma, Figma to code, and on to decks and docs.</p>
+        <figure class="look-fig">
+          <img src={img('with-and-without')} width="1561" height="1139" alt="The same internal dashboard made without and with the Capsule skills: a plain gray layout, then an on-brand one with colored KPI cards. Figures blurred" loading="lazy" decoding="async" />
+          <figcaption>The same request, without and with the skills. Figures blurred.</figcaption>
+        </figure>
       </li>
     </ol>
   </section>
@@ -100,7 +124,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
   <section class="look-section" aria-labelledby="changed">
     <h2 id="changed">What changed</h2>
     <div class="look-text">
-      <p>The biggest shift wasn’t in the system. It was in where my time went. With the rules in the code and the agents following them, I stopped being the bottleneck for “is this on-brand?”, and that time went back to the work only a designer can do: deciding what the rules should be, noticing where the system is wrong, and making the calls that don’t fit into a rule yet.</p>
+      <p>The biggest shift wasn’t in the system. It was in where my time went. With the rules in the repo and the agents following them, I stopped being the bottleneck for “is this on-brand?”, and that time went back to the work only a designer can do: deciding what the rules should be, noticing where the system is wrong, and making the calls that don’t fit into a skill yet.</p>
     </div>
   </section>
 
@@ -117,7 +141,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
   </section>
 
   <aside class="look-cta" aria-label="Talk it through">
-    <p>The full story, with the decisions, the tradeoffs and how the rules are written, is a 30-minute walkthrough.</p>
+    <p>The full story, with the decisions, the tradeoffs and how the skills are written, is a 30-minute walkthrough.</p>
     <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
       {site.intro.cta.label}
       <span class="sr-only">(opens in a new tab)</span>
