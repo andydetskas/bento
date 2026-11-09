@@ -13,8 +13,8 @@ export const DARK_PALETTE = glyphPalettes.find((p) => p.id === 'adobe-night')!.p
 export const LIGHT_PALETTE = defaultPreset.palette;
 
 export interface DisplaySettings {
-  /** Light or dark: "system" follows the device (prefers-color-scheme). */
-  theme: 'system' | 'light' | 'dark';
+  /** Light (the default, Andy's call), Dark, or "system" to follow the device (prefers-color-scheme). */
+  theme: 'light' | 'dark' | 'system';
   /** Text size: 100%, 115%, 130%. */
   text: 'default' | 'large' | 'larger';
   /** Atkinson Hyperlegible, designed for low vision, in place of the brand typefaces. */
@@ -31,7 +31,7 @@ export interface DisplaySettings {
 }
 
 export const DEFAULTS: DisplaySettings = {
-  theme: 'system',
+  theme: 'light',
   text: 'default',
   font: 'default',
   spacing: 'default',
@@ -82,7 +82,7 @@ export function applySettings(s: DisplaySettings) {
   applyTheme(s);
 }
 
-/** Dark when the visitor chose it, or chose nothing and the device is dark. */
+/** Dark when the visitor chose it, or chose to follow a device that's dark. */
 export const isDark = (s: DisplaySettings) =>
   s.theme === 'dark' || (s.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 

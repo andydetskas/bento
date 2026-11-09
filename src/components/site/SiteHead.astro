@@ -21,12 +21,12 @@ import { DARK_PALETTE, DISPLAY_KEY } from '../../lib/display-settings';
     const d = JSON.parse(localStorage.getItem(displayKey) || '{}');
     for (const k in d) if (typeof d[k] === 'string' && /^[a-z]+$/.test(k)) root.dataset[k] = d[k];
   } catch {}
-  // Theme: dark if chosen here, or if nothing is chosen and the device is dark. The tokens follow
+  // Theme: light unless the visitor chose Dark, or chose to follow a device that's dark. The tokens follow
   // data-mode; the page behind the cards and the scene (window.__scenePalette, read by
   // ShapeField when it boots) switch to Adobe Night, so nothing paints light first.
   try {
     const t = root.dataset.theme;
-    if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
       root.dataset.mode = 'dark';
       root.style.setProperty('--scene-bg', darkPalette.bg);
       root.style.background = darkPalette.bg;

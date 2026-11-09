@@ -8,7 +8,7 @@ order: 2
 draft: true
 ---
 
-Under my links on this site there’s a row called Display settings. It lets you change text size, typeface, spacing, contrast, link and focus highlighting, motion, and the animated background. Here’s why it looks the way it does, and what it deliberately doesn’t do.
+Under my links on this site there’s a row called Display settings. It lets you change the theme, text size, typeface, spacing, contrast, link and focus highlighting, motion, and the animated background. Here’s why it looks the way it does, and what it deliberately doesn’t do.
 
 ## Why not an overlay
 
@@ -18,6 +18,7 @@ So the bar is the site itself: semantic HTML, real contrast, visible focus, and 
 
 ## What each setting does
 
+- **Theme:** Light by default, or Dark, or follow your device. Dark uses the Taos dark palette for the cards and the background.
 - **Text size:** Large and Larger scale the whole site, not just paragraphs. Browser zoom works too; this is a shortcut that remembers your choice.
 - **Typeface:** Hyperlegible swaps in Atkinson Hyperlegible, the Braille Institute’s typeface for low vision, which makes letters like I, l and 1 easy to tell apart.
 - **Text spacing:** Wide applies the spacing in WCAG 1.4.12, with roomier lines, letters and words. Big titles open up less, because wide tracking hurts large type.
@@ -36,7 +37,7 @@ Four presets (Low vision, Dyslexia-friendly, Motion sensitive and Fewer distract
 - **No single-key shortcuts:** they collide with screen readers’ own keys (WCAG 2.1.4).
 - **No claims of compliance.**
 
-It starts from your device’s settings, keeps your choices on your device, and applies them before the page draws, so nothing flashes.
+It respects your device’s motion setting, keeps your choices on your device, and applies them before the page draws, so nothing flashes.
 
 ## How it’s built
 
