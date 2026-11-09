@@ -4,7 +4,7 @@ subtitle: "Quick ways and custom ways to design with haptic patterns"
 description: "How to bring haptics into your designs: stock patterns on iOS, Android and the web, how to demo them to engineers, and how to author your own."
 icon: "haptics"
 hero: "/site/techniques/haptics.webp"
-order: 4
+order: 6
 ---
 
 I love when apps utilize haptics in their UX. Whether it’s just a simple bit of feedback when you tap a button or move a slider, or it’s an extension of the brand using a custom haptic pattern on a load or demo screen. These little flourishes invoke a sense of deep intention and quality in an app where no detail is left unaddressed.

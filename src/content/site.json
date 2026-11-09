@@ -311,6 +311,22 @@
     "lede": "My creative process involves pixels and people. These are the approaches you can expect when we work together.",
     "posts": [
       {
+        "title": "Glyph lab",
+        "note": "Turning a brand system into a generative 3D background",
+        "url": "/site/techniques/glyph-lab/",
+        "icon": "spiral",
+        "image": "/site/techniques/glyph-lab.webp",
+        "draft": true
+      },
+      {
+        "title": "Display settings",
+        "note": "Accessibility settings without the overlay",
+        "url": "/site/techniques/display-settings/",
+        "icon": "eye",
+        "image": "/site/techniques/display-settings.webp",
+        "draft": true
+      },
+      {
         "title": "Integrity Compass",
         "note": "Design methods for trust, safety, inclusion, and integrity",
         "url": "/site/techniques/integrity-compass/",
@@ -337,22 +353,6 @@
         "url": "/site/techniques/making-haptics-happen/",
         "icon": "haptics",
         "image": "/site/techniques/haptics.webp"
-      },
-      {
-        "title": "Glyph lab",
-        "note": "Turning a brand system into a generative 3D background",
-        "url": "/site/techniques/glyph-lab/",
-        "icon": "spiral",
-        "image": "/site/techniques/glyph-lab.webp",
-        "draft": true
-      },
-      {
-        "title": "Display settings",
-        "note": "Accessibility settings without the overlay",
-        "url": "/site/techniques/display-settings/",
-        "icon": "eye",
-        "image": "/site/techniques/display-settings.webp",
-        "draft": true
       }
     ],
     "eyebrow": "Techniques",
