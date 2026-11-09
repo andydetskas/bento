@@ -126,7 +126,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
         <p class="box-body">{techniques.lede}</p>
         {/* Each technique links to its article on this site; hovering one hints what it's about. */}
         <ul class="post-list" role="list">
-          {techniques.posts.map((p) => (
+          {techniques.posts.filter((p) => !('draft' in p && p.draft)).map((p) => (
             <li>
               <a href={p.url} data-pill={p.note} data-accent={accent.techniques}>
                 <Icon name={p.icon} />
@@ -147,6 +147,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
               <div class="post-art">
                 <img src={p.image} width="800" height="448" alt="" loading="lazy" decoding="async" />
               </div>
+              {'draft' in p && p.draft && <p class="eyebrow">Draft</p>}
               <h3 class="tile-title">
                 <a href={p.url} data-pill="Read the technique">
                   {p.title}
