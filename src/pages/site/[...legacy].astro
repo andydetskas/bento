@@ -1,0 +1,29 @@
+---
+// One small page per old Framer URL (lib/legacy-urls.ts) that sends the visitor to its new home.
+// Instant meta refresh plus location.replace (so Back skips it), a canonical link to the new page
+// for search engines, noindex, and a plain link in case both are blocked.
+import { legacyRedirects } from '../../lib/legacy-urls';
+import { SITE_BASE } from '../../lib/site-sections';
+
+export function getStaticPaths() {
+  return Object.entries(legacyRedirects).map(([from, to]) => ({ params: { legacy: from }, props: { to } }));
+}
+
+const to = `${SITE_BASE}${(Astro.props as { to: string }).to}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Moved · Andy Detskas</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={to} />
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <script is:inline define:vars={{ to }}>location.replace(to);</script>
+  </head>
+  <body>
+    <p>This page has moved: <a href={to}>{to}</a></p>
+  </body>
+</html>

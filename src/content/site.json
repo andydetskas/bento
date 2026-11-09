@@ -295,28 +295,28 @@
       {
         "title": "Integrity Compass",
         "note": "Design methods for trust, safety, inclusion, and integrity",
-        "url": "https://www.andydetskas.com/techniques/integrity-compass",
+        "url": "/site/techniques/integrity-compass/",
         "icon": "integrity-compass",
         "image": "/site/techniques/integrity-compass.webp"
       },
       {
         "title": "Vibeframing",
         "note": "Speeding up product definition and prototyping",
-        "url": "https://www.andydetskas.com/techniques/vibeframing",
+        "url": "/site/techniques/vibeframing/",
         "icon": "vibeframing",
         "image": "/site/techniques/vibeframing.webp"
       },
       {
         "title": "Design Dojo",
         "note": "Creating space to learn and grow in your design team",
-        "url": "https://www.andydetskas.com/techniques/the-design-dojo",
+        "url": "/site/techniques/the-design-dojo/",
         "icon": "design-dojo",
         "image": "/site/techniques/design-dojo.webp"
       },
       {
         "title": "Haptic patterns",
         "note": "Quick ways and custom ways to design with haptics",
-        "url": "https://www.andydetskas.com/techniques/making-haptics-happen",
+        "url": "/site/techniques/making-haptics-happen/",
         "icon": "haptics",
         "image": "/site/techniques/haptics.webp"
       }

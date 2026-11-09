@@ -1,0 +1,64 @@
+---
+// A Techniques article (/site/techniques/<slug>/), in the closer-look shell: the hero on the left,
+// the article as an open card that morphs out of the Techniques card. The articles are Markdown in
+// src/content/techniques/ (ported from the Framer CMS, Nov 9): front matter for the short title, the
+// original long title as the subtitle, the description, the panel icon and the hero image; the body
+// is the article as published, with the images moved onto this site. No dates (Andy's rule for
+// portfolio surfaces). Slugs match the Framer paths, so /techniques/<slug> keeps working at cutover.
+import type { MarkdownInstance } from 'astro';
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+
+interface Frontmatter {
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: string;
+  hero: string;
+  order: number;
+}
+
+export function getStaticPaths() {
+  const files = import.meta.glob<MarkdownInstance<Frontmatter>>('../../../content/techniques/*.md', { eager: true });
+  return Object.entries(files).map(([path, article]) => ({
+    params: { slug: path.split('/').pop()!.replace(/\.md$/, '') },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props as { article: MarkdownInstance<Frontmatter> };
+const { frontmatter: fm, Content } = article;
+const accent = (tokens.accent as Record<string, string>).techniques;
+---
+
+<CloserLook
+  title={fm.title}
+  subtitle={fm.subtitle}
+  eyebrow="Techniques"
+  transition="box-techniques"
+  pageTitle={`${fm.title} · Techniques · Andy Detskas`}
+  description={fm.description}
+  accent={accent}
+  backHref={`${SITE_BASE}techniques/`}
+  backLabel="Techniques"
+>
+  <figure class="look-fig">
+    <img src={fm.hero} width="800" height="448" alt="" loading="eager" decoding="async" />
+  </figure>
+
+  <div class="look-text look-article">
+    <Content />
+  </div>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>Want to try this with your team, or talk through how I’d use it? Let’s find 30 minutes.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}techniques/`}>← All techniques</a></p>
+</CloserLook>
