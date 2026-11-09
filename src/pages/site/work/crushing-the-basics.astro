@@ -1,0 +1,148 @@
+---
+// Crushing the Basics, a closer look (public, ungated), reframed as building a design function at
+// SRAM, with Battery UI folded in as a chapter (the plan Andy approved Nov 8). Sources: Master
+// Profile §2.2 (SRAM rows) and story kit §4.4, sources/02-sram-evidence.md (Crush the Basics,
+// battery research, team), and the Figma 2026 Portfolio › Case Studies › "SRAM Crush the Basics" and
+// "SRAM Battery UI" slides. Public-safe only: the §2.2 public lines. No outcome metrics exist for Crush
+// the Basics and the battery work shipped after Andy left, so the page claims neither; the gated Framer
+// pages' ticket and review claims aren't sourced and stay off. Battery credit follows §2.2: two
+// designers on Andy's team designed it; he was manager and sponsor. Left out: the roadmap slides
+// (internal codenames and dates), the research decks (dated covers), the Business Model Canvas and
+// MoSCoW boards (internal strategy), the survey's satisfaction scores, and the battery research
+// percentages. No dates. Colleagues are credited by role.
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+const accent = (tokens.accent as Record<string, string>).sram;
+const work = site.work.find((w) => w.id === 'crushing-the-basics')!;
+const img = (name: string) => `/site/work/crushing-the-basics/${name}.webp`;
+---
+
+<CloserLook
+  title={work.title}
+  subtitle="Building a design function inside a hardware company, and re-centering the app on what riders needed most"
+  company={work.company}
+  pageTitle="Crushing the Basics · SRAM · Andy Detskas"
+  description="How I built a product design and research function at SRAM, and used it to re-center the AXS app on battery, firmware and connection."
+  accent={accent}
+  backHref={`${SITE_BASE}work/`}
+  backLabel="Selected work"
+>
+  <p class="panel-lede">At SRAM, I turned a UX team into a product design and research function, then used what we learned to re-center the AXS app on the basics riders needed most: battery, firmware and connection.</p>
+  <dl class="look-facts">
+    <div>
+      <dt>My role</dt>
+      <dd>UX manager for six product designers; strategy lead and facilitator</dd>
+    </div>
+    <div>
+      <dt>Worked with</dt>
+      <dd>Product management, app and firmware engineering, and senior leadership</dd>
+    </div>
+    <div>
+      <dt>What I did</dt>
+      <dd>Grew the team and its research practice, ran the strategy workshops, and set the app’s mission and primary KPI with leadership</dd>
+    </div>
+  </dl>
+  <p class="outcome">I re-centered the app strategy on reliability (battery, firmware and connection) using a 10,000-rider survey, community vote data and 25 stakeholder interviews. It became the Digital Product Group’s plan for the year.</p>
+  <figure class="look-fig">
+    <img src={img('three-pains')} width="1150" height="1139" alt="Three rider pains with quotes. Connection frustration: “When the app doesn’t connect to my bike I want to throw my phone in the river.” Firmware anxiety: “I am worried that this firmware update will brick my bike.” Battery and range anxiety: “I don’t understand what the battery status is and how long I can ride my bike for.”" loading="eager" decoding="async" />
+  </figure>
+
+  <section class="look-section" aria-labelledby="situation">
+    <h2 id="situation">The situation</h2>
+    <div class="look-text">
+      <p>SRAM makes bike components, and its AXS app is how riders pair, update and check them. The app comes free with the hardware, so its real job is trust: is my bike ready to ride?</p>
+      <p>Research told us it wasn’t doing that job. Riders couldn’t tell how much battery they had left or how long they could ride, firmware updates felt like they might brick the bike, and the connection between phone and bike was unreliable. Those three things were the app’s whole reason to exist.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="role">
+    <h2 id="role">My role</h2>
+    <div class="look-text">
+      <p>As UX manager, I led six product designers across the AXS rider app, the web, and the tools used in factories and by dealers. I grew the team, built its research practice, and led this strategy with partners in product, engineering and firmware, through workshops, share-outs and facilitated discussions.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="approach">
+    <h2 id="approach">How I approached it</h2>
+    <ol class="look-steps" role="list">
+      <li>
+        <p class="look-num" aria-hidden="true">01</p>
+        <h3>Build the team and the research habit</h3>
+        <p>I hired three designers in my first six months and set up a research practice the whole group could use: field testing with riders at events like Sea Otter, and a shared research repository in Dovetail that 73 people across product and engineering came to use.</p>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">02</p>
+        <h3>Dump out all the Lego pieces</h3>
+        <p>I pulled together the research we had and the research we still needed: a 10,000-rider survey, community vote data and 25 stakeholder interviews. Then I shared it out with designers, stakeholders and leaders until we agreed on what needed attention first.</p>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">03</p>
+        <h3>Agree on what the app is for</h3>
+        <p>Sharing the research showed that the app’s value proposition wasn’t clear to leadership anymore. I ran a Business Model Canvas workshop to agree on what the app is for today and what it could become, and set the app’s mission and its primary KPI, Ready to Ride, with senior leadership.</p>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">04</p>
+        <h3>Give the strategy a name</h3>
+        <p>I packaged the priorities as one strategy with a name people could repeat: Crush the Basics. Fix battery status, firmware updates and connection first, because nothing else in the app matters if those fail.</p>
+        <figure class="look-fig">
+          <img src={img('the-strategy')} width="1561" height="1139" alt="Pages from the Crush the Basics strategy: the key issues facing the rider experience, how feedback becomes design decisions, and how fixes map to flows" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">05</p>
+        <h3>Map every problem by owner</h3>
+        <p>Many of the fixes needed firmware or hardware teams, not just the app team. Mapping every problem by owner showed leaders what design could fix alone and what needed other teams, and prioritizing with the team set the order of the work.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="look-section" aria-labelledby="battery">
+    <h2 id="battery">Battery, the first basic</h2>
+    <div class="look-text">
+      <p>Battery status was the first basic we took on. Two designers on my team led the design; I set the direction, sponsored the work and coached them through the research.</p>
+      <p>My team discovered that riders believed in a yellow battery light that doesn’t exist. The light shows green, red or flashing red, but riders swore it turned yellow. They also rarely checked the battery in the app, and when a battery died on a ride, they blamed themselves. The team’s note was simple: we should make this responsibility ours. The gap between what the hardware said and what riders believed became the brief.</p>
+      <p>We put prototypes in front of riders in person at Sea Otter: short copy like “Charge now” against an estimated ride time, a simple list against one organized by battery type, and several approaches to color and icons.</p>
+    </div>
+    <figure class="look-fig">
+      <img src={img('battery-tests')} width="1561" height="1139" alt="Three prototypes tested with riders: a simple list with battery time, a screen organized by battery type, and short pill copy" loading="lazy" decoding="async" />
+    </figure>
+    <div class="look-split is-narrow-fig">
+      <div class="look-text">
+        <p>Riders preferred a screen grouped by battery type, the circle icon and its colors over other depictions, and an estimated ride time over a percentage. The team turned that into a full set of battery states for the design system: full, low, critical, disconnected and connecting.</p>
+        <p>The new battery status shipped after I left SRAM, so I don’t have its numbers. What I can show is the research, the decisions and the designers who made it.</p>
+      </div>
+      <figure class="look-fig">
+        <img src={img('battery-lockups')} width="384" height="450" alt="Final battery lockups for a rear derailleur: shake the bike to wake it, battery good, battery low with hours of ride time left, and charge now" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="changed">
+    <h2 id="changed">What changed</h2>
+    <div class="look-text">
+      <p>Crush the Basics became the Digital Product Group’s plan for the year, and the team went on to treat battery, firmware and connection as core to the app rather than as bugs to get past. Most of the outcomes landed after I left, so I won’t claim them here.</p>
+      <p>What stayed with the team was the function: designers hired and growing, research that anyone in product and engineering could search, and a shared answer to what the app is for.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="learned">
+    <h2 id="learned">What I learned</h2>
+    <ul class="look-takeaways" role="list">
+      <li>Give the strategy a name people can repeat.</li>
+      <li>Map every problem by owner before promising a fix.</li>
+      <li>What riders believe is the brief.</li>
+    </ul>
+  </section>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>The full story, with the research behind each call and how it reached the roadmap, is a 30-minute walkthrough.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+</CloserLook>

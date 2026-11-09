@@ -92,6 +92,9 @@
 .box.is-open {
   gap: var(--space-6);
   container-type: inline-size;
+  /* Open, a card's content runs long, so it ends with more room than the bento's tight
+     --pad-end (Andy: the bottom of Selected work looked tight). */
+  padding-bottom: calc(var(--pad) + var(--space-4));
 }
 
 /* Focus mode (Bohdana): the hovered card stays, the others step back. Only their content fades;
@@ -901,6 +904,49 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
   }
+  /* A tall, narrow figure (a column of lockups) takes the smaller share. */
+  .look-split.is-narrow-fig {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+
+/* A simple model drawn in the page itself (no internal artifacts): numbered steps on the
+   work's tint, side by side where there's room. */
+.look-flow ol {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: var(--space-3);
+  border-radius: var(--space-3);
+  background: var(--tint, var(--color-page));
+}
+.look-flow li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--space-2);
+  background: var(--color-card);
+}
+.look-flow li span:first-child {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-text-muted);
+}
+.look-flow strong {
+  font-size: var(--step-1);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+}
+.look-flow li span:last-child {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
 }
 .look-steps {
   list-style: none;

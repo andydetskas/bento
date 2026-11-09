@@ -148,13 +148,14 @@
       "roleShort": "Hands-on owner",
       "outcome": "I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills in the repo.",
       "image": {
-        "src": "/site/work/agentic-design-system.webp",
-        "width": 1200,
-        "height": 1083,
-        "alt": "Capsule design system: agent skills repo, product sticker sheet, and TESTED catalog screen"
+        "src": "/site/work/agentic-design-system-screens.webp",
+        "width": 1013,
+        "height": 651,
+        "alt": "SuppCo screens built on the design system: Today with My stack and StackScore, TESTED by SuppCo, and sign-up"
       },
       "fit": "contain",
-      "url": "https://www.andydetskas.com/design-suppco-agentic-design-system"
+      "url": "https://www.andydetskas.com/design-suppco-agentic-design-system",
+      "look": "/site/work/agentic-design-system/"
     },
     {
       "id": "surfacing-value",
@@ -199,7 +200,8 @@
         "alt": "Crush the Basics prioritization matrix"
       },
       "fit": "contain",
-      "url": "https://www.andydetskas.com/strategy-sram-crush-the-basics"
+      "url": "https://www.andydetskas.com/strategy-sram-crush-the-basics",
+      "look": "/site/work/crushing-the-basics/"
     },
     {
       "id": "stackscore",
@@ -221,7 +223,8 @@
         "alt": "SuppCo StackScore app screens: the score overview ring, Quality tab, and Goals tab"
       },
       "fit": "contain",
-      "url": "https://www.andydetskas.com/design-suppco-stackscore"
+      "url": "https://www.andydetskas.com/design-suppco-stackscore",
+      "look": "/site/work/stackscore/"
     },
     {
       "id": "buying-club",
