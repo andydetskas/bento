@@ -870,6 +870,61 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
+/* A link to a section (#battery, #related, from the old Framer URLs) lands below the sticky Back pill. */
+.look [id] {
+  scroll-margin-top: calc(var(--space-8) * 2.5);
+}
+/* Techniques articles (Markdown in src/content/techniques/): the article's own headings, lists and
+   figures, on the closer-look text measure. */
+.look-article h2 {
+  margin: var(--space-6) 0 0;
+  font-size: var(--step-2);
+  line-height: 1.15;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-title);
+  text-wrap: balance;
+}
+.look-article h3 {
+  margin: var(--space-4) 0 0;
+  font-size: var(--step-1);
+  line-height: 1.2;
+  font-weight: var(--weight-medium);
+}
+.look-article :is(ul, ol) {
+  margin: 0;
+  padding-left: 1.25em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.look-article li {
+  line-height: 1.55;
+  padding-left: 0.25em;
+}
+.look-article li::marker {
+  color: var(--color-text-muted);
+}
+.look-article strong {
+  font-weight: var(--weight-medium);
+}
+.look-article figure {
+  margin: var(--space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.look-article img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--space-3);
+  background: var(--color-line);
+}
+.look-article figcaption {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
 .look-list {
   list-style: none;
   margin: 0;

@@ -1,5 +1,6 @@
 ---
-// A closer look at one piece of work: the public, ungated version of a case study. It's a page
+// A closer look at one piece of work: the public, ungated version of a case study. Techniques
+// articles use the same shell (pages/site/techniques/[slug].astro). It's a page
 // of its own (/site/work/<slug>/) in the site's shell: the hero stays on the left and the work
 // fills the right two columns, like an open card. A Back link at the top (Bohdana) returns to
 // Selected work: through history when that's where the visitor came from (scroll and state come
@@ -23,14 +24,18 @@ interface Props {
   /** Shown under the title. */
   subtitle: string;
   /** Company name; the eyebrow reads "<company> · A closer look". */
-  company: string;
+  company?: string;
+  /** Overrides the eyebrow (Techniques articles: "Techniques"). */
+  eyebrow?: string;
+  /** The open card this page morphs out of: box-portfolio for case studies, box-techniques for articles. */
+  transition?: string;
   pageTitle: string;
   description: string;
   accent: string;
   backHref: string;
   backLabel: string;
 }
-const { title, subtitle, company, pageTitle, description, accent, backHref, backLabel } = Astro.props;
+const { title, subtitle, company, eyebrow = `${company} · A closer look`, transition = 'box-portfolio', pageTitle, description, accent, backHref, backLabel } = Astro.props;
 ---
 
 <Base title={pageTitle} description={description} preset={defaultPreset} noindex>
@@ -42,7 +47,7 @@ const { title, subtitle, company, pageTitle, description, accent, backHref, back
 
   <main class="site has-open">
     <SiteCard nameAs="p" />
-    <article class="card box is-open is-takeover look" style={`--accent:${accent};--b:0;view-transition-name:box-portfolio`} aria-labelledby="look-title">
+    <article class="card box is-open is-takeover look" style={`--accent:${accent};--b:0;view-transition-name:${transition}`} aria-labelledby="look-title">
       <a class="backlink" href={backHref} data-back aria-label={`Back to ${backLabel}`}>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M19 12H5M11 6l-6 6 6 6" />
@@ -50,7 +55,7 @@ const { title, subtitle, company, pageTitle, description, accent, backHref, back
         Back
       </a>
       <div class="box-top">
-        <p class="eyebrow">{company} · A closer look</p>
+        <p class="eyebrow">{eyebrow}</p>
       </div>
       <header class="look-head">
         <h1 class="box-title" id="look-title">{title}</h1>

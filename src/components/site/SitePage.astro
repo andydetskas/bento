@@ -120,17 +120,16 @@ const arrow = 'M7 17 17 7M9 7h8v8';
     <SectionCard id="techniques" eyebrow={techniques.eyebrow} title={techniques.title} accent={accent.techniques} pill="Read the techniques" index={2} {...card('techniques')}>
       <Fragment slot="summary">
         <p class="box-body">{techniques.lede}</p>
-        {/* Each technique links to its article; hovering one hints what it's about. */}
+        {/* Each technique links to its article on this site; hovering one hints what it's about. */}
         <ul class="post-list" role="list">
           {techniques.posts.map((p) => (
             <li>
-              <a href={p.url} target="_blank" rel="noopener noreferrer" data-pill={p.note} data-accent={accent.techniques}>
+              <a href={p.url} data-pill={p.note} data-accent={accent.techniques}>
                 <Icon name={p.icon} />
                 <span class="post-title">{p.title}</span>
                 <svg class="post-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d={arrow} />
                 </svg>
-                <span class="sr-only">(opens in a new tab)</span>
               </a>
             </li>
           ))}
@@ -145,9 +144,8 @@ const arrow = 'M7 17 17 7M9 7h8v8';
                 <img src={p.image} width="800" height="448" alt="" loading="lazy" decoding="async" />
               </div>
               <h3 class="tile-title">
-                <a href={p.url} target="_blank" rel="noopener noreferrer" data-pill="Read the technique">
+                <a href={p.url} data-pill="Read the technique">
                   {p.title}
-                  <span class="sr-only">(opens in a new tab)</span>
                 </a>
               </h3>
               <p class="box-body">{p.note}</p>
