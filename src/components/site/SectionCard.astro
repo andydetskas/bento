@@ -25,6 +25,8 @@ interface Props {
   open?: boolean;
 }
 const { id, eyebrow, title, accent, pill, index, href, closeHref, pageTitle, open = false } = Astro.props;
+// On a section's own page the open card's title is the page's h1 (the hero's name steps down to a p).
+const Title = open ? 'h1' : 'h2';
 const arrow = 'M7 17 17 7M9 7h8v8';
 ---
 
@@ -55,11 +57,11 @@ const arrow = 'M7 17 17 7M9 7h8v8';
       </svg>
     </span>
   </div>
-  <h2 class="box-title" id={`${id}-title`}>
+  <Title class="box-title" id={`${id}-title`}>
     <a class="box-hit" href={open ? closeHref : href} aria-expanded={String(open)} aria-controls={`${id}-panel`}>
       {title}
     </a>
-  </h2>
+  </Title>
   <div class="box-summary">
     <slot name="summary" />
   </div>

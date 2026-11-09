@@ -4,6 +4,12 @@ import LinkCard from '../components/LinkCard.astro';
 import ShapeField from '../components/ShapeField.astro';
 import { defaultPreset } from '../lib/presets';
 import { MAIN_URL } from '../lib/handoff';
+import JsonLd from '../components/JsonLd.astro';
+import { PERSON_ID, graph, person } from '../lib/schema';
+
+// Structured data: the link page is Andy's profile page; the Person is the same one the main
+// site describes (same @id), so engines tie the two together.
+const schema = graph(person(), { '@type': 'ProfilePage', url: 'https://links.andydetskas.com/', name: 'Andy Detskas', mainEntity: { '@id': PERSON_ID } });
 
 // Portfolio hand-off: open the connection to the main site now (every browser, including
 // in-app ones), and let Chrome prefetch the page when a pointer settles on the link.
@@ -20,6 +26,7 @@ const speculation = JSON.stringify({ prefetch: [{ where: { href_matches: MAIN_UR
   <Fragment slot="head">
     <link rel="preconnect" href={mainOrigin} />
     <script type="speculationrules" set:html={speculation} />
+    <JsonLd data={schema} />
   </Fragment>
   <ShapeField preset={defaultPreset} />
   <LinkCard />

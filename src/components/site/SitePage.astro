@@ -19,7 +19,9 @@ import Signature from './Signature.astro';
 import WorkTile from './WorkTile.astro';
 import site from '../../content/site.json';
 import { defaultPreset } from '../../lib/presets';
-import { SITE_BASE, SITE_DESCRIPTION, SITE_TITLE, sectionById, sectionPath, type Section } from '../../lib/site-sections';
+import { SITE_BASE, SITE_DESCRIPTION, SITE_ORIGIN, SITE_TITLE, absUrl, sectionById, sectionPath, type Section } from '../../lib/site-sections';
+import JsonLd from '../JsonLd.astro';
+import { PERSON_ID, breadcrumbs, graph, itemList, person, website } from '../../lib/schema';
 import { tokens } from '../../lib/tokens';
 
 interface Props {
@@ -40,18 +42,37 @@ const card = (id: Section['id']) => {
   return { href: sectionPath(s), closeHref: SITE_BASE, pageTitle: s.title, open: open === id };
 };
 const arrow = 'M7 17 17 7M9 7h8v8';
+
+// Structured data: the person and the site on every page, plus what this page is.
+const pagePath = current ? sectionPath(current) : SITE_BASE;
+const pageNode = (() => {
+  const base = { '@id': `${absUrl(pagePath)}#page`, url: absUrl(pagePath), name: current?.title ?? SITE_TITLE, description: current?.description ?? SITE_DESCRIPTION, isPartOf: { '@id': `${absUrl(SITE_BASE)}#site` }, inLanguage: 'en' };
+  switch (open) {
+    case 'about':
+      return { '@type': 'ProfilePage', ...base, mainEntity: { '@id': PERSON_ID } };
+    case 'portfolio':
+      return { '@type': 'CollectionPage', ...base, about: { '@id': PERSON_ID }, mainEntity: itemList(work.map((w) => ({ name: w.title, path: ('look' in w && w.look) || '', description: `${w.summary} My role: ${w.role}.` })).filter((w) => w.path)) };
+    case 'techniques':
+      return { '@type': 'CollectionPage', ...base, about: { '@id': PERSON_ID }, mainEntity: itemList(techniques.posts.filter((p) => !('draft' in p && p.draft)).map((p) => ({ name: p.title, path: p.url, description: p.note }))) };
+    default:
+      return { '@type': 'WebPage', ...base, about: { '@id': PERSON_ID } };
+  }
+})();
+const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([{ name: current.title.replace(/ · Andy Detskas$/, '') }])] : []));
 ---
 
-<Base title={current?.title ?? SITE_TITLE} description={current?.description ?? SITE_DESCRIPTION} preset={defaultPreset} noindex>
+<Base title={current?.title ?? SITE_TITLE} description={current?.description ?? SITE_DESCRIPTION} preset={defaultPreset} origin={SITE_ORIGIN} noindex>
   <Fragment slot="head">
     {/* Before first paint: arriving from the bento or another site page? (see SiteHead) */}
     <SiteHead />
+    <JsonLd data={schema} />
   </Fragment>
 
   <ShapeField preset={defaultPreset} eager />
 
   <main class:list={['site', { 'has-open': !!open }]} data-base={SITE_BASE} data-page-title={SITE_TITLE}>
-    <SiteCard />
+    {/* The grid's h1 is the name; a section's own page makes its open card's title the h1. */}
+    <SiteCard nameAs={open ? 'p' : 'h1'} />
 
     <SectionCard id="portfolio" eyebrow={portfolio.eyebrow} title={portfolio.title} accent={accent.portfolio} pill="See the work" index={0} {...card('portfolio')}>
       <Fragment slot="summary">

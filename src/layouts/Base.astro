@@ -22,6 +22,10 @@ interface Props {
   /** Title shown on link previews; defaults to `title`. */
   shareTitle?: string;
   image?: ShareImage;
+  /** Open Graph type: case studies and articles are "article". */
+  ogType?: 'website' | 'article';
+  /** The origin for canonical and share URLs, when it isn't Astro's `site` (the main site's pages). */
+  origin?: string;
 }
 
 const { profile, links } = data;
@@ -32,9 +36,9 @@ const defaultImage: ShareImage = {
   alt: `${profile.name}, ${profile.role}. A link card for ${links.map((l) => l.label).join(', ')}, beside extruded 3D Taos icons.`,
 };
 
-const { title, description, preset, noindex = false, shareTitle = title, image = defaultImage } = Astro.props;
+const { title, description, preset, noindex = false, shareTitle = title, image = defaultImage, ogType = 'website', origin } = Astro.props;
 
-const site = Astro.site ?? new URL(Astro.url.origin);
+const site = origin ? new URL(origin) : (Astro.site ?? new URL(Astro.url.origin));
 const canonical = new URL(Astro.url.pathname, site).href;
 
 // A content hash on the image URL, so link previews (LinkedIn caches for about a week)
@@ -68,14 +72,14 @@ try {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <!-- Link previews (Open Graph: LinkedIn, iMessage, Slack, Facebook; plus X/Twitter) -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={profile.name} />
     <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={shareTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageUrl.href} />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:type" content={/\.jpe?g$/.test(image.src) ? 'image/jpeg' : /\.webp$/.test(image.src) ? 'image/webp' : 'image/png'} />
     <meta property="og:image:width" content={String(image.width)} />
     <meta property="og:image:height" content={String(image.height)} />
     <meta property="og:image:alt" content={image.alt} />

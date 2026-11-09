@@ -45,6 +45,7 @@ const accent = (tokens.accent as Record<string, string>).techniques;
   accent={accent}
   backHref={`${SITE_BASE}techniques/`}
   backLabel="Techniques"
+  markdown={`${SITE_BASE}techniques/${Astro.params.slug}.md`}
 >
   <figure class="look-fig">
     <img src={fm.hero} width="800" height="448" alt="" loading="eager" decoding="async" />
