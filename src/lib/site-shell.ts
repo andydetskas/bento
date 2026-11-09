@@ -1,3 +1,5 @@
+import { motionReduced } from './display-settings';
+
 // Shared by every main-site page (the grid and the closer-look pages): the hero's height for its
 // sticky offset, the staged entrance, and the scene clock handed from page to page.
 
@@ -118,7 +120,7 @@ export function runEntrance(onSettled?: () => void) {
     requestAnimationFrame(() => onSettled?.());
     return;
   }
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reduced = motionReduced();
   const ARRIVE_BY = 1200; // ms after navigation start
   const SCENE_BEAT = 900; // ms of scene before the cards cover it
   const wait = (ms: number) => new Promise<void>((r) => setTimeout(r, Math.max(0, ms)));

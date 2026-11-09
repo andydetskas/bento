@@ -1,0 +1,329 @@
+---
+// Display settings: a native modal dialog (showModal traps focus, Escape closes, focus returns to the
+// button that opened it). Every change applies at once and is saved on this device (lib/display-
+// settings.ts). Presets are starting points that set a few options; pressing one again undoes it.
+// Opened from the hero card's "Display settings" row (SiteCard). No shortcuts, no screen-reader
+// mode: see the note in lib/display-settings.ts.
+import '@fontsource/atkinson-hyperlegible/400.css';
+import '@fontsource/atkinson-hyperlegible/700.css';
+import { PRESETS } from '../../lib/display-settings';
+
+const groups: { name: string; legend: string; options: [string, string][] }[] = [
+  { name: 'text', legend: 'Text size', options: [['default', 'Default'], ['large', 'Large'], ['larger', 'Larger']] },
+  { name: 'font', legend: 'Typeface', options: [['default', 'Default'], ['readable', 'Readable']] },
+  { name: 'spacing', legend: 'Text spacing', options: [['default', 'Default'], ['wide', 'Wide']] },
+  { name: 'contrast', legend: 'Contrast', options: [['default', 'Default'], ['high', 'High']] },
+  { name: 'highlight', legend: 'Links and focus', options: [['default', 'Default'], ['on', 'Highlighted']] },
+  { name: 'motion', legend: 'Motion', options: [['system', 'System setting'], ['reduced', 'Off']] },
+  { name: 'scene', legend: 'Background', options: [['on', 'Animated'], ['paused', 'Paused'], ['off', 'Off']] },
+];
+---
+
+<dialog id="display-settings" class="display" aria-labelledby="display-title" aria-describedby="display-intro">
+  <form method="dialog">
+    <header class="display-head">
+      <h2 id="display-title">Display settings</h2>
+      <p id="display-intro">Adjust how this site looks and moves. It starts from your device’s settings, and your choices stay on this device.</p>
+    </header>
+
+    <section class="display-presets" aria-labelledby="display-presets-title">
+      <h3 id="display-presets-title" class="display-label">Start from a preset</h3>
+      <div class="presets">
+        {PRESETS.map((p) => (
+          <button type="button" class="preset" data-preset={p.id} aria-pressed="false">
+            <strong>{p.label}</strong>
+            <span>{p.note}</span>
+          </button>
+        ))}
+      </div>
+    </section>
+
+    <div class="display-groups">
+      {groups.map((g) => (
+        <fieldset>
+          <legend>{g.legend}</legend>
+          <div class="seg">
+            {g.options.map(([value, label]) => (
+              <label>
+                <input type="radio" name={g.name} value={value} />
+                <span>{label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
+    </div>
+
+    <footer class="display-foot">
+      <p class="display-status" role="status" aria-live="polite"></p>
+      <button type="button" class="display-reset" data-display-reset>Reset to defaults</button>
+      <button class="btn display-done" value="done">Done</button>
+    </footer>
+  </form>
+</dialog>
+
+<style>
+  .display {
+    width: min(600px, calc(100vw - 32px));
+    max-height: min(90svh, 860px);
+    padding: 0;
+    border: 0;
+    border-radius: var(--card-radius);
+    background: var(--color-card);
+    color: var(--color-text-primary);
+    box-shadow: 0 40px 90px -40px rgb(20 20 30 / 0.55);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .display::backdrop {
+    background: rgb(20 20 30 / 0.45);
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--pad) var(--pad) 0;
+  }
+  .display-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  h2 {
+    margin: 0;
+    font-size: var(--step-2);
+    line-height: 1.15;
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-title);
+  }
+  .display-head p {
+    margin: 0;
+    color: var(--color-text-muted);
+    text-wrap: pretty;
+  }
+  .display-label {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: calc(11px * var(--text-scale, 1));
+    font-weight: var(--weight-mono);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  /* Presets: four cards, two by two. */
+  .presets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: var(--space-2);
+  }
+  .preset {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--space-3);
+    background: var(--color-card);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .preset strong {
+    font-weight: var(--weight-medium);
+  }
+  .preset span {
+    font-size: var(--step--1);
+    line-height: 1.35;
+    color: var(--color-text-muted);
+  }
+  .preset[aria-pressed='true'] {
+    border-color: var(--color-text-primary);
+    box-shadow: inset 0 0 0 1px var(--color-text-primary);
+  }
+
+  /* Each setting is a row: its name on the left, the choices on the right (stacked on phones). */
+  .display-groups {
+    display: flex;
+    flex-direction: column;
+  }
+  fieldset {
+    margin: 0;
+    padding: var(--space-3) 0;
+    border: 0;
+    border-top: 1px solid var(--color-line);
+    min-width: 0;
+  }
+  legend {
+    float: left;
+    width: 9.5em;
+    padding: 0;
+    line-height: 44px;
+    font-weight: var(--weight-medium);
+  }
+  .seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .seg label {
+    position: relative;
+  }
+  .seg input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .seg span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--space-4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-pill);
+  }
+  .seg input:checked + span {
+    background: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    color: var(--color-card);
+    font-weight: var(--weight-medium);
+  }
+  /* Phones: the name above its choices. The legend stays floated (full width) so it never sits in
+     the fieldset's top line the way a plain legend does. */
+  @media (max-width: 560px) {
+    legend {
+      width: 100%;
+      line-height: 1.4;
+      margin-bottom: var(--space-2);
+    }
+    .seg {
+      clear: both;
+    }
+  }
+
+  .seg label:has(input:focus-visible) span,
+  .preset:focus-visible,
+  .display-reset:focus-visible,
+  .display-done:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* The footer stays pinned to the bottom of the dialog, so Reset and Done never scroll away. */
+  .display-foot {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    margin: 0 calc(var(--pad) * -1);
+    padding: var(--space-4) var(--pad) var(--pad);
+    border-top: 1px solid var(--color-line);
+    background: var(--color-card);
+  }
+  .display-status {
+    flex: 1 0 100%;
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--color-text-muted);
+  }
+  .display-status:empty {
+    display: none;
+  }
+  .display-reset {
+    min-height: 44px;
+    margin-right: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--weight-medium);
+    text-decoration: underline;
+    text-decoration-color: var(--color-line);
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+  .display-done {
+    border: 0;
+    font: inherit;
+    font-weight: var(--weight-medium);
+    cursor: pointer;
+  }
+  .display-done::after {
+    content: none;
+  }
+</style>
+
+<script>
+  import { DEFAULTS, PRESETS, applySettings, loadSettings, saveSettings, type DisplaySettings } from '../../lib/display-settings';
+
+  const dialog = document.getElementById('display-settings') as HTMLDialogElement | null;
+  if (dialog) {
+    const form = dialog.querySelector('form')!;
+    const status = dialog.querySelector<HTMLElement>('.display-status')!;
+    const keys = Object.keys(DEFAULTS) as (keyof DisplaySettings)[];
+    let s = loadSettings();
+
+    const matches = (values: Partial<DisplaySettings>) => (Object.keys(values) as (keyof DisplaySettings)[]).every((k) => s[k] === values[k]);
+    const sync = () => {
+      for (const k of keys) {
+        const input = form.querySelector<HTMLInputElement>(`input[name="${k}"][value="${s[k]}"]`);
+        if (input) input.checked = true;
+      }
+      for (const b of form.querySelectorAll<HTMLButtonElement>('.preset')) {
+        const p = PRESETS.find((x) => x.id === b.dataset.preset)!;
+        b.setAttribute('aria-pressed', String(matches(p.values)));
+      }
+    };
+    const commit = (message: string) => {
+      applySettings(s);
+      saveSettings(s);
+      sync();
+      status.textContent = message;
+    };
+
+    form.addEventListener('change', (e) => {
+      const t = e.target as HTMLInputElement;
+      if (t.type !== 'radio') return;
+      s = { ...s, [t.name]: t.value };
+      commit('Saved on this device.');
+    });
+    for (const b of form.querySelectorAll<HTMLButtonElement>('.preset')) {
+      b.addEventListener('click', () => {
+        const p = PRESETS.find((x) => x.id === b.dataset.preset)!;
+        const on = matches(p.values);
+        // Pressing a preset that's already on turns its options back to the defaults.
+        const next = { ...s };
+        for (const k of Object.keys(p.values) as (keyof DisplaySettings)[]) (next as Record<string, string>)[k] = on ? DEFAULTS[k] : (p.values[k] as string);
+        s = next;
+        commit(on ? `${p.label} turned off.` : `${p.label} on. Saved on this device.`);
+      });
+    }
+    form.querySelector('[data-display-reset]')!.addEventListener('click', () => {
+      s = { ...DEFAULTS };
+      commit('Back to the defaults.');
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-display-open]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        s = loadSettings();
+        sync();
+        status.textContent = '';
+        document.dispatchEvent(new CustomEvent('pill:clear'));
+        dialog.showModal();
+      }),
+    );
+    // A click on the backdrop closes it, like Escape.
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+    // The scene can boot after the saved settings were applied: hold it then too.
+    document.addEventListener('shapefield:ready', () => window.shapeField?.setPaused?.(loadSettings().scene !== 'on'));
+  }
+</script>

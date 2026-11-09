@@ -54,6 +54,21 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
           }
         </ul>
 
+        <!-- Display settings: opens the dialog (DisplaySettings.astro, rendered once per page beside the Pill).
+             A control, not a link, so no note
+             and a sliders icon in place of the arrow. Needs JS, so it's hidden without it. -->
+        <button type="button" class="frow frow-settings" data-display-open aria-haspopup="dialog" aria-controls="display-settings">
+          <Icon name="eye" class="frow-icon" />
+          <span class="frow-label">Display settings</span>
+          <span class="arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
+              <circle cx="16" cy="7" r="2" />
+              <circle cx="10" cy="17" r="2" />
+            </svg>
+          </span>
+        </button>
+
         <div class="cta-row">
           <p class="status"><span class="dot" aria-hidden="true"></span>{intro.status}</p>
           <a class="btn" href={intro.cta.url} target="_blank" rel="noopener noreferrer">
@@ -151,7 +166,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
   }
   .frow-note {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: calc(11px * var(--text-scale, 1));
     font-weight: var(--weight-mono);
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
@@ -163,6 +178,32 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.15em;
     text-decoration-color: var(--color-focus);
+  }
+
+  /* The Display settings row: a button dressed as a follow row (same grid, a line above). */
+  .frow-settings {
+    grid-template-columns: 20px 1fr auto;
+    width: 100%;
+    margin-top: calc(var(--space-6) * -1);
+    border: 0;
+    border-top: 1px solid var(--color-line);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .frow-settings .frow-label {
+    white-space: nowrap;
+  }
+  .frow-settings:focus-visible .frow-label {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: var(--color-focus);
+  }
+  :global(html:not(.js)) .frow-settings {
+    display: none;
   }
 
   /* ── Call to action ─────────────────────────────────── */
@@ -187,7 +228,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
     line-height: 1.35;
     text-wrap: balance;
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: calc(11px * var(--text-scale, 1));
     font-weight: var(--weight-mono);
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;

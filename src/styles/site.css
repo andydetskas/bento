@@ -127,7 +127,7 @@
 .eyebrow {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   line-height: 16px;
   letter-spacing: var(--tracking-eyebrow);
@@ -807,7 +807,7 @@
 }
 .look-facts dt {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
@@ -932,7 +932,7 @@
 }
 .look-flow li span:first-child {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   color: var(--color-text-muted);
@@ -975,7 +975,7 @@
 .look-num {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: calc(11px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   color: var(--color-text-muted);
@@ -1168,4 +1168,80 @@ html.page-transition::view-transition-old(*.box):only-child {
   .post-go {
     transition: none;
   }
+}
+
+/* ── Display settings (lib/display-settings.ts) ──────── */
+/* Each choice is a data attribute on <html>, set before first paint (SiteHead) and live from the
+   dialog (DisplaySettings.astro). Defaults leave the attribute off, so none of this applies. */
+html[data-text='large'] {
+  --text-scale: 1.15;
+}
+html[data-text='larger'] {
+  --text-scale: 1.3;
+}
+html[data-text] {
+  font-size: calc(100% * var(--text-scale));
+}
+/* Atkinson Hyperlegible (Braille Institute), designed for low vision, for both text faces. */
+html[data-font='readable'] {
+  --font-sans: 'Atkinson Hyperlegible', system-ui, sans-serif;
+  --font-mono: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+/* WCAG 1.4.12 text spacing: line height at least 1.5, letters 0.12em, words 0.16em. */
+html[data-spacing='wide'] :is(.site, .display) :is(p, li, dd, dt, a, span, strong, em, h3, button, label, legend) {
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+html[data-spacing='wide'] :is(.site, .display) :is(p, li, dd) {
+  line-height: 1.6 !important;
+}
+/* Display sizes (the hero line, page and card titles) open up less: wide tracking hurts big type. */
+html[data-spacing='wide'] :is(.site, .display) :is(h1, h2, .headline, .name, .box-title),
+html[data-spacing='wide'] :is(.site, .display) :is(h1, h2, .headline, .name, .box-title) * {
+  letter-spacing: 0.02em !important;
+  word-spacing: 0.12em !important;
+  line-height: 1.2 !important;
+}
+/* High contrast: secondary text at full strength, firmer lines and card edges, no dimming. */
+html[data-contrast='high'] {
+  --color-text-muted: var(--color-text-primary);
+  --color-line: color-mix(in srgb, var(--color-text-primary) 60%, transparent);
+}
+html[data-contrast='high'] .site .card {
+  box-shadow: 0 0 0 2px var(--color-text-primary);
+}
+/* The cursor pill sits on an accent color; in high contrast it goes dark on light. */
+html[data-contrast='high'] .pill {
+  background: var(--color-text-primary) !important;
+  color: var(--color-card) !important;
+}
+html[data-contrast='high'] .site .box > *,
+html[data-contrast='high'] .site .tile {
+  opacity: 1 !important;
+}
+/* Links and focus: every link underlined; a heavy outline on whatever is hovered or focused. */
+html[data-highlight='on'] :is(.site, .display) a:not(.btn, .backlink, .box-hit, .head-link, .frow) {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+html[data-highlight='on'] :is(.site, .display) :is(a:not(.box-hit), button, label):is(:hover, :focus-visible),
+html[data-highlight='on'] :is(.site, .display) .box:not(.is-open):has(.box-hit:hover) {
+  outline: 3px solid var(--color-focus) !important;
+  outline-offset: 3px !important;
+}
+/* Motion off: transitions and animations finish at once (the scripts check this too). */
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+/* Background off: the scene goes; its flat color stays. (Paused is handled by the engine.) */
+html[data-scene='off'] canvas.scene {
+  visibility: hidden;
 }

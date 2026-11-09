@@ -10,10 +10,12 @@ import '../../styles/site.css';
 import Base from '../../layouts/Base.astro';
 import Icon from '../Icon.astro';
 import Pill from '../Pill.astro';
+import DisplaySettings from './DisplaySettings.astro';
 import ShapeField from '../ShapeField.astro';
 import SectionCard from './SectionCard.astro';
 import SiteCard from './SiteCard.astro';
 import SiteHead from './SiteHead.astro';
+import Signature from './Signature.astro';
 import WorkTile from './WorkTile.astro';
 import site from '../../content/site.json';
 import { defaultPreset } from '../../lib/presets';
@@ -171,6 +173,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
             <div class="about-text">
               <p class="panel-lede">{about.body}</p>
               <p class="box-body">{about.more}</p>
+              <Signature class="about-signature" />
             </div>
           </div>
           <section class="about-section" aria-labelledby="about-kit">
@@ -202,14 +205,17 @@ const arrow = 'M7 17 17 7M9 7h8v8';
   </main>
 
   <Pill />
+  <DisplaySettings />
 </Base>
 
 <script>
   import { rememberScene, runEntrance, watchHeroHeight } from '../../lib/site-shell';
+  import { motionReduced } from '../../lib/display-settings';
 
   rememberScene();
   const grid = document.querySelector<HTMLElement>('.site')!;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Motion off: the system setting, or Display settings (it can change while the page is open).
+  const reduced = () => motionReduced();
   const wide = window.matchMedia('(min-width: 760px)');
   const base = grid.dataset.base ?? '/';
 
@@ -288,7 +294,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
       if (was && was !== card && (was === refocus || was.contains(document.activeElement))) was.querySelector<HTMLElement>('.box-hit')?.focus({ preventScroll: true });
       refocus = undefined;
     };
-    if (animate && !reduced && 'startViewTransition' in document) document.startViewTransition(update);
+    if (animate && !reduced() && 'startViewTransition' in document) document.startViewTransition(update);
     else update();
     document.dispatchEvent(new CustomEvent('pill:clear'));
   };
@@ -339,7 +345,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
     if (m.button !== 0 || m.metaKey || m.ctrlKey || m.shiftKey || m.altKey) return;
     e.preventDefault();
     if (openCard()) close();
-    else window.scrollTo({ top: 0, behavior: reduced ? 'instant' : 'smooth' });
+    else window.scrollTo({ top: 0, behavior: reduced() ? 'instant' : 'smooth' });
   });
 
   // Back and Forward between the grid and an open card.
@@ -380,7 +386,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
   runEntrance(() => {
     // A reload or a Back that reloaded: the saved position again, now the hero has opened.
     if (savedY) return userScrolled || window.scrollTo({ top: savedY, behavior: 'instant' });
-    const quiet = reduced || document.documentElement.classList.contains('from-site');
+    const quiet = reduced() || document.documentElement.classList.contains('from-site');
     if (linked && !wide.matches && openCard() === linked) bringIntoView(linked, quiet ? 'instant' : 'smooth');
   });
 </script>
