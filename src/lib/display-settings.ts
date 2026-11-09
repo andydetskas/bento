@@ -35,7 +35,7 @@ export const DEFAULTS: DisplaySettings = {
 /** Starting points, not modes: each sets a few of the options above, which stay adjustable. */
 export const PRESETS: { id: string; label: string; note: string; values: Partial<DisplaySettings> }[] = [
   { id: 'low-vision', label: 'Low vision', note: 'Larger text, high contrast, clear links and focus', values: { text: 'larger', contrast: 'high', highlight: 'on' } },
-  { id: 'dyslexia', label: 'Dyslexia-friendly', note: 'Readable typeface, wider spacing', values: { font: 'readable', spacing: 'wide' } },
+  { id: 'dyslexia', label: 'Dyslexia-friendly', note: 'Hyperlegible typeface, wider spacing', values: { font: 'readable', spacing: 'wide' } },
   { id: 'motion', label: 'Motion sensitive', note: 'No animation; the background holds still', values: { motion: 'reduced', scene: 'paused' } },
   { id: 'focus', label: 'Fewer distractions', note: 'No animation and no background', values: { motion: 'reduced', scene: 'off' } },
 ];
