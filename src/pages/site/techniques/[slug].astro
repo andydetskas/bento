@@ -18,6 +18,8 @@ interface Frontmatter {
   icon: string;
   hero: string;
   order: number;
+  /** A draft: listed in the Techniques panel as "Draft" for review, kept off the home card. */
+  draft?: boolean;
 }
 
 export function getStaticPaths() {
@@ -36,7 +38,7 @@ const accent = (tokens.accent as Record<string, string>).techniques;
 <CloserLook
   title={fm.title}
   subtitle={fm.subtitle}
-  eyebrow="Techniques"
+  eyebrow={fm.draft ? 'Techniques · Draft' : 'Techniques'}
   transition="box-techniques"
   pageTitle={`${fm.title} · Techniques · Andy Detskas`}
   description={fm.description}
