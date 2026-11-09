@@ -1,0 +1,65 @@
+---
+// Andy's signature, drawn the way it is on the old About page. The original is a Lottie animation
+// (framerusercontent.com/assets/hTDGMFXg7mKEuGPmVn82Ehy10g.json); its three strokes and their timing
+// (frames 0–4, 4–10 and 11–40 at 30 fps) are converted here to plain SVG and CSS, so no Lottie
+// player ships. It draws once, when it scrolls into view. With reduced motion, or motion turned off in
+// Display settings, it's simply there.
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+---
+
+<svg class:list={['signature', cls]} viewBox="15 13 982 1065" fill="none" stroke="currentColor" role="img" aria-label="Signed, Andy">
+    <path pathLength="100" style="--d:0.000s;--t:0.133s" transform="translate(516 538) scale(0.43706) translate(-1109.5 -1215.5) translate(508.843 1194.461)" d="M169.87 -885.62 C169.87 -885.62 -101.16 412.27 -169.87 885.62" stroke-width="50" stroke-linecap="round" stroke-linejoin="miter" />
+    <path pathLength="100" style="--d:0.133s;--t:0.200s" transform="translate(512 544) scale(0.43700000000000006) translate(-1109.5 -1215.5) translate(877.212 1096.914)" d="M-316.84 -1051.67 C-316.84 -1051.67 316.84 1051.67 316.84 1051.67" stroke-width="50" stroke-linecap="round" stroke-linejoin="miter" />
+    <path pathLength="100" style="--d:0.367s;--t:0.967s" transform="translate(504 538) scale(0.43700000000000006) translate(-1109.5 -1215.5) translate(1115.034 1552.3)" d="M-1080.43 -151.55 C-1080.43 -151.55 -898.22 -254.77 -554.66 -266.22 C-211.10 -277.68 -5.53 -246.40 -5.53 -246.40 C-5.53 -246.40 -2.71 -88.09 42.71 34.85 C42.71 34.85 181.22 -268.75 181.22 -268.75 C181.22 -268.75 290.91 -28.19 456.49 23.85 C456.49 23.85 581.38 44.65 576.83 -127.95 C566.85 -279.79 467.84 -261.94 467.84 -261.94 C467.84 -261.94 391.75 -268.88 374.74 -141.59 C357.73 -14.31 479.69 61.74 550.93 -16.26 C613.05 -84.26 602.81 -790.66 603.58 -859.50 C603.58 -859.50 600.05 -69.67 673.97 -5.70 C673.97 -5.70 733.01 71.50 821.57 -123.78 C821.57 -123.78 865.71 -210.36 926.02 -76.10 C926.02 -76.10 1051.41 135.73 1062.27 405.30 C1075.89 791.32 958.63 854.85 916.94 857.17 C875.25 859.50 728.47 698.22 866.99 212.29 C866.99 212.29 973.71 -151.03 1080.43 -169.20" stroke-width="50" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
+
+<style>
+  .signature {
+    display: block;
+    width: 112px;
+    height: auto;
+  }
+  .signature path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+  }
+  :global(html.js) .signature:not(.is-drawn) path {
+    stroke-dashoffset: 100;
+  }
+  :global(html.js) .signature.is-drawn path {
+    animation: signature-draw var(--t) linear var(--d) backwards;
+  }
+  @keyframes signature-draw {
+    from {
+      stroke-dashoffset: 100;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .signature path {
+      stroke-dashoffset: 0 !important;
+      animation: none !important;
+    }
+  }
+  :global(html[data-motion='reduced']) .signature path {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+</style>
+
+<script>
+  // Draw each signature the first time it's on screen (the About panel can open later).
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('is-drawn');
+      io.unobserve(e.target);
+    }
+  }, { threshold: 0.6 });
+  document.querySelectorAll('.signature').forEach((el) => io.observe(el));
+</script>

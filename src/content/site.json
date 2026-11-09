@@ -83,12 +83,11 @@
     ],
     "groups": [
       {
-        "org": "Strava",
-        "role": "Senior Product Design Manager",
+        "org": "SuppCo (acquired by Function Health)",
+        "role": "Head of Product Design",
         "points": [
-          "Grew the design team from 5 to 15 in two years, managing five direct and about ten indirect reports across Trust & Safety, Growth, Web Platform and Foundations.",
-          "Promoted designers into staff and management roles.",
-          "Co-created Integrity Compass, a pre-launch inclusion, privacy and safety review. One session ran nine product teams through it."
+          "Led product design as a player-coach, managing one product designer and reporting to the CEO.",
+          "Made the design system AI-native, so designers, engineers, and agents build from one source of truth."
         ]
       },
       {
@@ -101,11 +100,12 @@
         ]
       },
       {
-        "org": "SuppCo (acquired by Function Health)",
-        "role": "Head of Product Design",
+        "org": "Strava",
+        "role": "Senior Product Design Manager",
         "points": [
-          "Led product design as a player-coach, managing one product designer and reporting to the CEO.",
-          "Made the design system AI-native, so designers, engineers, and agents build from one source of truth."
+          "Grew the design team from 5 to 15 in two years, managing five direct and about ten indirect reports across Trust & Safety, Growth, Web Platform and Foundations.",
+          "Promoted designers into staff and management roles.",
+          "Co-created Integrity Compass, a pre-launch inclusion, privacy and safety review. One session ran nine product teams through it."
         ]
       }
     ]

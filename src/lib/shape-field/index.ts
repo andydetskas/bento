@@ -29,6 +29,9 @@ export interface ShapeField {
   snapshot(pixelRatio?: number): Promise<Blob | null>;
   /** Step the scene forward by `seconds` and render once (posters, tests, background tabs). */
   advance(seconds: number): void;
+  /** Hold the scene still (Display settings): time and pointer parallax stop; tint changes still paint. */
+  setPaused(paused: boolean): void;
+  readonly paused: boolean;
   destroy(): void;
 }
 
@@ -92,6 +95,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
   let raf = 0;
   let last = performance.now();
   let firstFrame = true;
+  let held = false; // Display settings: background paused
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 
   function setLight() {
@@ -164,7 +168,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
     raf = requestAnimationFrame(frame);
     const dtReal = Math.min((now - last) / 1000, 0.1);
     last = now;
-    const moving = !reduced && preset.params.speed > 0;
+    const moving = !reduced && !held && preset.params.speed > 0;
     const dt = moving ? dtReal * preset.params.speed : 0;
     t += dt;
     shared.uTime.value = t;
@@ -200,7 +204,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
 
   const onVisibility = () => (document.hidden ? stop() : start());
   const onPointer = (e: PointerEvent) => {
-    if (reduced || e.pointerType !== 'mouse') return;
+    if (reduced || held || e.pointerType !== 'mouse') return;
     pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
     pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
     dirty = Math.max(dirty, 60);
@@ -301,6 +305,14 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
       renderer.setSize(width, height, false);
       dirty = 2;
       return blob;
+    },
+    get paused() {
+      return held;
+    },
+    setPaused(paused) {
+      held = paused;
+      if (held) pointer.tx = pointer.ty = 0;
+      dirty = Math.max(dirty, 60);
     },
     advance(seconds) {
       const step = 1 / 30;

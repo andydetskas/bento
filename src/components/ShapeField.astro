@@ -77,6 +77,9 @@ const { preset, eager = false } = Astro.props;
       window.shapeField = field;
       if (!field) return firstFrame(false);
       if (continuing) field.seek(handoff.t + (Math.max(0, Date.now() - handoff.at) / 1000) * preset.params.speed);
+      // The site's Display settings can hold the background still (html[data-scene], set before paint).
+      const scenePref = document.documentElement.dataset.scene;
+      if (scenePref === 'paused' || scenePref === 'off') field.setPaused(true);
       const refocus = () => {
         const f = focusForViewport();
         field.setFocus(f.x, f.y);
