@@ -53,8 +53,12 @@ const arrow = 'M7 17 17 7M9 7h8v8';
 
     <SectionCard id="portfolio" eyebrow={portfolio.eyebrow} title={portfolio.title} accent={accent.portfolio} pill="See the work" index={0} {...card('portfolio')}>
       <Fragment slot="summary">
-        <div class="feature" aria-hidden="true" style={`--tint:${tintOf(byId(portfolio.feature.work))}`}>
-          <img src={portfolio.feature.src} width={portfolio.feature.width} height={portfolio.feature.height} alt="" loading="eager" decoding="async" fetchpriority="low" />
+        <div class="mosaic" aria-hidden="true">
+          {portfolio.details.map((d) => (
+            <span class="mosaic-cell" style={`--tint:${tintOf(byId(d.work))}`}>
+              <img src={d.src} width={d.width} height={d.height} alt="" loading="eager" decoding="async" fetchpriority="low" />
+            </span>
+          ))}
         </div>
         <p class="box-body">{portfolio.lede}</p>
       </Fragment>
