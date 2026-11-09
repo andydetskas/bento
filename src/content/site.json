@@ -22,26 +22,26 @@
       {
         "work": "designing-for-trust",
         "src": "/site/work/details/designing-for-trust.webp",
-        "width": 360,
-        "height": 253
+        "width": 375,
+        "height": 509
       },
       {
         "work": "agentic-design-system",
         "src": "/site/work/details/agentic-design-system.webp",
-        "width": 360,
-        "height": 253
+        "width": 387,
+        "height": 519
       },
       {
         "work": "surfacing-value",
         "src": "/site/work/details/surfacing-value.webp",
-        "width": 360,
-        "height": 253
+        "width": 615,
+        "height": 818
       },
       {
         "work": "stackscore",
         "src": "/site/work/details/stackscore.webp",
-        "width": 360,
-        "height": 253
+        "width": 375,
+        "height": 509
       }
     ]
   },
@@ -176,7 +176,8 @@
         "alt": "Strava redesigned home screen"
       },
       "fit": "screen",
-      "url": "https://www.andydetskas.com/strategy-strava-navigation-for-clarity-retention-scale"
+      "url": "https://www.andydetskas.com/strategy-strava-navigation-for-clarity-retention-scale",
+      "look": "/site/work/surfacing-value/"
     },
     {
       "id": "crushing-the-basics",
