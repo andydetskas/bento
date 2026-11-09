@@ -10,7 +10,7 @@
 // charts). No dates. Colleagues are credited by role.
 import CloserLook from '../../../components/site/CloserLook.astro';
 import site from '../../../content/site.json';
-import { SITE_BASE } from '../../../lib/site-sections';
+import { SITE_BASE, CALL_PATH } from '../../../lib/site-sections';
 import { tokens } from '../../../lib/tokens';
 const accent = (tokens.accent as Record<string, string>).strava;
 const work = site.work.find((w) => w.id === 'surfacing-value')!;
@@ -143,7 +143,7 @@ const img = (name: string) => `/site/work/surfacing-value/${name}.webp`;
 
   <aside class="look-cta" aria-label="Talk it through">
     <p>The full story, with the model behind the number and the tradeoffs we weighed, is a 30-minute walkthrough.</p>
-    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+    <a class="btn" href={CALL_PATH} target="_blank" rel="noopener noreferrer">
       {site.intro.cta.label}
       <span class="sr-only">(opens in a new tab)</span>
     </a>

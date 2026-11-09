@@ -6,7 +6,15 @@
 
 export const DISPLAY_KEY = 'ad_display';
 
+import { defaultPreset, glyphPalettes } from './presets';
+
+/** The scene in dark mode: Adobe Night (presets.ts), the light Adobe scene's counterpart. */
+export const DARK_PALETTE = glyphPalettes.find((p) => p.id === 'adobe-night')!.palette;
+export const LIGHT_PALETTE = defaultPreset.palette;
+
 export interface DisplaySettings {
+  /** Light or dark: "system" follows the device (prefers-color-scheme). */
+  theme: 'system' | 'light' | 'dark';
   /** Text size: 100%, 115%, 130%. */
   text: 'default' | 'large' | 'larger';
   /** Atkinson Hyperlegible, designed for low vision, in place of the brand typefaces. */
@@ -23,6 +31,7 @@ export interface DisplaySettings {
 }
 
 export const DEFAULTS: DisplaySettings = {
+  theme: 'system',
   text: 'default',
   font: 'default',
   spacing: 'default',
@@ -70,6 +79,24 @@ export function applySettings(s: DisplaySettings) {
     else root.dataset[k] = s[k];
   }
   window.shapeField?.setPaused?.(s.scene !== 'on');
+  applyTheme(s);
+}
+
+/** Dark when the visitor chose it, or chose nothing and the device is dark. */
+export const isDark = (s: DisplaySettings) =>
+  s.theme === 'dark' || (s.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+/** The tokens switch on data-mode (tokens.css); the scene and the page behind it change palette. */
+export function applyTheme(s: DisplaySettings) {
+  const root = document.documentElement;
+  const dark = isDark(s);
+  const palette = dark ? DARK_PALETTE : LIGHT_PALETTE;
+  root.dataset.mode = dark ? 'dark' : 'light';
+  root.style.setProperty('--scene-bg', palette.bg);
+  root.style.background = palette.bg;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', palette.bg);
+  const field = window.shapeField;
+  if (field && field.preset.palette.bg !== palette.bg) field.setPalette(palette);
 }
 
 /** Motion off: the visitor's system asks for it, or they turned it off here. */

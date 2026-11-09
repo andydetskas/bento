@@ -158,7 +158,7 @@ export const tokens = {
     },
     "dark": {
       "page": "#1F2226",
-      "card": "#1F2226",
+      "card": "#343840",
       "text-primary": "#F8F5F3",
       "text-muted": "#AEAFB3",
       "line": "#F8F5F31F",

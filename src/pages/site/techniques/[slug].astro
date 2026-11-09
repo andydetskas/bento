@@ -8,7 +8,7 @@
 import type { MarkdownInstance } from 'astro';
 import CloserLook from '../../../components/site/CloserLook.astro';
 import site from '../../../content/site.json';
-import { SITE_BASE } from '../../../lib/site-sections';
+import { SITE_BASE, CALL_PATH } from '../../../lib/site-sections';
 import { tokens } from '../../../lib/tokens';
 
 interface Frontmatter {
@@ -57,7 +57,7 @@ const accent = (tokens.accent as Record<string, string>).techniques;
 
   <aside class="look-cta" aria-label="Talk it through">
     <p>Want to try this with your team, or talk through how I’d use it? Let’s find 30 minutes.</p>
-    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+    <a class="btn" href={CALL_PATH} target="_blank" rel="noopener noreferrer">
       {site.intro.cta.label}
       <span class="sr-only">(opens in a new tab)</span>
     </a>
