@@ -10,7 +10,7 @@ import { PRESETS } from '../../lib/display-settings';
 
 const groups: { name: string; legend: string; options: [string, string][] }[] = [
   { name: 'text', legend: 'Text size', options: [['default', 'Default'], ['large', 'Large'], ['larger', 'Larger']] },
-  { name: 'font', legend: 'Typeface', options: [['default', 'Default'], ['readable', 'Readable']] },
+  { name: 'font', legend: 'Typeface', options: [['default', 'Default'], ['readable', 'Hyperlegible']] },
   { name: 'spacing', legend: 'Text spacing', options: [['default', 'Default'], ['wide', 'Wide']] },
   { name: 'contrast', legend: 'Contrast', options: [['default', 'Default'], ['high', 'High']] },
   { name: 'highlight', legend: 'Links and focus', options: [['default', 'Default'], ['on', 'Highlighted']] },
@@ -63,7 +63,9 @@ const groups: { name: string; legend: string; options: [string, string][] }[] = 
 </dialog>
 
 <style>
+  /* The dialog sits outside the cards (beside the Pill), so it sets its own padding. */
   .display {
+    --pad: clamp(24px, round(3vw, 4px), 40px);
     width: min(600px, calc(100vw - 32px));
     max-height: min(90svh, 860px);
     padding: 0;
