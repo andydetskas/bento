@@ -4,9 +4,9 @@
 // › "SuppCo Agentic Design System case study" slides 01–07 and the specifics from the Capsule article
 // draft (2026 Portfolio/framer/drafts/agentic-design-system-article.md). Still off the page: a
 // colleague's name (masked on the service-layer slide), dates (masked on the parity and skills slides),
-// the internal Buying Club dashboard numbers (blurred: internal metrics stay off public pages), the
-// skill-eval figures (call-only in Master Profile §2.2), and slide 08 (internal docs and partner
-// screens). The design team was two: Andy and the product designer he managed (§2.2). No dates.
+// the skill-eval figures (call-only in Master Profile §2.2), and slide 08 (internal docs and partner
+// screens). The with-and-without dashboard shows dummy numbers (Andy, Nov 9), so it isn't blurred;
+// its "Week of" labels carry no years. The design team was two: Andy and the product designer he managed (§2.2). No dates.
 import CloserLook from '../../../components/site/CloserLook.astro';
 import site from '../../../content/site.json';
 import { SITE_BASE } from '../../../lib/site-sections';
@@ -114,8 +114,8 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
         <h3>Let it compound</h3>
         <p>Once the system lived where design-shaped work actually happens, the results compounded. Non-designers started producing on-system work, from town hall decks to dashboards and marketing pieces, with just the skills and no design oversight. Prototyping skills built on the repo produced repeatable, shippable prototypes with shareable links, and prompt-based workflows let us move in every direction: code to Figma, Figma to code, and on to decks and docs.</p>
         <figure class="look-fig">
-          <img src={img('with-and-without')} width="1561" height="1139" alt="The same internal dashboard made without and with the Capsule skills: a plain gray layout, then an on-brand one with colored KPI cards. Figures blurred" loading="lazy" decoding="async" />
-          <figcaption>The same request, without and with the skills. Figures blurred.</figcaption>
+          <img src={img('with-and-without')} width="1561" height="1139" alt="The same dashboard request made without and with the Capsule skills: a plain gray layout, then an on-brand one with colored KPI cards, filled with dummy numbers" loading="lazy" decoding="async" />
+          <figcaption>The same request, without and with the skills (dummy numbers).</figcaption>
         </figure>
       </li>
     </ol>
