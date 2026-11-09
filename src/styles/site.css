@@ -442,6 +442,19 @@
   object-fit: contain;
   transition: scale var(--motion-settle) var(--motion-ease-settle);
 }
+/* Art composed in Figma (2026 Portfolio › Case Studies › "Selected work thumbnails"): the export is
+   the whole cell, tint included, so it fills the box edge to edge. */
+.work-art[data-fit='bleed'] img,
+.mosaic-cell[data-fit='bleed'] img {
+  inset: 0;
+  top: 0;
+  left: 0;
+  translate: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 50% 50%;
+}
 /* A single bare screenshot: shown whole and centered, with a screen's rounded corners. */
 .work-art[data-fit='screen'] img {
   left: 50%;
@@ -584,6 +597,43 @@
 }
 .group li::marker {
   color: var(--accent);
+}
+
+/* How I lead, open: each practice beside its evidence (company, then what happened, then a link). */
+.practice-body {
+  margin: 0;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+.practice ul {
+  list-style: none;
+  padding: 0;
+}
+.practice li {
+  line-height: 1.5;
+}
+.ev-org {
+  display: block;
+  margin-bottom: 2px;
+  font-family: var(--font-mono);
+  font-size: calc(11px * var(--text-scale, 1));
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.ev-link {
+  color: inherit;
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 0.2em;
+}
+.ev-link:hover {
+  text-decoration-color: currentColor;
 }
 
 /* ── Kit ────────────────────────────────────────────── */
