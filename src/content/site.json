@@ -18,12 +18,32 @@
     "eyebrow": "Portfolio",
     "title": "Selected work",
     "lede": "Case studies from Strava, SRAM and SuppCo, each with my role and what changed.",
-    "feature": {
-      "work": "stackscore",
-      "src": "/site/work/stackscore-screen.webp",
-      "width": 375,
-      "height": 763
-    }
+    "details": [
+      {
+        "work": "designing-for-trust",
+        "src": "/site/work/details/designing-for-trust.webp",
+        "width": 360,
+        "height": 253
+      },
+      {
+        "work": "agentic-design-system",
+        "src": "/site/work/details/agentic-design-system.webp",
+        "width": 360,
+        "height": 253
+      },
+      {
+        "work": "surfacing-value",
+        "src": "/site/work/details/surfacing-value.webp",
+        "width": 360,
+        "height": 253
+      },
+      {
+        "work": "stackscore",
+        "src": "/site/work/details/stackscore.webp",
+        "width": 360,
+        "height": 253
+      }
+    ]
   },
   "leadership": {
     "eyebrow": "Leadership",
@@ -268,13 +288,6 @@
     "lede": "My creative process involves pixels and people. These are the approaches you can expect when we work together.",
     "posts": [
       {
-        "title": "Vibeframing",
-        "note": "Speeding up product definition and prototyping",
-        "url": "https://www.andydetskas.com/techniques/vibeframing",
-        "icon": "vibeframing",
-        "image": "/site/techniques/vibeframing.webp"
-      },
-      {
         "title": "Integrity Compass",
         "note": "Design methods for trust, safety, inclusion, and integrity",
         "url": "https://www.andydetskas.com/techniques/integrity-compass",
@@ -282,11 +295,11 @@
         "image": "/site/techniques/integrity-compass.webp"
       },
       {
-        "title": "Haptic patterns",
-        "note": "Quick ways and custom ways to design with haptics",
-        "url": "https://www.andydetskas.com/techniques/making-haptics-happen",
-        "icon": "haptics",
-        "image": "/site/techniques/haptics.webp"
+        "title": "Vibeframing",
+        "note": "Speeding up product definition and prototyping",
+        "url": "https://www.andydetskas.com/techniques/vibeframing",
+        "icon": "vibeframing",
+        "image": "/site/techniques/vibeframing.webp"
       },
       {
         "title": "Design Dojo",
@@ -296,18 +309,11 @@
         "image": "/site/techniques/design-dojo.webp"
       },
       {
-        "title": "Group Critique",
-        "note": "Bring the team together for feedback and collaboration",
-        "url": "https://www.andydetskas.com/techniques/the-group-critique",
-        "icon": "group-critique",
-        "image": "/site/techniques/group-critique.webp"
-      },
-      {
-        "title": "Designed Alliance",
-        "note": "A more intentional approach to relationship building",
-        "url": "https://www.andydetskas.com/techniques/the-designed-alliance",
-        "icon": "designed-alliance",
-        "image": "/site/techniques/designed-alliance.webp"
+        "title": "Haptic patterns",
+        "note": "Quick ways and custom ways to design with haptics",
+        "url": "https://www.andydetskas.com/techniques/making-haptics-happen",
+        "icon": "haptics",
+        "image": "/site/techniques/haptics.webp"
       }
     ],
     "eyebrow": "Techniques",

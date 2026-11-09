@@ -318,31 +318,35 @@
 }
 
 /* ── Portfolio ──────────────────────────────────────── */
-/* One screen, close up (Andy: the four small previews read as far away), centered on its tint.
-   The panel grows to fill the card when the row is taller than the card's content. */
-.feature {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  aspect-ratio: 5 / 4;
+/* Four case studies, each as one close-up (Andy: whole compositions this small read as far
+   away): a detail of the work (public/site/work/details/, cut at 10:7) on its tint, with the same
+   margin on every side. */
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
   margin-top: var(--space-1);
-  border-radius: var(--space-3);
+}
+.mosaic-cell {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--space-2);
   background: var(--tint);
   overflow: hidden;
 }
-.feature img {
+.mosaic-cell img {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  translate: -50% -50%;
-  height: 84%;
-  width: auto;
-  max-width: 84%;
-  object-fit: contain;
+  top: 10.667%; /* 8% of the width, at 4:3 */
+  left: 8%;
+  width: 84%;
+  height: 78.667%;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px -10px rgb(20 20 30 / 0.5);
   transition: scale var(--motion-settle) var(--motion-ease-settle);
 }
 @media (hover: hover) {
-  .area-portfolio:not(.is-open):hover .feature img {
+  .area-portfolio:not(.is-open):hover .mosaic-cell img {
     scale: 1.04;
   }
 }
@@ -1111,7 +1115,7 @@ html.page-transition::view-transition-old(*.box):only-child {
   .box > *,
   .arrow,
   .tile,
-  .feature img,
+  .mosaic-cell img,
   .work-art img,
   .post-art img,
   .post-title,
