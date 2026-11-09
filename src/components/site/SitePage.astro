@@ -147,7 +147,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
         <p class="box-body">{techniques.lede}</p>
         {/* Each technique links to its article on this site; hovering one hints what it's about. */}
         <ul class="post-list" role="list">
-          {techniques.posts.filter((p) => !('draft' in p && p.draft)).map((p) => (
+          {techniques.posts.map((p) => (
             <li>
               <a href={p.url} data-pill={p.note} data-accent={accent.techniques}>
                 <Icon name={p.icon} />

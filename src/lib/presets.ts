@@ -281,6 +281,9 @@ export const glyphPalettes: NamedPalette[] = [
   { id: 'earth', name: 'Earth', kind: 'earth', mode: 'light', palette: { bg: L('saddle', '300'), extrusion: D('fire', '200'), colors: [L('saddle', '600'), L('fire', '500'), D('alpenglow', '400'), D('fire', '300'), D('verde', '400'), D('sun', '500')] } },
   { id: 'adobe', name: 'Adobe', kind: 'earth', mode: 'light', palette: { bg: L('alpenglow', '200'), extrusion: D('fire', '300'), colors: [L('fire', '400'), L('fire', '600'), L('saddle', '600'), D('alpenglow', '300'), L('coral', '600'), L('alpenglow', '500')] } },
   { id: 'sage', name: 'Sage & Clay', kind: 'earth', mode: 'light', palette: { bg: L('saddle', '200'), extrusion: D('verde', '200'), colors: [L('verde', '500'), D('verde', '400'), L('saddle', '500'), L('fire', '400'), D('sun', '400')] } },
+  // The site's dark theme (Display settings → Theme): Adobe's warm glyphs on True Black, behind the
+  // Style Guide's dark card (Shadow 600).
+  { id: 'adobe-night', name: 'Adobe Night', kind: 'earth', mode: 'dark', palette: { bg: D('black', '300'), extrusion: D('black', '500'), colors: [D('fire', '600'), D('alpenglow', '600'), D('alpenglow', '400'), D('fire', '400'), D('coral', '500'), D('saddle', '600')] } },
   { id: 'mesa', name: 'Mesa Night', kind: 'earth', mode: 'light', palette: { bg: D('fire', '200'), extrusion: L('black', '600'), colors: [L('sun', '400'), L('alpenglow', '600'), L('fire', '500'), L('saddle', '400'), L('verde', '300')] } },
   // Mono
   { id: 'charcoal', name: 'Charcoal', kind: 'mono', mode: 'light', palette: { bg: L('saddle', '200'), extrusion: TRUE_BLACK_80, colors: [L('shadow', '600'), L('shadow', '400'), L('shadow', '200')] } },

@@ -9,7 +9,7 @@ import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
 import CardHead from '../CardHead.astro';
 import Icon from '../Icon.astro';
-import { SITE_BASE } from '../../lib/site-sections';
+import { SITE_BASE, CALL_PATH } from '../../lib/site-sections';
 
 interface Props {
   /** See CardHead: 'p' on pages with their own h1. */
@@ -71,7 +71,7 @@ const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 
         <div class="cta-row">
           <p class="status"><span class="dot" aria-hidden="true"></span>{intro.status}</p>
-          <a class="btn" href={intro.cta.url} target="_blank" rel="noopener noreferrer">
+          <a class="btn" href={CALL_PATH} target="_blank" rel="noopener noreferrer">
             {intro.cta.label}
             <span class="sr-only">(opens in a new tab)</span>
           </a>

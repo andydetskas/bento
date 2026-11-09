@@ -10,16 +10,29 @@
 //     rememberScene's pageshow handler picks up the clock in that case.
 import { HANDOFF_COOKIE, HANDOFF_MAX_AGE_S } from '../../lib/handoff';
 import { SITE_SCENE_KEY } from '../../lib/site-shell';
-import { DISPLAY_KEY } from '../../lib/display-settings';
+import { DARK_PALETTE, DISPLAY_KEY } from '../../lib/display-settings';
 ---
 
-<script is:inline define:vars={{ name: HANDOFF_COOKIE, maxAge: HANDOFF_MAX_AGE_S, sceneKey: SITE_SCENE_KEY, displayKey: DISPLAY_KEY }}>
+<script is:inline define:vars={{ name: HANDOFF_COOKIE, maxAge: HANDOFF_MAX_AGE_S, sceneKey: SITE_SCENE_KEY, displayKey: DISPLAY_KEY, darkPalette: DARK_PALETTE }}>
   const root = document.documentElement;
   // Display settings saved on this device (lib/display-settings.ts), applied before first paint so
   // text size, contrast and motion never flash. Only non-default values are stored.
   try {
     const d = JSON.parse(localStorage.getItem(displayKey) || '{}');
     for (const k in d) if (typeof d[k] === 'string' && /^[a-z]+$/.test(k)) root.dataset[k] = d[k];
+  } catch {}
+  // Theme: dark if chosen here, or if nothing is chosen and the device is dark. The tokens follow
+  // data-mode; the page behind the cards and the scene (window.__scenePalette, read by
+  // ShapeField when it boots) switch to Adobe Night, so nothing paints light first.
+  try {
+    const t = root.dataset.theme;
+    if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) {
+      root.dataset.mode = 'dark';
+      root.style.setProperty('--scene-bg', darkPalette.bg);
+      root.style.background = darkPalette.bg;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', darkPalette.bg);
+      window.__scenePalette = darkPalette;
+    }
   } catch {}
   const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
   if (m) {

@@ -42,7 +42,7 @@
     },
     "dark": {
       "page":          { "$value": "{taos.dark.black.300}" },
-      "card":          { "$value": "{taos.dark.black.300}" },
+      "card":          { "$value": "{taos.light.shadow.600}" },
       "text-primary":  { "$value": "{taos.light.saddle.200}" },
       "text-muted":    { "$value": "{taos.dark.shadow.300}" },
       "line":          { "$value": "#F8F5F31F" },

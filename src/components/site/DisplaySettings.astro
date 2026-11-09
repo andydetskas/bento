@@ -9,6 +9,7 @@ import '@fontsource/atkinson-hyperlegible/700.css';
 import { PRESETS } from '../../lib/display-settings';
 
 const groups: { name: string; legend: string; options: [string, string][] }[] = [
+  { name: 'theme', legend: 'Theme', options: [['system', 'System setting'], ['light', 'Light'], ['dark', 'Dark']] },
   { name: 'text', legend: 'Text size', options: [['default', 'Default'], ['large', 'Large'], ['larger', 'Larger']] },
   { name: 'font', legend: 'Typeface', options: [['default', 'Default'], ['readable', 'Hyperlegible']] },
   { name: 'spacing', legend: 'Text spacing', options: [['default', 'Default'], ['wide', 'Wide']] },
@@ -23,7 +24,7 @@ const groups: { name: string; legend: string; options: [string, string][] }[] = 
   <form method="dialog">
     <header class="display-head">
       <h2 id="display-title">Display settings</h2>
-      <p id="display-intro">Adjust how this site looks and moves. It starts from your device’s settings, and your choices stay on this device.</p>
+      <p id="display-intro">Adjust how this site looks and moves. It starts from your device’s settings, including light or dark, and your choices stay on this device.</p>
     </header>
 
     <section class="display-presets" aria-labelledby="display-presets-title">
@@ -263,7 +264,7 @@ const groups: { name: string; legend: string; options: [string, string][] }[] = 
 </style>
 
 <script>
-  import { DEFAULTS, PRESETS, applySettings, loadSettings, saveSettings, type DisplaySettings } from '../../lib/display-settings';
+  import { DEFAULTS, PRESETS, applySettings, applyTheme, loadSettings, saveSettings, type DisplaySettings } from '../../lib/display-settings';
 
   const dialog = document.getElementById('display-settings') as HTMLDialogElement | null;
   if (dialog) {
@@ -326,6 +327,14 @@ const groups: { name: string; legend: string; options: [string, string][] }[] = 
       if (e.target === dialog) dialog.close();
     });
     // The scene can boot after the saved settings were applied: hold it then too.
-    document.addEventListener('shapefield:ready', () => window.shapeField?.setPaused?.(loadSettings().scene !== 'on'));
+    document.addEventListener('shapefield:ready', () => {
+      window.shapeField?.setPaused?.(loadSettings().scene !== 'on');
+      applyTheme(loadSettings());
+    });
+    // Following the device: switch when it does (sunset, or the visitor flips it).
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      const saved = loadSettings();
+      if (saved.theme === 'system') applyTheme(saved);
+    });
   }
 </script>

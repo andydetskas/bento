@@ -44,6 +44,8 @@ const { preset, eager = false } = Astro.props;
       shapeField?: ShapeField | null;
       /** Set before first paint by a page that accepts the bento's hand-off (see src/lib/handoff.ts). */
       __handoff?: Handoff;
+      /** Set before first paint by the site in dark mode (SiteHead): the scene boots with this palette. */
+      __scenePalette?: Preset['palette'];
     }
     interface DocumentEventMap {
       'bento:accent': CustomEvent<{ hex: string | null }>;
@@ -65,6 +67,7 @@ const { preset, eager = false } = Astro.props;
     const continuing = !!handoff && handoff.preset === preset.id;
 
     const boot = async () => {
+      if (window.__scenePalette) preset = { ...preset, palette: window.__scenePalette };
       const { createShapeField, prepareShapeField } = await import('../lib/shape-field');
       await prepareShapeField(preset); // builds the glyphs in small steps, so taps stay responsive
       const firstFrame = (live: boolean) => document.dispatchEvent(new CustomEvent('shapefield:firstframe', { detail: { live } }));
