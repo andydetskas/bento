@@ -238,15 +238,16 @@
       "summary": "Designed SuppCo’s first commerce product, a members’ club that sells trusted supplements without discounts.",
       "role": "Responsible for design, alongside the Head of Product",
       "roleShort": "Shared design ownership",
-      "outcome": "In alpha, the checkout worked and the catalog was the constraint.",
+      "outcome": "Before the full launch, the checkout worked and the catalog was the constraint.",
       "image": {
         "src": "/site/work/buying-club.webp",
         "width": 1200,
         "height": 783,
-        "alt": "SuppCo Buying Club app screens: onboarding, product page with member credits, and the Buying Club hub"
+        "alt": "SuppCo Buying Club onboarding screens: members earn 30% back in credits, products straight from the source, and your estimated lifetime supplement spend"
       },
       "fit": "contain",
-      "url": "https://www.andydetskas.com/design-suppco-buying-club"
+      "url": "https://www.andydetskas.com/design-suppco-buying-club",
+      "look": "/site/work/buying-club/"
     }
   ],
   "kit": {
