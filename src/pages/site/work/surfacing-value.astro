@@ -1,0 +1,153 @@
+---
+// Surfacing Value, a closer look (public, ungated). Copy: "04 - Surfacing Value Case Study (copy
+// draft).md" (v2, Andy's answers of Nov 8) in 2027 Strategy, plus the Figma 2026 Portfolio › Case
+// Studies › "Strava Navigation case study" slides, whose own copy adds the Step and Leap test, what
+// shipped and the dings on Maps and Groups. Figures are the slides' panels: 01, 04, 05 (card-sort
+// column only), 07, 08 and 09.
+// Public-safe only (Master Profile 2.2): one result line. Trial, subscription and downgrade figures,
+// the 79% free-athlete score and the bookings model stay for the call. Left out: slide 03 (sprint
+// boards with internal charts and photos), 05's usage analytics, 06 (a workshop photo) and 10 (result
+// charts). No dates. Colleagues are credited by role.
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+const accent = (tokens.accent as Record<string, string>).strava;
+const work = site.work.find((w) => w.id === 'surfacing-value')!;
+const img = (name: string) => `/site/work/surfacing-value/${name}.webp`;
+---
+
+<CloserLook
+  title={work.title}
+  subtitle="Strava’s navigation, reorganized around what athletes came to do"
+  company={work.company}
+  pageTitle="Surfacing Value · Strava · Andy Detskas"
+  description="How I facilitated the cross-functional sprint that redesigned Strava’s navigation around what athletes came to do, without breaking what already worked."
+  accent={accent}
+  backHref={`${SITE_BASE}work/`}
+  backLabel="Selected work"
+>
+  <p class="panel-lede">I facilitated the cross-functional sprint that redesigned Strava’s navigation, so athletes could find what they came for, including the features worth paying for.</p>
+  <dl class="look-facts">
+    <div>
+      <dt>My role</dt>
+      <dd>Facilitator and design leader</dd>
+    </div>
+    <div>
+      <dt>Worked with</dt>
+      <dd>Revenue, research, product, data and engineering, plus a fellow design lead who owned the design and architecture, and our VP of Design as sponsor</dd>
+    </div>
+    <div>
+      <dt>What I did</dt>
+      <dd>Pushed for the sprint, ran it, set design direction, and got leaders behind one plan</dd>
+    </div>
+  </dl>
+  <p class="outcome">84% of subscribers rated the new navigation better, and the experiment modeled +$3.3M a year in net bookings.</p>
+  <figure class="look-fig">
+    <img src={img('final-design')} width="1561" height="1139" alt="Three screens from the redesigned Strava app: the Home feed with the “New look, better Strava” introduction, “Introducing: Maps”, and Groups with challenges and clubs" loading="eager" decoding="async" />
+  </figure>
+
+  <section class="look-section" aria-labelledby="situation">
+    <h2 id="situation">The situation</h2>
+    <div class="look-text">
+      <p>Strava’s navigation had started to show what I call experience rot. Years of new features, experiments and tests had pushed core features, paid ones included, deeper into the app, and the value of a subscription got harder to see.</p>
+      <p>At the time, Strava had about 100 million registered athletes, about 25 million of them active each month, so small changes moved big numbers. Leaders wanted it fixed and were wary of breaking what worked. They asked for three things:</p>
+      <ul class="look-list" role="list">
+        <li><strong>Protect what’s working.</strong> Engagement, uploads and subscriptions couldn’t dip.</li>
+        <li><strong>Make it buildable.</strong> A prototype simple enough to plan development from.</li>
+        <li><strong>Explain the why.</strong> A clear point of view on why each change was worth making.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="role">
+    <h2 id="role">My role</h2>
+    <div class="look-text">
+      <p>I made the case for a cross-org design sprint and ran it, bringing revenue, research, product, data and engineering to one table. A fellow design lead owned the design and architecture, and our VP of Design sponsored the work. My job was alignment: getting leaders who each owned part of the app to agree on one structure, and keeping the athlete at the center while they did. One participant called it “the best meeting I’ve ever been in.”</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="approach">
+    <h2 id="approach">How I approached it</h2>
+    <ol class="look-steps" role="list">
+      <li>
+        <p class="look-num" aria-hidden="true">01</p>
+        <h3>Organize around jobs, not the org chart</h3>
+        <p>Before we drew a single tab, we mapped every navigation pattern in the app and found the deep ends where valuable features were hiding, like maps and profiles. Then we grouped features by what athletes come to Strava to do, using the analytics as jobs to be done rather than by which team owned which screen.</p>
+        <figure class="look-fig">
+          <img src={img('current-patterns')} width="1561" height="1139" alt="Current patterns: the app’s tab bars, title bars and screens mapped side by side, with the full information architecture" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">02</p>
+        <h3>Let athletes sort it</h3>
+        <div class="look-split">
+          <p>Fourteen athlete interviews and a card sort with 30 athletes showed three areas people already understood: places, community, and their own activities and progress. Those became the backbone of the new navigation.</p>
+          <figure class="look-fig">
+            <img src={img('card-sort')} width="648" height="1094" alt="Card sort results as three dendrograms, showing the clubs, personal and places groupings that emerged" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">03</p>
+        <h3>Test a step against a leap</h3>
+        <p>We built two prototypes. Step moved existing features to where athletes expected them, without huge moves. Leap was a drastic departure, with new features and a new structure. We wanted to know whether athletes wanted new functionality or the features they already had, better placed. Step won.</p>
+        <figure class="look-fig">
+          <img src={img('step-and-leap')} width="1561" height="1139" alt="The Step prototype’s screens above the longer Leap prototype flow" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">04</p>
+        <h3>Explain the change inside the app</h3>
+        <div class="look-split">
+          <p>Testing showed that how we explained the why made all the difference. A new navigation can feel like someone moved your furniture, so a short introduction walked athletes through what moved and why, and the redesign read as an upgrade, not a surprise.</p>
+          <figure class="look-fig">
+            <img src={img('the-why')} width="790" height="950" alt="The tested introduction, “We’re updating how you navigate Strava”, listing a new map, consolidated clubs and groups, a boosted profile, and settings at the top level" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">05</p>
+        <h3>Ship it as an experiment</h3>
+        <p>We launched to a test group and watched what could break as closely as what could improve, subscriptions included, so the result we reported was the net effect.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="look-section" aria-labelledby="shipped">
+    <h2 id="shipped">What shipped</h2>
+    <div class="look-text">
+      <p>The structure athletes sorted for themselves shipped as Maps, Groups and You. Maps brought routes and segments together, Groups gathered clubs and challenges, and the You tab brought profile and progress into one place. An in-app introduction explained each change the first time an athlete saw it.</p>
+    </div>
+    <figure class="look-fig">
+      <img src={img('recommendations')} width="1561" height="1139" alt="Recommendations from testing: clearly communicate the value of Strava, combine Profile and You into the new You tab, consolidate clubs and challenges under Community, and clearly communicate what’s new" loading="lazy" decoding="async" />
+    </figure>
+  </section>
+
+  <section class="look-section" aria-labelledby="changed">
+    <h2 id="changed">What changed</h2>
+    <div class="look-text">
+      <p>Within a quarter, the new navigation had proved itself: more athletes found and used Strava’s core and paid features. The feedback had a couple of dings, on Maps and Groups, and they confirmed features we’d already planned.</p>
+      <p>It also gave the team the confidence to keep investing in maps and community, and a designer on my team went on to lead a Settings overhaul built on the same thinking.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="learned">
+    <h2 id="learned">What I learned</h2>
+    <ul class="look-takeaways" role="list">
+      <li>How you explain a change matters as much as the change.</li>
+      <li>Isolate the downgrade signal before calling the win.</li>
+      <li>Better UX is easy to credit, and easy to blame.</li>
+    </ul>
+  </section>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>The full story, with the model behind the number and the tradeoffs we weighed, is a 30-minute walkthrough.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+</CloserLook>
