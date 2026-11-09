@@ -920,6 +920,15 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
 }
+.look-list a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-underline-offset: 0.2em;
+}
+.look-list a:hover {
+  text-decoration-color: currentColor;
+}
 /* A link to a section (#battery, #related, from the old Framer URLs) lands below the sticky Back pill. */
 .look [id] {
   scroll-margin-top: calc(var(--space-8) * 2.5);

@@ -6,6 +6,12 @@
 import site from '../content/site.json';
 
 export const SITE_BASE = '/site/';
+/** Where the site is served. The prototype rides on the bento's origin under /site/; at cutover set
+ *  PUBLIC_SITE_ORIGIN=https://www.andydetskas.com (and SITE_BASE to '/'), and canonicals, share
+ *  URLs, structured data, the sitemap and llms.txt all follow. */
+export const SITE_ORIGIN: string = import.meta.env.PUBLIC_SITE_ORIGIN || 'https://links.andydetskas.com';
+/** An absolute URL on the site. */
+export const absUrl = (path: string) => new URL(path, SITE_ORIGIN).href;
 export const SITE_TITLE = 'Andy Detskas · Product Design';
 export const SITE_DESCRIPTION =
   'Hands-on design leadership for products people have to trust. Case studies, leadership, techniques and how to reach me.';

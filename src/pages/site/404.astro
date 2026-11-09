@@ -1,0 +1,37 @@
+---
+// Not found, in the site's shell. Lives at /site/404/ in the prototype; at cutover it becomes the
+// root 404.html (src/pages/404.astro), which GitHub Pages serves for any missing path. Old Framer
+// URLs don't land here: lib/legacy-urls.ts forwards them.
+import CloserLook from '../../components/site/CloserLook.astro';
+import { tokens } from '../../lib/tokens';
+import { SITE_BASE, sectionById, sectionPath } from '../../lib/site-sections';
+const accent = (tokens.accent as Record<string, string>).portfolio;
+const go = [
+  ['portfolio', 'Selected work', 'Case studies from Strava, SRAM and SuppCo'],
+  ['leadership', 'How I lead', 'The practices, and the work that shows them'],
+  ['techniques', 'Techniques', 'Methods and experiments you can use'],
+  ['about', 'About', 'Who I am, my working kit and my experience'],
+] as const;
+---
+
+<CloserLook
+  title="That page isn’t here"
+  subtitle="It may have moved when this site left Framer. These are the places to go."
+  eyebrow="404"
+  kind="page"
+  pageTitle="Not found · Andy Detskas"
+  description="This page doesn’t exist. Selected work, How I lead, Techniques and About are a click away."
+  accent={accent}
+  backHref={SITE_BASE}
+  backLabel="Home"
+>
+  <ul class="look-list" role="list">
+    {go.map(([id, label, note]) => (
+      <li>
+        <a href={sectionPath(sectionById(id))}><strong>{label}</strong></a>
+        <span>{note}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="look-back"><a href={SITE_BASE}>← Home</a></p>
+</CloserLook>

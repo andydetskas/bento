@@ -18,6 +18,11 @@ import ShapeField from '../ShapeField.astro';
 import SiteCard from './SiteCard.astro';
 import SiteHead from './SiteHead.astro';
 import { defaultPreset } from '../../lib/presets';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import JsonLd from '../JsonLd.astro';
+import { article, breadcrumbs, graph, person, website } from '../../lib/schema';
+import { SITE_BASE, SITE_ORIGIN } from '../../lib/site-sections';
 
 interface Props {
   title: string;
@@ -29,18 +34,35 @@ interface Props {
   eyebrow?: string;
   /** The open card this page morphs out of: box-portfolio for case studies, box-techniques for articles. */
   transition?: string;
+  /** What this page is, for structured data: a case study or Techniques article (an Article with
+   *  breadcrumbs), or a plain page (the 404) with no article data. */
+  kind?: 'article' | 'page';
+  /** A Markdown version of this page (Techniques articles), linked for agents. */
+  markdown?: string;
   pageTitle: string;
   description: string;
   accent: string;
   backHref: string;
   backLabel: string;
 }
-const { title, subtitle, company, eyebrow = `${company} · A closer look`, transition = 'box-portfolio', pageTitle, description, accent, backHref, backLabel } = Astro.props;
+const { title, subtitle, company, eyebrow = `${company} · A closer look`, transition = 'box-portfolio', pageTitle, description, accent, backHref, backLabel, kind = 'article', markdown } = Astro.props;
+
+// Share image: public/site/og/<section>-<slug>.jpg, made by `npm run og:pages`; the default if none.
+const path = Astro.url.pathname;
+const ogName = path.replace(SITE_BASE, '').replace(/\/$/, '').replace(/\//g, '-');
+const ogSrc = `/site/og/${ogName}.jpg`;
+const image = kind === 'article' && existsSync(join(process.cwd(), 'public', ogSrc)) ? { src: ogSrc, width: 1200, height: 630, alt: `${title}: ${subtitle}` } : undefined;
+const schema =
+  kind === 'article'
+    ? graph(person(), website(), article({ path, title, subtitle, description, image: image?.src, company, section: backLabel }), breadcrumbs([{ name: backLabel, path: backHref }, { name: title }]))
+    : graph(person(), website());
 ---
 
-<Base title={pageTitle} description={description} preset={defaultPreset} noindex>
+<Base title={pageTitle} description={description} preset={defaultPreset} origin={SITE_ORIGIN} ogType={kind === 'article' ? 'article' : 'website'} image={image} noindex>
   <Fragment slot="head">
     <SiteHead />
+    <JsonLd data={schema} />
+    {markdown && <link rel="alternate" type="text/markdown" href={markdown} title={`${title} (Markdown)`} />}
   </Fragment>
 
   <ShapeField preset={defaultPreset} eager />
