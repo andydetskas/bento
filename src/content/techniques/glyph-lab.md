@@ -4,7 +4,7 @@ subtitle: "Turning a brand system into a generative 3D background"
 description: "How I turned my Taos icons and design tokens into a 3D background engine, and built a lab to tune it, where every setting I like becomes a theme the site ships."
 icon: "spiral"
 hero: "/site/techniques/glyph-lab.webp"
-order: 5
+order: 1
 draft: true
 ---
 
