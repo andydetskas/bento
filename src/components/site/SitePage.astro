@@ -57,7 +57,7 @@ const arrow = 'M7 17 17 7M9 7h8v8';
       <Fragment slot="summary">
         <div class="mosaic" aria-hidden="true">
           {portfolio.details.map((d) => (
-            <span class="mosaic-cell" style={`--tint:${tintOf(byId(d.work))}`}>
+            <span class="mosaic-cell" data-fit={'fit' in d ? d.fit : undefined} style={`--tint:${tintOf(byId(d.work))}`}>
               <img src={d.src} width={d.width} height={d.height} alt="" loading="eager" decoding="async" fetchpriority="low" />
             </span>
           ))}
@@ -85,14 +85,6 @@ const arrow = 'M7 17 17 7M9 7h8v8';
       </Fragment>
       <Fragment slot="panel">
         <p class="panel-lede">{leadership.lede}</p>
-        <ul class="principles principles-grid" role="list">
-          {leadership.principles.map((p) => (
-            <li>
-              <strong>{p.title}</strong>
-              <span>{p.body}</span>
-            </li>
-          ))}
-        </ul>
         <ul class="stats stats-row" role="list">
           {leadership.stats.map((s) => (
             <li>
@@ -101,15 +93,27 @@ const arrow = 'M7 17 17 7M9 7h8v8';
             </li>
           ))}
         </ul>
-        <div class="groups">
-          {leadership.groups.map((g) => (
-            <section class="group">
+        {/* Each practice with its evidence: the work that shows it, by company, linked to the case study or
+            technique where there is one. (The jobs themselves are listed once, on About.) */}
+        <div class="groups practices">
+          {leadership.principles.map((p) => (
+            <section class="group practice">
               <header>
-                <h3>{g.org}</h3>
-                <p class="eyebrow">{g.role}</p>
+                <h3>{p.title}</h3>
+                <p class="practice-body">{p.body}</p>
               </header>
               <ul role="list">
-                {g.points.map((pt) => <li>{pt}</li>)}
+                {p.evidence.map((e) => (
+                  <li>
+                    <span class="ev-org">{e.org}</span> {e.text}
+                    {'href' in e && e.href && (
+                      <>
+                        {' '}
+                        <a class="ev-link" href={e.href}>{e.link} →</a>
+                      </>
+                    )}
+                  </li>
+                ))}
               </ul>
             </section>
           ))}

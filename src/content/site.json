@@ -20,28 +20,32 @@
     "lede": "Case studies from Strava, SRAM and SuppCo, each with my role and what changed.",
     "details": [
       {
-        "work": "designing-for-trust",
-        "src": "/site/work/details/designing-for-trust.webp",
-        "width": 375,
-        "height": 509
+        "work": "crushing-the-basics",
+        "src": "/site/work/thumbs/home-crushing-the-basics.webp",
+        "width": 347,
+        "height": 260,
+        "fit": "bleed"
       },
       {
         "work": "agentic-design-system",
-        "src": "/site/work/details/agentic-design-system.webp",
-        "width": 387,
-        "height": 519
-      },
-      {
-        "work": "surfacing-value",
-        "src": "/site/work/details/surfacing-value.webp",
-        "width": 615,
-        "height": 818
+        "src": "/site/work/thumbs/home-agentic-design-system.webp",
+        "width": 347,
+        "height": 260,
+        "fit": "bleed"
       },
       {
         "work": "stackscore",
-        "src": "/site/work/details/stackscore.webp",
-        "width": 375,
-        "height": 509
+        "src": "/site/work/thumbs/home-stackscore.webp",
+        "width": 347,
+        "height": 260,
+        "fit": "bleed"
+      },
+      {
+        "work": "surfacing-value",
+        "src": "/site/work/thumbs/home-surfacing-value.webp",
+        "width": 347,
+        "height": 260,
+        "fit": "bleed"
       }
     ]
   },
@@ -52,19 +56,67 @@
     "principles": [
       {
         "title": "Stay in the work",
-        "body": "I design alongside the team, so my feedback comes from the work, not from a distance."
+        "body": "I design alongside the team, so my feedback comes from the work, not from a distance.",
+        "evidence": [
+          {
+            "org": "SuppCo",
+            "text": "Led product design as a player-coach, managing one product designer and reporting to the CEO."
+          },
+          {
+            "org": "SuppCo",
+            "text": "Designed StackScore myself, from the first framing through a year of iteration; an A/B-tested update prompt raised score updates 24%.",
+            "href": "/site/work/stackscore/",
+            "link": "StackScore"
+          }
+        ]
       },
       {
         "title": "Enable others",
-        "body": "Research, critique and design systems that help everyone make good calls without me in the room."
+        "body": "Research, critique and design systems that help everyone make good calls without me in the room.",
+        "evidence": [
+          {
+            "org": "Strava",
+            "text": "Grew the design team across Trust & Safety, Growth, Web Platform and Foundations, managing five direct and about ten indirect reports, and promoted designers into staff and management roles."
+          },
+          {
+            "org": "SRAM",
+            "text": "Led six product designers across the AXS rider app, web, and factory and dealer tools, and hired three in my first six months."
+          },
+          {
+            "org": "SRAM",
+            "text": "Stood up a research practice: field A/B testing at Sea Otter, and a Dovetail repository that product and engineering adopted."
+          }
+        ]
       },
       {
         "title": "Unblock the team",
-        "body": "Design should be a lubricant, not a tollbooth. I keep a fast, informal SLA on questions and reviews, with feedback in open threads."
+        "body": "Design should be a lubricant, not a tollbooth. I keep a fast, informal SLA on questions and reviews, with feedback in open threads.",
+        "evidence": [
+          {
+            "org": "SuppCo",
+            "text": "Made the design system AI-native and packaged it as agent skills in the repo, so designers, engineers and agents build from one source of truth and following the system no longer runs through me.",
+            "href": "/site/work/agentic-design-system/",
+            "link": "Agentic Design System"
+          }
+        ]
       },
       {
         "title": "Judgment is the job",
-        "body": "Making the hard calls early. Integrity Compass, which I co-created, is one example: it brings privacy, safety and inclusion into the room before launch."
+        "body": "Making the hard calls early. Integrity Compass, which I co-created, is one example: it brings privacy, safety and inclusion into the room before launch.",
+        "evidence": [
+          {
+            "org": "Strava",
+            "text": "Co-created Integrity Compass, a pre-launch inclusion, privacy and safety review. One session ran nine product teams through it.",
+            "href": "/site/techniques/integrity-compass/",
+            "link": "Integrity Compass"
+          },
+          {
+            "org": "SRAM",
+            "text": "Defined the AXS app’s mission and primary KPI (“Ready to Ride”) with senior leadership, and re-centered the roadmap on the basics riders needed most.",
+            "href": "/site/work/crushing-the-basics/",
+            "link": "Crushing the Basics"
+          }
+        ]
       }
     ],
     "stats": [
@@ -80,60 +132,9 @@
         "value": "73",
         "label": "People across product and engineering using the research practice I set up"
       }
-    ],
-    "groups": [
-      {
-        "org": "SuppCo (acquired by Function Health)",
-        "role": "Head of Product Design",
-        "points": [
-          "Led product design as a player-coach, managing one product designer and reporting to the CEO.",
-          "Made the design system AI-native, so designers, engineers, and agents build from one source of truth."
-        ]
-      },
-      {
-        "org": "SRAM",
-        "role": "UX Manager",
-        "points": [
-          "Led six product designers across the AXS rider app, web, and factory and dealer tools, and hired three in my first six months.",
-          "Stood up a research practice: field A/B testing at Sea Otter and a Dovetail repository adopted by 73 people across product and engineering.",
-          "Defined the AXS app’s mission and primary KPI (“Ready to Ride”) with senior leadership."
-        ]
-      },
-      {
-        "org": "Strava",
-        "role": "Senior Product Design Manager",
-        "points": [
-          "Grew the design team from 5 to 15 in two years, managing five direct and about ten indirect reports across Trust & Safety, Growth, Web Platform and Foundations.",
-          "Promoted designers into staff and management roles.",
-          "Co-created Integrity Compass, a pre-launch inclusion, privacy and safety review. One session ran nine product teams through it."
-        ]
-      }
     ]
   },
   "work": [
-    {
-      "id": "designing-for-trust",
-      "title": "Designing for Trust",
-      "company": "Strava",
-      "accent": "strava",
-      "tint": [
-        "alpenglow",
-        "300"
-      ],
-      "summary": "Redesigned Strava’s privacy controls so athletes could understand, and choose, exactly what they share.",
-      "role": "Hands-on design lead",
-      "roleShort": "Hands-on design lead",
-      "outcome": "Within a month, more than a quarter of active athletes reviewed the new controls, and 27% of them changed a setting.",
-      "image": {
-        "src": "/site/work/designing-for-trust.webp",
-        "width": 1200,
-        "height": 763,
-        "alt": "Strava privacy controls: the privacy settings list, profile page visibility, and the Heatmap opt-out"
-      },
-      "fit": "contain",
-      "url": "https://www.andydetskas.com/design-strava-privacy-controls",
-      "look": "/site/work/designing-for-trust/"
-    },
     {
       "id": "agentic-design-system",
       "title": "Agentic Design System",
@@ -148,14 +149,37 @@
       "roleShort": "Hands-on owner",
       "outcome": "I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills in the repo.",
       "image": {
-        "src": "/site/work/agentic-design-system-screens.webp",
-        "width": 1013,
-        "height": 651,
-        "alt": "SuppCo screens built on the design system: Today with My stack and StackScore, TESTED by SuppCo, and sign-up"
+        "src": "/site/work/thumbs/tile-agentic-design-system.webp",
+        "width": 774,
+        "height": 484,
+        "alt": "SuppCo’s product card sticker sheet beside the TESTED by SuppCo catalog on iPhone, both built from the design system"
       },
-      "fit": "contain",
+      "fit": "bleed",
       "url": "https://www.andydetskas.com/design-suppco-agentic-design-system",
       "look": "/site/work/agentic-design-system/"
+    },
+    {
+      "id": "designing-for-trust",
+      "title": "Designing for Trust",
+      "company": "Strava",
+      "accent": "strava",
+      "tint": [
+        "alpenglow",
+        "300"
+      ],
+      "summary": "Redesigned Strava’s privacy controls so athletes could understand, and choose, exactly what they share.",
+      "role": "Hands-on design lead",
+      "roleShort": "Hands-on design lead",
+      "outcome": "Within a month, more than a quarter of active athletes reviewed the new controls, and 27% of them changed a setting.",
+      "image": {
+        "src": "/site/work/thumbs/tile-designing-for-trust.webp",
+        "width": 774,
+        "height": 484,
+        "alt": "Strava privacy controls: the privacy settings list, profile page visibility, and the Heatmap opt-out"
+      },
+      "fit": "bleed",
+      "url": "https://www.andydetskas.com/design-strava-privacy-controls",
+      "look": "/site/work/designing-for-trust/"
     },
     {
       "id": "surfacing-value",
@@ -171,37 +195,14 @@
       "roleShort": "Facilitator and design leader",
       "outcome": "I facilitated the sprint. 84% of subscribers rated the new navigation better; the test modeled +$3.3M a year in net bookings.",
       "image": {
-        "src": "/site/work/surfacing-value.webp",
-        "width": 554,
-        "height": 1200,
-        "alt": "Strava redesigned home screen"
+        "src": "/site/work/thumbs/tile-surfacing-value.webp",
+        "width": 774,
+        "height": 484,
+        "alt": "Three screens from Strava’s redesigned navigation: the new home feed, introducing Maps, and competing and connecting with others"
       },
-      "fit": "screen",
+      "fit": "bleed",
       "url": "https://www.andydetskas.com/strategy-strava-navigation-for-clarity-retention-scale",
       "look": "/site/work/surfacing-value/"
-    },
-    {
-      "id": "crushing-the-basics",
-      "title": "Crushing the Basics",
-      "company": "SRAM",
-      "accent": "sram",
-      "tint": [
-        "indigo",
-        "200"
-      ],
-      "summary": "Re-oriented the team around the AXS app’s core value: battery status, firmware updates and connectivity.",
-      "role": "Strategy lead and facilitator",
-      "roleShort": "Strategy lead and facilitator",
-      "outcome": "I built it on a 10,000-rider survey and 25 stakeholder interviews. It became the product group’s plan for the year.",
-      "image": {
-        "src": "/site/work/crushing-the-basics.webp",
-        "width": 1148,
-        "height": 1200,
-        "alt": "Crush the Basics prioritization matrix"
-      },
-      "fit": "contain",
-      "url": "https://www.andydetskas.com/strategy-sram-crush-the-basics",
-      "look": "/site/work/crushing-the-basics/"
     },
     {
       "id": "stackscore",
@@ -217,12 +218,12 @@
       "roleShort": "Designer",
       "outcome": "I designed a score-update prompt; in an A/B test, it raised score updates 24% for both free and Pro members.",
       "image": {
-        "src": "/site/work/stackscore.webp",
-        "width": 1200,
-        "height": 763,
+        "src": "/site/work/thumbs/tile-stackscore.webp",
+        "width": 774,
+        "height": 484,
         "alt": "SuppCo StackScore app screens: the score overview ring, Quality tab, and Goals tab"
       },
-      "fit": "contain",
+      "fit": "bleed",
       "url": "https://www.andydetskas.com/design-suppco-stackscore",
       "look": "/site/work/stackscore/"
     },
@@ -240,14 +241,37 @@
       "roleShort": "Shared design ownership",
       "outcome": "In alpha, 56% of carts became orders, 41% of purchases were subscriptions, and 54% of buyers reordered within 45 days.",
       "image": {
-        "src": "/site/work/buying-club.webp",
-        "width": 1200,
-        "height": 783,
-        "alt": "SuppCo Buying Club onboarding screens: members earn 30% back in credits, products straight from the source, and your estimated lifetime supplement spend"
+        "src": "/site/work/thumbs/tile-buying-club.webp",
+        "width": 774,
+        "height": 484,
+        "alt": "The Buying Club on desktop, “the new way to buy supplements,” beside the onboarding screen where members earn 30% back in credits"
       },
-      "fit": "contain",
+      "fit": "bleed",
       "url": "https://www.andydetskas.com/design-suppco-buying-club",
       "look": "/site/work/buying-club/"
+    },
+    {
+      "id": "crushing-the-basics",
+      "title": "Crushing the Basics",
+      "company": "SRAM",
+      "accent": "sram",
+      "tint": [
+        "indigo",
+        "200"
+      ],
+      "summary": "Re-oriented the team around the AXS app’s core value: battery status, firmware updates and connectivity.",
+      "role": "Strategy lead and facilitator",
+      "roleShort": "Strategy lead and facilitator",
+      "outcome": "I built it on a 10,000-rider survey and 25 stakeholder interviews. It became the product group’s plan for the year.",
+      "image": {
+        "src": "/site/work/thumbs/tile-crushing-the-basics.webp",
+        "width": 774,
+        "height": 484,
+        "alt": "The SRAM AXS app’s battery status for an XX1 rear derailleur: Battery good"
+      },
+      "fit": "bleed",
+      "url": "https://www.andydetskas.com/strategy-sram-crush-the-basics",
+      "look": "/site/work/crushing-the-basics/"
     }
   ],
   "kit": {
@@ -332,7 +356,7 @@
       "height": 1009,
       "alt": "Andy Detskas walking up the steps of a sunlit, whitewashed courtyard"
     },
-    "body": "I lead design for products people have to trust: privacy and safety at Strava, connected bikes at SRAM, and supplement trust at SuppCo (acquired by Function Health). I’m a player-coach who does the work alongside my team and builds the systems around it.",
+    "body": "I lead design for products people have to trust: privacy and safety at Strava, connected bikes at SRAM, and supplement trust at SuppCo (acquired by Function Health). Before I led teams, I was a hands-on designer at Pivotal Labs, Punchkick Interactive and DePaul University, and I still do the work myself.",
     "more": "For inspiration, I love to watch movies, travel and shoot photos, and spend time learning about the craftsmanship that goes into building watches and bikes. I love creative endeavors that blend the technical and creative.",
     "experience": [
       {
