@@ -1,0 +1,144 @@
+---
+// StackScore, a closer look (public, ungated), with Call-and-Response folded in as a related
+// experiment (the plan Andy approved Nov 8). SuppCo work is kept generic (Andy, Nov 8): shipped UI and
+// the one public-safe result line (Master Profile §2.2). Sources: story kit §4.5, §2.2 (StackScore and
+// Call-and-Response rows), and the Figma 2026 Portfolio › Case Studies › "StackScore case study" and
+// "Call-and-Response case study" slides, whose own copy this follows. Left out: the "What it moved"
+// slide (all but the +24% A/B result are call-only: refresh rate, email click rate, retention, Pro
+// likelihood, return rate), the share card naming a colleague (cropped from the original-score
+// figure), and every Call-and-Response test number and result (call-only). No dates.
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+const accent = (tokens.accent as Record<string, string>).suppco;
+const work = site.work.find((w) => w.id === 'stackscore')!;
+const img = (name: string) => `/site/work/stackscore/${name}.webp`;
+---
+
+<CloserLook
+  title={work.title}
+  subtitle="SuppCo’s signature score, redesigned to explain itself"
+  company={work.company}
+  pageTitle="StackScore · SuppCo · Andy Detskas"
+  description="How I redesigned SuppCo’s signature score into a hub that explains itself, with four sub-scores that each lead to a next step."
+  accent={accent}
+  backHref={`${SITE_BASE}work/`}
+  backLabel="Selected work"
+>
+  <p class="panel-lede">I redesigned SuppCo’s signature score into a hub that explains itself, breaking one AI-written verdict into four sub-scores that each lead to a next step.</p>
+  <dl class="look-facts">
+    <div>
+      <dt>My role</dt>
+      <dd>Designer, from the first framing through launch and a year of iteration</dd>
+    </div>
+    <div>
+      <dt>Worked with</dt>
+      <dd>Product and engineering, who owned the scoring logic</dd>
+    </div>
+    <div>
+      <dt>What I designed</dt>
+      <dd>The four sub-scores, the ring, the Insights and Optimize pattern on every tab, and the update flow</dd>
+    </div>
+  </dl>
+  <p class="outcome">An A/B-tested update prompt raised score updates 24% for free and Pro members.</p>
+  <figure class="look-fig">
+    <img src={img('hub-tabs')} width="1561" height="1139" alt="The StackScore hub’s Overview, Value, Goals and Dosage tabs: a ring score of 91 with four segments, and each tab’s own score and insights" loading="eager" decoding="async" />
+  </figure>
+
+  <section class="look-section" aria-labelledby="situation">
+    <h2 id="situation">The situation</h2>
+    <div class="look-split">
+      <div class="look-text">
+        <p>The score was why people downloaded SuppCo, yet it was a single number and a long, AI-written report about your supplement stack.</p>
+        <p>The score moved for reasons no one could see, and when members followed our advice, they didn’t always understand why it changed. It became the top issue in member feedback.</p>
+      </div>
+      <figure class="look-fig">
+        <img src={img('original-score')} width="960" height="970" alt="The original score: one number on an orange or green card, followed by a long written analysis" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="role">
+    <h2 id="role">My role</h2>
+    <div class="look-text">
+      <p>I designed StackScore from the first framing through launch and a year of iteration. Product and engineering owned the scoring logic; I owned how the score looked, read and behaved, and what it asked members to do next.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="approach">
+    <h2 id="approach">How I approached it</h2>
+    <ol class="look-steps" role="list">
+      <li>
+        <p class="look-num" aria-hidden="true">01</p>
+        <h3>Four questions, not one verdict</h3>
+        <p>I broke “How’s my stack?” into the four questions people actually ask: Am I buying quality? Spending well? Covering my goals? Taking the right amount? It also showed the score for what it was: a calculation that moves with your stack, not something ambiguously AI-generated.</p>
+        <figure class="look-fig">
+          <img src={img('four-questions')} width="1561" height="1139" alt="“How’s my stack?” broken into four sub-scores: Quality, Value, Goals and Dosage, each with its own question" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">02</p>
+        <h3>Find the ring</h3>
+        <p>Four sub-scores couldn’t bury the one number people came for. I tried bars, petals, stacked arcs and color fields, with Apple Watch faces as inspiration. One ring with four segments won: the score stays the hero, and each segment shows at a glance where you’re strong and what to fix.</p>
+        <figure class="look-fig">
+          <img src={img('ring-explorations')} width="1561" height="1139" alt="Ring explorations, from a single gauge to segmented arcs, ending in the shipped ring with four segments" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">03</p>
+        <h3>Every score earns an action</h3>
+        <p>A score without a next step is a dead end. Each tab pairs Insights (why you got this score) with Optimize (what to do about it): swap a low-quality product, find better value, fill a goal gap, fix a dose. Optimize also became the natural home for Pro tools.</p>
+        <figure class="look-fig">
+          <img src={img('insights-optimize')} width="1561" height="1139" alt="The Quality tab with Insights and Optimize, a Pro product optimizer, and a drawer for fixing a goal gap" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">04</p>
+        <h3>Make the update a moment</h3>
+        <p>Scores went stale because updating was invisible. I modeled the update on a credit report: a short calculation, a from-to reveal, and a log of what changed. Monthly emails brought people back for a new score, even when they hadn’t opened the app.</p>
+        <figure class="look-fig">
+          <img src={img('update-moment')} width="1561" height="1139" alt="The update flow: an update drawer, a calculating screen, the score moving from 79 to 88, and the refreshed hub" loading="lazy" decoding="async" />
+        </figure>
+      </li>
+    </ol>
+  </section>
+
+  <section class="look-section" aria-labelledby="changed">
+    <h2 id="changed">What changed</h2>
+    <div class="look-text">
+      <p>In an A/B test, the new update prompt raised score updates 24% for both free and Pro members, and StackScore became SuppCo’s most established engagement loop.</p>
+      <p>It didn’t fix everything. Too many new members never reached their score in their first week, and metered refreshes added friction to the very habit we wanted.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="related">
+    <h2 id="related">A related experiment: call and response</h2>
+    <div class="look-text">
+      <p>SuppCo’s onboarding asked new members about their goals, age, budget and stack without saying what they’d get back. My concept was to treat every question as a call that earns a response: answer, and SuppCo answers back with a small, specific fact about you or people like you, proof of value before the paywall instead of a pitch.</p>
+      <p>Onboarding was about to change again, so I built it to test, not to keep. One template (an icon, a headline, two proof points) turned every new response into copy and data rather than new screens, and we shipped it as an A/B test so the data decided what happened next.</p>
+    </div>
+    <figure class="look-fig">
+      <img src={img('call-and-response')} width="1561" height="1139" alt="Call and response: the question “Where do you need the most help?” with “Track my supplements” selected, answered by a screen on staying consistent with your routine" loading="lazy" decoding="async" />
+    </figure>
+  </section>
+
+  <section class="look-section" aria-labelledby="learned">
+    <h2 id="learned">What I learned</h2>
+    <ul class="look-takeaways" role="list">
+      <li>Don’t meter the habit you want.</li>
+      <li>A score needs reasons and a next step.</li>
+      <li>Build experiments to be replaced.</li>
+    </ul>
+  </section>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>The full story, with what the tests showed and what I’d change, is a 30-minute walkthrough.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+</CloserLook>

@@ -1,0 +1,128 @@
+---
+// Agentic Design System, a closer look (public, ungated). Kept generic (Andy, Nov 8): the approach
+// and its principles, shipped UI, and the one public-safe result line (Master Profile 2.2). Left out
+// on purpose: internal repo and skill names, the tools behind it, screenshots of internal artifacts
+// (the skills, the service-layer diagram, the Figma library, dashboards), colleagues' names, and the
+// negotiation with front-end engineering. Sources: the Capsule article draft
+// (2026 Portfolio/framer/drafts/agentic-design-system-article.md), story kit §4.2, and the Figma
+// 2026 Portfolio › Case Studies › "SuppCo Agentic Design System case study" slides (only the
+// shipped-screens panel of slide 01 is used). No dates.
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+const accent = (tokens.accent as Record<string, string>).suppco;
+const tint = (tokens.taos.light as Record<string, Record<string, string>>).verde['200'];
+const work = site.work.find((w) => w.id === 'agentic-design-system')!;
+const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
+---
+
+<CloserLook
+  title={work.title}
+  subtitle="A design system that people and coding agents can both follow"
+  company={work.company}
+  pageTitle="Agentic Design System · SuppCo · Andy Detskas"
+  description="How I made SuppCo’s design system AI-native, so designers, engineers, PMs and coding agents could all build on-system from one source of truth."
+  accent={accent}
+  backHref={`${SITE_BASE}work/`}
+  backLabel="Selected work"
+>
+  <p class="panel-lede">I made SuppCo’s design system AI-native, so designers, engineers, PMs and coding agents could all build on-system work from one source of truth.</p>
+  <dl class="look-facts">
+    <div>
+      <dt>My role</dt>
+      <dd>Head of Product Design, and the system’s hands-on owner</dd>
+    </div>
+    <div>
+      <dt>Worked with</dt>
+      <dd>Front-end engineering, product and our CEO, with a design team of two</dd>
+    </div>
+    <div>
+      <dt>What I did</dt>
+      <dd>Brought Figma and code into parity, wrote the decisions down as rules, and put the system where the work happens</dd>
+    </div>
+  </dl>
+  <p class="outcome">I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills inside the product repo, at a company where roughly a third of commits came from coding agents.</p>
+  <figure class="look-fig">
+    <img src={img('shipped-screens')} width="1561" height="1139" alt="Shipped SuppCo screens built on the system: the Today tab with My stack and StackScore, sign-up, and the TESTED by SuppCo catalog" loading="eager" decoding="async" />
+  </figure>
+
+  <section class="look-section" aria-labelledby="situation">
+    <h2 id="situation">The situation</h2>
+    <div class="look-text">
+      <p>AI made output cheap and judgment scarce. At SuppCo, PMs and engineers were already doing design-shaped work with AI: spinning up prototypes, generating screens from tickets, building their own decks and dashboards. None of that was going to slow down because a designer asked nicely.</p>
+      <p>Meanwhile, Figma and code had grown up separately: similar components under different names, and no agreed rules for when to use what. Even our lightest gray had two names, one in Figma and one in code, and nobody could say which was the gray. Following the system was a matter of persuasion, one person at a time, and most of that persuasion ran through me.</p>
+      <p>So the question changed. Not “how do we get people to follow the docs?” but “how do we make the right decision the easiest one to make, for people and for agents?” We didn’t have a documentation problem. We had a distribution problem.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="role">
+    <h2 id="role">My role</h2>
+    <div class="look-text">
+      <p>As Head of Product Design, leading a design team of two, I owned the system hands-on: reconciling Figma with what was actually in production, writing the rules, and making the case for where the system should live. I agreed decision rights with front-end engineering and our CEO, so everyone knew which source won when Figma and code disagreed.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="approach">
+    <h2 id="approach">How I approached it</h2>
+    <figure class="look-fig look-flow" style={`--tint:${tint}`}>
+      <ol role="list" aria-label="The approach in four steps">
+        <li><span>01</span><strong>Parity</strong><span>Figma and code tell the same story.</span></li>
+        <li><span>02</span><strong>Capture</strong><span>Decisions written down as rules anyone, or any agent, can check.</span></li>
+        <li><span>03</span><strong>Distribute</strong><span>The system lives where people and agents already work.</span></li>
+        <li><span>04</span><strong>Compound</strong><span>On-system work from people who never asked a designer.</span></li>
+      </ol>
+    </figure>
+    <ol class="look-steps" role="list">
+      <li>
+        <p class="look-num" aria-hidden="true">01</p>
+        <h3>Get to parity first</h3>
+        <p>Figma was behind code, so the first job was catching it up. Reconciling color and type gave us a Figma library that matched production, and with design tokens in place, redrawing the components to match was straightforward. It’s the unglamorous part, and it’s where governance becomes enforceable: you can’t write a rule about which gray to use until there’s one set of facts about what the grays are.</p>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">02</p>
+        <h3>Write decisions down as rules</h3>
+        <p>Next, I captured when to use what as written rules for people and agents alike. The trick that made them work was keeping every rule binary and checkable. “Use the right type size” isn’t a rule; “screen titles use this style, never a raw font size” is. That gave the team a way to contribute without asking me, and it gave coding agents the same rules the designers used.</p>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">03</p>
+        <h3>Put the system where the work happens</h3>
+        <p>A documentation site only works if people remember to open it. So the system moved into the code, where people and agents were already working: the design tokens and the rules side by side, readable by any agent and searchable by anyone. Parity is what made that safe. An agent reading two different stories would faithfully reproduce both.</p>
+      </li>
+      <li>
+        <p class="look-num" aria-hidden="true">04</p>
+        <h3>Let it compound</h3>
+        <p>Once the rules traveled with the agents, on-system work started showing up from people who never asked a designer: town hall decks, dashboards and marketing pieces. Prototypes built on the system came out repeatable and shareable, and prompt-based workflows let us move in every direction, from code to Figma and back.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section class="look-section" aria-labelledby="changed">
+    <h2 id="changed">What changed</h2>
+    <div class="look-text">
+      <p>The biggest shift wasn’t in the system. It was in where my time went. With the rules in the code and the agents following them, I stopped being the bottleneck for “is this on-brand?”, and that time went back to the work only a designer can do: deciding what the rules should be, noticing where the system is wrong, and making the calls that don’t fit into a rule yet.</p>
+    </div>
+  </section>
+
+  <section class="look-section" aria-labelledby="learned">
+    <h2 id="learned">What I learned</h2>
+    <ul class="look-takeaways" role="list">
+      <li>Get to parity first. Agents amplify whatever is in the source.</li>
+      <li>Put the system where the work happens.</li>
+      <li>Measure who ships on-system without you.</li>
+    </ul>
+    <div class="look-text">
+      <p>AI is great at the first draft and the hundredth repetition. It isn’t great at taste. An agentic design system is a way of writing your taste down clearly enough that it travels without you. Judgment is the job; the system is how it scales.</p>
+    </div>
+  </section>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>The full story, with the decisions, the tradeoffs and how the rules are written, is a 30-minute walkthrough.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+</CloserLook>
