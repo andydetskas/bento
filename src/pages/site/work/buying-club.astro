@@ -1,0 +1,69 @@
+---
+// Buying Club, a brief (public, ungated). Shorter than the other closer looks on purpose (Andy, Nov 9):
+// one figure, the role, the public result and the idea, then the full story is a call. Sources: Master
+// Profile §2.2 (Buying Club row) and story kit §4.5, sources/03-suppco-evidence.md (Buying Club), and
+// the Figma 2026 Portfolio › Case Studies › "Buying Club case study" slides. Role: shared design
+// ownership with the Head of Product, the co-founder accountable; launched internally and to a beta
+// while Andy was there, the full launch after (Andy, Nov 9). Brand names stay off (the co-founder was
+// careful about them): the figure is three pre-login onboarding screens, so no club, product or order
+// views, no brand names, no dates and no faces. Left out for the call: the shelf diagnosis (catalog
+// coverage, its purchase rates), the OKR and purchaser counts, the membership price, the subscription
+// plan target and the user counts. Colleagues are credited by role. No dates.
+import CloserLook from '../../../components/site/CloserLook.astro';
+import site from '../../../content/site.json';
+import { SITE_BASE } from '../../../lib/site-sections';
+import { tokens } from '../../../lib/tokens';
+const accent = (tokens.accent as Record<string, string>).suppco;
+const work = site.work.find((w) => w.id === 'buying-club')!;
+const img = (name: string) => `/site/work/buying-club/${name}.webp`;
+---
+
+<CloserLook
+  title={work.title}
+  subtitle="SuppCo’s first commerce product: a members’ club that sells without discounting"
+  company={work.company}
+  pageTitle="Buying Club · SuppCo · Andy Detskas"
+  description="A brief on SuppCo’s Buying Club, a members’ club that pays back credits instead of discounting, which I designed with the Head of Product."
+  accent={accent}
+  backHref={`${SITE_BASE}work/`}
+  backLabel="Selected work"
+>
+  <p class="panel-lede">SuppCo’s members trusted it to tell them what to take. The Head of Product and I designed how SuppCo would sell to them without spending that trust: a members’ club that pays back credits instead of discounting.</p>
+  <dl class="look-facts">
+    <div>
+      <dt>My role</dt>
+      <dd>Shared design ownership with the Head of Product, through an internal launch and a beta</dd>
+    </div>
+    <div>
+      <dt>Worked with</dt>
+      <dd>Our co-founder, who owned the business, and front-end engineering</dd>
+    </div>
+    <div>
+      <dt>What I designed</dt>
+      <dd>Onboarding, the club hub, credits on the product page, orders and subscriptions, and one membership language across Pro and the club</dd>
+    </div>
+  </dl>
+  <p class="outcome">Before the full launch, 56% of carts became orders, 41% of purchases were subscriptions, and 54% of buyers reordered within 45 days.</p>
+  <figure class="look-fig">
+    <img src={img('onboarding')} width="1561" height="1139" alt="Three Buying Club onboarding screens: members earn 30% back in credits on every dollar spent; shop trusted products straight from the source; and your estimated lifetime supplement spend" loading="eager" decoding="async" />
+    <figcaption>Onboarding, before sign-in: what you earn, why you can trust it, and what you already spend.</figcaption>
+  </figure>
+
+  <section class="look-section" aria-labelledby="idea">
+    <h2 id="idea">The idea</h2>
+    <div class="look-text">
+      <p>Brand contracts ruled out discounts, so the value had to show up another way. Members earn credits back on every order, and we made that earning visible at each decision: in onboarding, on the product page, and against the stack they already take. Members see what they’re getting, never a slashed price.</p>
+      <p>The club also isn’t a separate store. It shows up where members already were, on their stack, in search and on home, so buying is the next step of what they came to do. It launched internally and to a beta while I was there; the full launch followed.</p>
+    </div>
+  </section>
+
+  <aside class="look-cta" aria-label="Talk it through">
+    <p>The full story, including what the beta taught us about the shelf, not the store, is a 30-minute walkthrough.</p>
+    <a class="btn" href={site.intro.cta.url} target="_blank" rel="noopener noreferrer">
+      {site.intro.cta.label}
+      <span class="sr-only">(opens in a new tab)</span>
+    </a>
+  </aside>
+
+  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+</CloserLook>
