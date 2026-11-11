@@ -180,3 +180,33 @@ html.js.is-ready .line-inner {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* ── Text on an accent fill (the hover pill and the filled arrows) ───────────
+   White text on the dark accents, black on the light ones (Andy, Nov 11: black on a dark
+   field looked wrong). A dark accent (OKLCH lightness under 0.68: fire, verde 600, indigo) is
+   also deepened to lightness 0.54 at most, which is where white clears 4.5:1 on all three
+   (lowest 4.8:1). Light accents keep their color with black text (lowest 8.7:1). Browsers
+   without relative colors get the plain accent with black text, which also passes. */
+.pill {
+  --fill-src: var(--pill-bg, #fff);
+}
+.arrow {
+  --fill-src: var(--accent, var(--color-text-primary));
+}
+.row-arrow {
+  --fill-src: var(--accent);
+}
+.pill,
+.arrow,
+.row-arrow {
+  --accent-fill: var(--fill-src);
+  --accent-on: var(--color-pill-text);
+}
+@supports (color: oklch(from red l c h)) {
+  .pill,
+  .arrow,
+  .row-arrow {
+    --accent-fill: oklch(from var(--fill-src) calc(l - clamp(0, (0.68 - l) * 999, 1) * max(0, l - 0.54)) c h);
+    --accent-on: oklch(from var(--fill-src) clamp(0, (0.68 - l) * 999, 1) 0 0);
+  }
+}

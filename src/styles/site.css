@@ -278,9 +278,9 @@
 }
 @media (hover: hover) {
   .box:not(.is-open):hover .arrow {
-    background: var(--accent, var(--color-text-primary));
-    border-color: var(--accent, var(--color-text-primary));
-    color: var(--color-pill-text);
+    background: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--accent-on);
   }
 }
 .frow .arrow {
@@ -293,9 +293,9 @@
 }
 /* The hero has no mouseovers; keyboard focus still fills the arrow. */
 .frow:focus-visible .arrow {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--color-pill-text);
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+  color: var(--accent-on);
 }
 
 /* ── Button (the hero's call to action: no hover change) ── */
