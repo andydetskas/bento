@@ -5,7 +5,6 @@ description: "How I turned my Taos icons and design tokens into a 3D background 
 icon: "spiral"
 hero: "/site/techniques/glyph-lab.webp"
 order: 1
-draft: true
 ---
 
 The background behind this site isn’t a video or a stock shader. It’s my own brand system, the Taos icons, colors and tokens, turned into 3D objects that a small engine arranges, lights and animates. I built a lab to tune it, and the presets it produces are the themes the site ships.

@@ -5,7 +5,6 @@ description: "Why this site has a Display settings panel instead of an accessibi
 icon: "eye"
 hero: "/site/techniques/display-settings.webp"
 order: 2
-draft: true
 ---
 
 Under my links on this site there’s a row called Display settings. It lets you change the theme, text size, typeface, spacing, contrast, link and focus highlighting, motion, and the animated background. Here’s why it looks the way it does, and what it deliberately doesn’t do.
