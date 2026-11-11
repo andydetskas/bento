@@ -38,7 +38,7 @@
       "text-muted":    { "$value": "{taos.light.shadow.500}" },
       "line":          { "$value": "#34384021" },
       "focus":         { "$value": "{taos.light.indigo.600}" },
-      "pill-text":     { "$value": "{taos.light.shadow.600}" }
+      "pill-text":     { "$value": "{taos.light.black.600}", "$description": "Text on an accent fill (hover pill, filled arrow). Black is the only choice that clears 4.5:1 on every accent; the lowest is 4.9:1 on fire.600." }
     },
     "dark": {
       "page":          { "$value": "{taos.dark.black.300}" },
@@ -47,7 +47,7 @@
       "text-muted":    { "$value": "{taos.dark.shadow.300}" },
       "line":          { "$value": "#F8F5F31F" },
       "focus":         { "$value": "{taos.light.lavender.600}" },
-      "pill-text":     { "$value": "{taos.light.shadow.600}" }
+      "pill-text":     { "$value": "{taos.light.black.600}", "$description": "Text on an accent fill (hover pill, filled arrow). Black is the only choice that clears 4.5:1 on every accent; the lowest is 4.9:1 on fire.600." }
     }
   },
   "accent": {
