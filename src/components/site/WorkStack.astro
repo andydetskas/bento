@@ -1,32 +1,32 @@
 ---
 // The Selected work card's art (Andy, Nov 11; it replaced the 2 × 2 thumbnails): a stack of
 // cards, one in front at a time. The front one drops off the bottom and the stack steps forward.
-// Each card is a company's logo on its brand color (the nine on the old Framer home page, in
-// that order). Still being tuned. With motion off (system or Display settings) it's a still
-// stack of the first three.
+// Each card is one of Andy's compositions: a piece of the work on the brand's color, with the
+// logo in the lower right. He draws them in 2026 Portfolio › Case Studies › "Selected work stack
+// cards (for the coded site)" (4173:6580), 800 × 500 with rounded top corners; each frame is
+// exported as public/site/work/stack/<id>.webp, in his order (rows, left to right). `color` is
+// the frame's fill, shown behind the image's transparent corners and while it loads.
+// With motion off (system or Display settings) it's a still stack of the first three.
 import { SITE_BASE } from '../../lib/site-sections';
 
-// Brand primaries. SuppCo's is the green on supp.co. Function Health and Arity are best
-// guesses: Andy to confirm. The logos are white SVGs from 2026 Portfolio › Brand Assets (4169:6524).
-const companies = [
-  { id: 'suppco', name: 'SuppCo', color: '#29A878' },
-  { id: 'function', name: 'Function Health', color: '#B5562F' },
-  { id: 'strava', name: 'Strava', color: '#FC4C02' },
-  { id: 'sram', name: 'SRAM', color: '#E51937' },
-  { id: 'united', name: 'United Airlines', color: '#005DAA' },
-  { id: 'allstate', name: 'Allstate', color: '#0033A0' },
-  { id: 'intuit', name: 'Intuit', color: '#236CFF' },
-  { id: 'arity', name: 'Arity', color: '#12284C' },
-  { id: 'pivotal-labs', name: 'Pivotal Labs', color: '#00A79D' },
+const cards = [
+  { id: 'suppco', alt: 'SuppCo, part of Function Health: the SuppScore screen', color: '#B5562F' },
+  { id: 'strava', alt: 'Strava: Local Legend on web and phone', color: '#FC4C02' },
+  { id: 'sram', alt: 'SRAM: a suspension fork’s setup page', color: '#E51937' },
+  { id: 'united', alt: 'United Airlines, with Pivotal Labs: a bag-transfer scanner in hand', color: '#005DAA' },
+  { id: 'allstate-arity', alt: 'Allstate and Arity: the Drivewise vehicle list', color: '#173C79' },
+  // Held back (Nov 11): the photo in this card carries iStock watermarks. Add it back once the
+  // image is replaced.
+  // { id: 'intuit', alt: 'Intuit: the TurboTax mobile home page', color: '#236CFF' },
 ];
 const posOf = (i: number) => (i < 3 ? String(i) : 'back');
 ---
 
 <ul class="stack" role="list" aria-label="Companies I’ve worked with" data-stack>
   {
-    companies.map((c, i) => (
+    cards.map((c, i) => (
       <li class="stack-card" data-pos={posOf(i)} style={`--tint:${c.color}`}>
-        <img src={`${SITE_BASE}logos/${c.id}.svg`} alt={c.name} loading="eager" decoding="async" />
+        <img src={`${SITE_BASE}work/stack/${c.id}.webp`} width="800" height="500" alt={c.alt} loading="eager" fetchpriority="low" />
       </li>
     ))
   }
@@ -74,8 +74,7 @@ const posOf = (i: number) => (i < 3 ? String(i) : 'back');
     bottom: 0;
     width: 90%;
     aspect-ratio: 16 / 10;
-    display: grid;
-    place-items: center;
+    overflow: hidden;
     border-radius: var(--space-3) var(--space-3) 0 0;
     background: var(--tint);
     box-shadow: 0 -1px 0 rgb(0 0 0 / 0.04), 0 -8px 24px -12px rgb(0 0 0 / 0.25);
@@ -112,9 +111,9 @@ const posOf = (i: number) => (i < 3 ? String(i) : 'back');
       opacity 300ms linear 320ms;
   }
   .stack-card img {
-    max-width: 46%;
-    max-height: 20%;
-    width: auto;
-    height: auto;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 </style>
