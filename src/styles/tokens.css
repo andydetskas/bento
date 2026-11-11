@@ -126,7 +126,7 @@
   --color-text-muted: #5B5E64;
   --color-line: #34384021;
   --color-focus: #5897C8;
-  --color-pill-text: #343840;
+  --color-pill-text: #000000;
   --accent-linkedin: #5897C8;
   --accent-portfolio: #D74C07;
   --accent-figma: #A99AFB;
@@ -192,6 +192,6 @@
   --color-text-muted: #AEAFB3;
   --color-line: #F8F5F31F;
   --color-focus: #A99AFB;
-  --color-pill-text: #343840;
+  --color-pill-text: #000000;
   color-scheme: dark;
 }

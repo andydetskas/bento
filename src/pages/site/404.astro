@@ -1,7 +1,7 @@
 ---
-// Not found, in the site's shell. Lives at /site/404/ in the prototype; at cutover it becomes the
-// root 404.html (src/pages/404.astro), which GitHub Pages serves for any missing path. Old Framer
-// URLs don't land here: lib/legacy-urls.ts forwards them.
+// Not found, in the site's shell. Lives at /site/404/ in the prototype; the www build
+// (scripts/build-www.mjs) makes it the root 404.html, which Cloudflare serves for any missing path.
+// Old Framer URLs don't land here: lib/legacy-urls.ts forwards them.
 import CloserLook from '../../components/site/CloserLook.astro';
 import { tokens } from '../../lib/tokens';
 import { SITE_BASE, sectionById, sectionPath } from '../../lib/site-sections';
@@ -16,7 +16,7 @@ const go = [
 
 <CloserLook
   title="That page isn’t here"
-  subtitle="It may have moved when this site left Framer. These are the places to go."
+  subtitle="The address may be out of date or mistyped. These are the places to go."
   eyebrow="404"
   kind="page"
   pageTitle="Not found · Andy Detskas"

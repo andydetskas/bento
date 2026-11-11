@@ -154,7 +154,7 @@ export const tokens = {
       "text-muted": "#5B5E64",
       "line": "#34384021",
       "focus": "#5897C8",
-      "pill-text": "#343840"
+      "pill-text": "#000000"
     },
     "dark": {
       "page": "#1F2226",
@@ -163,7 +163,7 @@ export const tokens = {
       "text-muted": "#AEAFB3",
       "line": "#F8F5F31F",
       "focus": "#A99AFB",
-      "pill-text": "#343840"
+      "pill-text": "#000000"
     }
   },
   "accent": {
