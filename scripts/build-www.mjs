@@ -72,6 +72,14 @@ const lines = ['# Old Framer URLs → their new homes (from src/lib/legacy-urls.
 for (const [from, to] of legacy) {
   lines.push(`/${from} /${to} 301`, `/${from}/ /${to} 301`);
 }
+// Framer's URLs had no trailing slash (/about, /techniques/vibeframing). Cloudflare would send
+// those on with a temporary 307; say it's permanent so search engines move the old address over.
+lines.push('', '# Pages without their trailing slash.');
+for (const f of walk(OUT)) {
+  if (!f.endsWith('/index.html') || f === join(OUT, 'index.html')) continue;
+  const path = '/' + dirname(f).slice(OUT.length + 1);
+  lines.push(`${path} ${path}/ 301`);
+}
 lines.push('', '# The prototype lived under /site/.', '/site / 301', '/site/* /:splat 301');
 writeFileSync(join(OUT, '_redirects'), lines.join('\n') + '\n');
 
@@ -109,7 +117,7 @@ for (const f of ['sitemap.xml', 'robots.txt', 'llms.txt']) {
 }
 
 rmSync(RAW, { recursive: true, force: true });
-console.log(`\n${OUT}/: ${html.length} pages, ${legacy.length * 2 + 2} redirects, ${rewritten} files rewritten, ${links} internal links checked.`);
+console.log(`\n${OUT}/: ${html.length} pages, ${lines.filter((l) => l.startsWith('/')).length} redirects, ${rewritten} files rewritten, ${links} internal links checked.`);
 if (problems.length) {
   console.error(`\n${problems.length} problem(s):\n  ` + [...new Set(problems)].slice(0, 40).join('\n  '));
   process.exit(1);
