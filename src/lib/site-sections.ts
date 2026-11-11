@@ -10,6 +10,9 @@ export const SITE_BASE = '/site/';
  *  PUBLIC_SITE_ORIGIN=https://www.andydetskas.com (and SITE_BASE to '/'), and canonicals, share
  *  URLs, structured data, the sitemap and llms.txt all follow. */
 export const SITE_ORIGIN: string = import.meta.env.PUBLIC_SITE_ORIGIN || 'https://links.andydetskas.com';
+/** True in the build for www.andydetskas.com (scripts/build-www.mjs sets PUBLIC_SITE_ORIGIN). Pages
+ *  carry noindex until then, so the prototype under /site/ stays out of search. */
+export const SITE_LIVE = Boolean(import.meta.env.PUBLIC_SITE_ORIGIN);
 /** "Schedule a call" goes through this page, which forwards to the booking calendar, so each click
  *  shows up as a visit in the site's analytics (pages/site/call.astro). */
 export const CALL_PATH = `${SITE_BASE}call/`;

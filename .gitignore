@@ -1,5 +1,7 @@
 node_modules/
 dist/
+dist-www/
+.www-build/
 .astro/
 .DS_Store
 snapshots/

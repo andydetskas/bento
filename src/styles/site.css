@@ -320,39 +320,17 @@
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
+/* The quiet version (Email me, beside the call to action): a gray fill, no arrow. */
+.btn-quiet {
+  background: color-mix(in srgb, var(--color-text-primary) 9%, transparent);
+  color: var(--color-text-primary);
+}
+.btn-quiet::after {
+  content: none;
+}
+
 /* ── Portfolio ──────────────────────────────────────── */
-/* Four case studies, each as one piece of its lockup (Andy): a single phone, showing the top two
-   thirds of its screen (public/site/work/details/, cut from the tile images). It sits centered,
-   with the same margin above it as at the sides, and runs off the bottom edge. */
-.mosaic {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-2);
-  margin-top: var(--space-1);
-}
-.mosaic-cell {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  border-radius: var(--space-2);
-  background: var(--tint);
-  overflow: hidden;
-}
-.mosaic-cell img {
-  position: absolute;
-  top: 13.333%; /* 10% of the width, at 4:3 */
-  bottom: 0;
-  left: 50%;
-  translate: -50% 0;
-  height: 86.667%;
-  width: auto;
-  transform-origin: 50% 100%;
-  transition: scale var(--motion-settle) var(--motion-ease-settle);
-}
-@media (hover: hover) {
-  .area-portfolio:not(.is-open):hover .mosaic-cell img {
-    scale: 1.04;
-  }
-}
+/* The Selected work card's art is the logo stack (components/site/WorkStack.astro). */
 
 /* Tiles: case studies (Portfolio) and posts (Techniques), two across in a takeover. */
 .tiles {
@@ -444,8 +422,7 @@
 }
 /* Art composed in Figma (2026 Portfolio › Case Studies › "Selected work thumbnails"): the export is
    the whole cell, tint included, so it fills the box edge to edge. */
-.work-art[data-fit='bleed'] img,
-.mosaic-cell[data-fit='bleed'] img {
+.work-art[data-fit='bleed'] img {
   inset: 0;
   top: 0;
   left: 0;
@@ -579,7 +556,7 @@
   flex-direction: column;
   gap: var(--space-1);
 }
-.group h3 {
+.group :is(h2, h3) {
   margin: 0;
   font-size: var(--step-1);
   font-weight: var(--weight-medium);
@@ -777,7 +754,7 @@
   padding-top: var(--space-6);
   border-top: 1px solid var(--color-line);
 }
-.about-section h3 {
+.about-section :is(h2, h3) {
   margin: 0;
   font-size: var(--step-2);
   line-height: 1.15;
@@ -1342,7 +1319,6 @@ html.page-transition::view-transition-old(*.box):only-child {
   .box > *,
   .arrow,
   .tile,
-  .mosaic-cell img,
   .work-art img,
   .post-art img,
   .post-title,

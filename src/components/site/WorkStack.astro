@@ -1,0 +1,120 @@
+---
+// The Selected work card's art (Andy, Nov 11; it replaced the 2 × 2 thumbnails): a stack of
+// cards, one in front at a time. The front one drops off the bottom and the stack steps forward.
+// Each card is a company's logo on its brand color (the nine on the old Framer home page, in
+// that order). Still being tuned. With motion off (system or Display settings) it's a still
+// stack of the first three.
+import { SITE_BASE } from '../../lib/site-sections';
+
+// Brand primaries. SuppCo's is the green on supp.co. Function Health and Arity are best
+// guesses: Andy to confirm. The logos are white SVGs from 2026 Portfolio › Brand Assets (4169:6524).
+const companies = [
+  { id: 'suppco', name: 'SuppCo', color: '#29A878' },
+  { id: 'function', name: 'Function Health', color: '#B5562F' },
+  { id: 'strava', name: 'Strava', color: '#FC4C02' },
+  { id: 'sram', name: 'SRAM', color: '#E51937' },
+  { id: 'united', name: 'United Airlines', color: '#005DAA' },
+  { id: 'allstate', name: 'Allstate', color: '#0033A0' },
+  { id: 'intuit', name: 'Intuit', color: '#236CFF' },
+  { id: 'arity', name: 'Arity', color: '#12284C' },
+  { id: 'pivotal-labs', name: 'Pivotal Labs', color: '#00A79D' },
+];
+const posOf = (i: number) => (i < 3 ? String(i) : 'back');
+---
+
+<ul class="stack" role="list" aria-label="Companies I’ve worked with" data-stack>
+  {
+    companies.map((c, i) => (
+      <li class="stack-card" data-pos={posOf(i)} style={`--tint:${c.color}`}>
+        <img src={`${SITE_BASE}logos/${c.id}.svg`} alt={c.name} loading="eager" decoding="async" />
+      </li>
+    ))
+  }
+</ul>
+
+<script>
+  import { motionReduced } from '../../lib/display-settings';
+
+  const stack = document.querySelector<HTMLElement>('[data-stack]');
+  if (stack) {
+    const cards = [...stack.querySelectorAll<HTMLElement>('.stack-card')];
+    const n = cards.length;
+    let front = 0;
+    const place = () =>
+      cards.forEach((c, i) => {
+        const p = (i - front + n) % n;
+        c.dataset.pos = p < 3 ? String(p) : p === n - 1 ? 'out' : 'back';
+      });
+    // One step every 2.6 s, only while the card is closed, on screen and motion is on.
+    let seen = true;
+    new IntersectionObserver(([e]) => (seen = e.isIntersecting)).observe(stack);
+    setInterval(() => {
+      if (!seen || document.hidden || motionReduced() || stack.closest('.is-open')) return;
+      front = (front + 1) % n;
+      place();
+    }, 2600);
+  }
+</script>
+
+<style>
+  /* The footprint of the 2 × 2 thumbnails it replaced. Cards sit on the bottom edge; the two behind the
+     front one show their top edges above it. */
+  .stack {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    margin: var(--space-1) 0 0;
+    padding: 0;
+    list-style: none;
+    overflow: hidden;
+    border-radius: var(--space-2);
+  }
+  .stack-card {
+    position: absolute;
+    left: 5%;
+    bottom: 0;
+    width: 90%;
+    aspect-ratio: 16 / 10;
+    display: grid;
+    place-items: center;
+    border-radius: var(--space-3) var(--space-3) 0 0;
+    background: var(--tint);
+    box-shadow: 0 -1px 0 rgb(0 0 0 / 0.04), 0 -8px 24px -12px rgb(0 0 0 / 0.25);
+    transform-origin: 50% 0;
+    /* Waiting at the back, out of sight. */
+    opacity: 0;
+    transform: translateY(-40%) scale(0.76);
+    transition:
+      transform var(--motion-settle) var(--motion-ease-settle),
+      opacity 500ms var(--motion-ease-standard);
+  }
+  .stack-card[data-pos='0'] {
+    z-index: 3;
+    opacity: 1;
+    transform: none;
+  }
+  .stack-card[data-pos='1'] {
+    z-index: 2;
+    opacity: 1;
+    transform: translateY(-15%) scale(0.92);
+  }
+  .stack-card[data-pos='2'] {
+    z-index: 1;
+    opacity: 1;
+    transform: translateY(-29%) scale(0.84);
+  }
+  /* The one that just left: it drops off the bottom edge. */
+  .stack-card[data-pos='out'] {
+    z-index: 4;
+    opacity: 0;
+    transform: translateY(70%);
+    transition:
+      transform 620ms cubic-bezier(0.5, 0, 0.9, 0.4),
+      opacity 300ms linear 320ms;
+  }
+  .stack-card img {
+    max-width: 46%;
+    max-height: 20%;
+    width: auto;
+    height: auto;
+  }
+</style>

@@ -14,7 +14,7 @@ export const GET: APIRoute = () => {
   const lines = [
     `# ${links.profile.name}`,
     '',
-    `> ${site.about.body} ${site.intro.sub} ${site.intro.status}.`,
+    `> ${site.about.body} ${site.intro.sub}`,
     '',
     'Every case study states my role next to its outcome: what I did myself, what I led, and what I facilitated or shared.',
     '',

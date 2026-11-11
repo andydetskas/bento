@@ -18,6 +18,18 @@
         "handoff"
       ],
       "port": 4321
+    },
+    {
+      "name": "www",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4330",
+        "--directory",
+        "dist-www"
+      ],
+      "port": 4330
     }
   ]
 }
