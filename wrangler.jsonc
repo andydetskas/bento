@@ -1,0 +1,17 @@
+// Cloudflare Workers (static assets) for www.andydetskas.com. The Worker is named "site" in
+// Andy's account. Workers Builds settings: build command `npm run build:www`, deploy command
+// `npx wrangler deploy`, and for other branches `npx wrangler versions upload` (that gives the
+// `site` branch its preview at site-site.andydetskas.workers.dev).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "site",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    // Written by scripts/build-www.mjs; holds _redirects (the 301s for the old Framer URLs).
+    "directory": "./dist-www",
+    // Unknown URLs get dist-www/404.html with a 404 status, not the home page.
+    "not_found_handling": "404-page",
+    // /about → /about/ (the pages are folders with an index.html).
+    "html_handling": "auto-trailing-slash"
+  }
+}
