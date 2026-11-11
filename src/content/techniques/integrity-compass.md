@@ -7,7 +7,7 @@ hero: "/site/techniques/integrity-compass.webp"
 order: 3
 ---
 
-In the dynamic landscape of product development, there’s a saying by Paul Virilio that has come to have deep meaning for me: “When you invent the ship, you invent the shipwreck.” Maintaining an ethical compass can be challenging yet crucial when we are encouraged to grow, scale, and move fast. The Integrity Compass workshop, conceived by myself and Seijen Takamura, is designed to guide teams in starting projects with an integrity-first mindset, ensuring that inclusion, privacy, and safety are at the forefront of their craftsmanship. Let’s delve into what makes this workshop a great tool for product teams to start their work with. [To jump right in, you can grab the FigJam template here](https://www.figma.com/community/file/1425852332442927463/the-integrity-compass).
+In the dynamic landscape of product development, there’s a saying by Paul Virilio that has come to have deep meaning for me: “When you invent the ship, you invent the shipwreck.” Maintaining an ethical compass can be challenging yet crucial when we are encouraged to grow, scale, and move fast. The Integrity Compass workshop, conceived by myself and a design colleague at Strava, is designed to guide teams in starting projects with an integrity-first mindset, ensuring that inclusion, privacy, and safety are at the forefront of their craftsmanship. Let’s delve into what makes this workshop a great tool for product teams to start their work with. [To jump right in, you can grab the FigJam template here](https://www.figma.com/community/file/1425852332442927463/the-integrity-compass).
 
 ## Setting the Course: Why Use a Compass?
 
@@ -41,7 +41,3 @@ After the activity, the workshop includes an optional synthesis deck to help tea
 ## A Commitment to Integrity
 
 The Integrity Compass workshop is more than a procedural activity; it’s a commitment to embedding integrity into the fabric of product development. By fostering an environment where ethical considerations are paramount, you can ensure that your app, product, platform, or ecosystem is not only innovative but also trustworthy and inclusive. This workshop exemplifies how forward-thinking companies can navigate the complexities of product development with a clear, ethical compass guiding their way.
-
-## Hire Me: I'll come to you and run this workshop
-
-If you or someone you know is interested in fortifying their product with an integrity-based approach, use the scheduling link below to setup a 30 minute intake call to better understand your needs, scope, and availabilities for a workshop.

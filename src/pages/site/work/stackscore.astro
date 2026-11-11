@@ -4,7 +4,7 @@
 // the one public-safe result line (Master Profile §2.2). Sources: story kit §4.5, §2.2 (StackScore and
 // Call-and-Response rows), and the Figma 2026 Portfolio › Case Studies › "StackScore case study" and
 // "Call-and-Response case study" slides, whose own copy this follows. Left out: the "What it moved"
-// slide (all but the +24% A/B result are call-only: refresh rate, email click rate, retention, Pro
+// slide (all are call-only, and the update result is rounded to "about a quarter" in public: refresh rate, email click rate, retention, Pro
 // likelihood, return rate), the share card naming a colleague (cropped from the original-score
 // figure), and every Call-and-Response test number (call-only). Its result direction, “activation, not
 // monetization,” is public by Andy’s call (Nov 9). No dates.
@@ -42,7 +42,7 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
       <dd>The four sub-scores, the ring, the Insights and Optimize pattern on every tab, and the update flow</dd>
     </div>
   </dl>
-  <p class="outcome">An A/B-tested update prompt raised score updates 24% for free and Pro members.</p>
+  <p class="outcome">After launch, an update prompt raised score updates by about a quarter for free and Pro members.</p>
   <figure class="look-fig">
     <img src={img('hub-tabs')} width="1561" height="1139" alt="The StackScore hub’s Overview, Value, Goals and Dosage tabs: a ring score of 91 with four segments, and each tab’s own score and insights" loading="eager" decoding="async" />
   </figure>
@@ -52,7 +52,7 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
     <div class="look-split">
       <div class="look-text">
         <p>The score was why people downloaded SuppCo, yet it was a single number and a long, AI-written report about your supplement stack.</p>
-        <p>The score moved for reasons no one could see, and when members followed our advice, they didn’t always understand why it changed. It became the top issue in member feedback.</p>
+        <p>The score moved for reasons no one could see, and when members followed our advice, they didn’t always understand why it changed. It came up again and again in member feedback.</p>
       </div>
       <figure class="look-fig">
         <img src={img('original-score')} width="949" height="1013" alt="The original score: one number on an orange or green card, followed by a long written analysis" loading="lazy" decoding="async" />
@@ -108,8 +108,8 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
   <section class="look-section" aria-labelledby="changed">
     <h2 id="changed">What changed</h2>
     <div class="look-text">
-      <p>In an A/B test, the new update prompt raised score updates 24% for both free and Pro members, and StackScore became SuppCo’s most established engagement loop.</p>
-      <p>It didn’t fix everything. Too many new members never reached their score in their first week, and metered refreshes added friction to the very habit we wanted.</p>
+      <p>After launch, the new update prompt raised score updates by about a quarter for both free and Pro members, and StackScore became one of SuppCo’s most established engagement loops.</p>
+      <p>It didn’t fix everything. New members still needed a faster path to their first score.</p>
     </div>
   </section>
 
@@ -127,7 +127,7 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
   <section class="look-section" aria-labelledby="learned">
     <h2 id="learned">What I learned</h2>
     <ul class="look-takeaways" role="list">
-      <li>Don’t meter the habit you want.</li>
+      <li>Watch for anything that slows the habit you’re trying to build.</li>
       <li>A score needs reasons and a next step.</li>
       <li>Build experiments to be replaced.</li>
     </ul>

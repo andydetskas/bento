@@ -127,7 +127,7 @@
 .eyebrow {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: calc(11px * var(--text-scale, 1));
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   line-height: 16px;
   letter-spacing: var(--tracking-eyebrow);
@@ -618,7 +618,7 @@
   display: block;
   margin-bottom: 2px;
   font-family: var(--font-mono);
-  font-size: calc(11px * var(--text-scale, 1));
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
@@ -824,6 +824,70 @@
   color: var(--color-text-muted);
 }
 
+/* ── A quote from a report (Leadership panel) ────────── */
+.lead-quote {
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--accent, var(--color-line));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.lead-quote blockquote,
+.lead-quote p {
+  margin: 0;
+}
+.lead-quote p {
+  font-size: var(--step-1);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+.lead-quote figcaption {
+  font-size: var(--step--1);
+  color: var(--color-text-muted);
+}
+
+/* ── Skip link ───────────────────────────────────────── */
+/* First stop for keyboard and screen-reader users: past the name, links and settings to the
+   content. Off-screen until it has focus. */
+.skip {
+  position: fixed;
+  top: var(--gutter);
+  left: var(--gutter);
+  z-index: 10;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-text-primary);
+  color: var(--color-card);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip:focus {
+  transform: none;
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+/* ── Inner pages on phones: a compact header ─────────── */
+/* On a case study or article the hero would fill the first screen and push the title below the
+   fold. Phones keep the masthead, Display settings and the call to action, and drop the
+   positioning lines and follow rows (they're one tap away, on the home page). */
+@media (max-width: 759.98px) {
+  .site.is-inner .site-card .headline,
+  .site.is-inner .site-card .sub,
+  .site.is-inner .site-card .follow {
+    display: none;
+  }
+  .site.is-inner .site-card .card-more-inner {
+    gap: var(--space-4);
+  }
+  .site.is-inner .site-card .frow-settings {
+    margin-top: 0;
+    border-top: 0;
+  }
+}
+
 /* ── A closer look (ungated case-study pages) ────────── */
 /* The page is one open card beside the hero, with the Back pill (above) at its top. */
 .look-head {
@@ -857,7 +921,7 @@
 }
 .look-facts dt {
   font-family: var(--font-mono);
-  font-size: calc(11px * var(--text-scale, 1));
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
@@ -1046,7 +1110,7 @@
 }
 .look-flow li span:first-child {
   font-family: var(--font-mono);
-  font-size: calc(11px * var(--text-scale, 1));
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   color: var(--color-text-muted);
@@ -1089,7 +1153,7 @@
 .look-num {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: calc(11px * var(--text-scale, 1));
+  font-size: calc(12px * var(--text-scale, 1));
   font-weight: var(--weight-mono);
   letter-spacing: var(--tracking-eyebrow);
   color: var(--color-text-muted);
@@ -1131,6 +1195,9 @@
   margin: 0;
 }
 .look-back a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: inherit;
   font-weight: var(--weight-medium);
   text-decoration: underline;

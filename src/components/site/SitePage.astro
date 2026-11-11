@@ -23,6 +23,8 @@ import { SITE_BASE, SITE_DESCRIPTION, SITE_ORIGIN, SITE_TITLE, absUrl, sectionBy
 import JsonLd from '../JsonLd.astro';
 import { PERSON_ID, breadcrumbs, graph, itemList, person, website } from '../../lib/schema';
 import { tokens } from '../../lib/tokens';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 
 interface Props {
   /** The section to render open (its own page); none = the grid. */
@@ -68,6 +70,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
     <JsonLd data={schema} />
   </Fragment>
 
+  <a class="skip" href={`#card-${open ?? 'portfolio'}`}>Skip to content</a>
   <ShapeField preset={defaultPreset} eager />
 
   <main class:list={['site', { 'has-open': !!open }]} data-base={SITE_BASE} data-page-title={SITE_TITLE}>
@@ -114,6 +117,12 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
             </li>
           ))}
         </ul>
+        <figure class="lead-quote">
+          <blockquote>
+            <p>“{leadership.quote.text}”</p>
+          </blockquote>
+          <figcaption>{leadership.quote.by}</figcaption>
+        </figure>
         {/* Each practice with its evidence: the work that shows it, by company, linked to the case study or
             technique where there is one. (The jobs themselves are listed once, on About.) */}
         <div class="groups practices">
@@ -197,6 +206,15 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
             <div class="about-text">
               <p class="panel-lede">{about.body}</p>
               <p class="box-body">{about.more}</p>
+              <p class="box-body">{about.next}</p>
+              <p class="box-body about-contact">
+                {site.intro.contact.filter((c) => c.url.startsWith('mailto:') || existsSync(join(process.cwd(), 'public', c.url))).map((c, i) => (
+                  <>
+                    {i > 0 && ' · '}
+                    <a href={c.url}>{c.url.startsWith('mailto:') ? c.note : `${c.label} (${c.note})`}</a>
+                  </>
+                ))}
+              </p>
               <Signature class="about-signature" />
             </div>
           </div>
