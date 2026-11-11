@@ -16,10 +16,11 @@ import SectionCard from './SectionCard.astro';
 import SiteCard from './SiteCard.astro';
 import SiteHead from './SiteHead.astro';
 import Signature from './Signature.astro';
+import WorkStack from './WorkStack.astro';
 import WorkTile from './WorkTile.astro';
 import site from '../../content/site.json';
 import { defaultPreset } from '../../lib/presets';
-import { SITE_BASE, SITE_DESCRIPTION, SITE_ORIGIN, SITE_TITLE, absUrl, sectionById, sectionPath, type Section } from '../../lib/site-sections';
+import { SITE_BASE, SITE_DESCRIPTION, SITE_LIVE, SITE_ORIGIN, SITE_TITLE, absUrl, sectionById, sectionPath, type Section } from '../../lib/site-sections';
 import JsonLd from '../JsonLd.astro';
 import { PERSON_ID, breadcrumbs, graph, itemList, person, website } from '../../lib/schema';
 import { tokens } from '../../lib/tokens';
@@ -35,15 +36,18 @@ const current = open ? sectionById(open) : undefined;
 
 const { portfolio, leadership, work, kit, techniques, about } = site;
 const accent = tokens.accent as Record<string, string>;
-const light = tokens.taos.light as Record<string, Record<string, string>>;
-const byId = (id: string) => work.find((w) => w.id === id)!;
-const tintOf = (w: (typeof work)[number]) => light[w.tint[0]][w.tint[1]];
 const kitLabel = kit.title.replace(/\.$/, ''); // "My working kit"
 const card = (id: Section['id']) => {
   const s = sectionById(id);
   return { href: sectionPath(s), closeHref: SITE_BASE, pageTitle: s.title, open: open === id };
 };
 const arrow = 'M7 17 17 7M9 7h8v8';
+// A section's own page makes its card title the h1, so the headings inside its panel step up to
+// h2 there (no skipped level). On the grid the card title is an h2 and they stay h3.
+const sub = (id: Section['id']) => (open === id ? 'h2' : 'h3');
+const HLead = sub('leadership');
+const HTech = sub('techniques');
+const HAbout = sub('about');
 
 // Structured data: the person and the site on every page, plus what this page is.
 const pagePath = current ? sectionPath(current) : SITE_BASE;
@@ -63,7 +67,7 @@ const pageNode = (() => {
 const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([{ name: current.title.replace(/ · Andy Detskas$/, '') }])] : []));
 ---
 
-<Base title={current?.title ?? SITE_TITLE} description={current?.description ?? SITE_DESCRIPTION} preset={defaultPreset} origin={SITE_ORIGIN} noindex>
+<Base title={current?.title ?? SITE_TITLE} description={current?.description ?? SITE_DESCRIPTION} preset={defaultPreset} origin={SITE_ORIGIN} noindex={!SITE_LIVE}>
   <Fragment slot="head">
     {/* Before first paint: arriving from the bento or another site page? (see SiteHead) */}
     <SiteHead />
@@ -79,19 +83,13 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
 
     <SectionCard id="portfolio" eyebrow={portfolio.eyebrow} title={portfolio.title} accent={accent.portfolio} pill="See the work" index={0} {...card('portfolio')}>
       <Fragment slot="summary">
-        <div class="mosaic" aria-hidden="true">
-          {portfolio.details.map((d) => (
-            <span class="mosaic-cell" data-fit={'fit' in d ? d.fit : undefined} style={`--tint:${tintOf(byId(d.work))}`}>
-              <img src={d.src} width={d.width} height={d.height} alt="" loading="eager" decoding="async" fetchpriority="low" />
-            </span>
-          ))}
-        </div>
+        <WorkStack />
         <p class="box-body">{portfolio.lede}</p>
       </Fragment>
       <Fragment slot="panel">
         <p class="panel-lede">{portfolio.lede}</p>
         <div class="tiles work-tiles">
-          {work.map((w) => <WorkTile item={w} />)}
+          {work.map((w) => <WorkTile item={w} as={sub('portfolio')} />)}
         </div>
       </Fragment>
     </SectionCard>
@@ -129,7 +127,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
           {leadership.principles.map((p) => (
             <section class="group practice">
               <header>
-                <h3>{p.title}</h3>
+                <HLead>{p.title}</HLead>
                 <p class="practice-body">{p.body}</p>
               </header>
               <ul role="list">
@@ -178,11 +176,11 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
                 <img src={p.image} width="800" height="448" alt="" loading="lazy" decoding="async" />
               </div>
               {'draft' in p && p.draft && <p class="eyebrow">Draft</p>}
-              <h3 class="tile-title">
+              <HTech class="tile-title">
                 <a href={p.url} data-pill="Read the technique">
                   {p.title}
                 </a>
-              </h3>
+              </HTech>
               <p class="box-body">{p.note}</p>
             </article>
           ))}
@@ -219,7 +217,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
             </div>
           </div>
           <section class="about-section" aria-labelledby="about-kit">
-            <h3 id="about-kit">{kit.title}</h3>
+            <HAbout id="about-kit">{kit.title}</HAbout>
             <p class="box-body">{kit.lede}</p>
             <ul class="kit-tools" role="list">
               {kit.tools.map((t) => (
@@ -231,7 +229,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
             </ul>
           </section>
           <section class="about-section" aria-labelledby="about-experience">
-            <h3 id="about-experience">Experience</h3>
+            <HAbout id="about-experience">Experience</HAbout>
             <ul class="roles" role="list">
               {about.experience.map((x) => (
                 <li>

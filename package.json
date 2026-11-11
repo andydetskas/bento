@@ -8,6 +8,7 @@
     "tokens": "node scripts/build-tokens.mjs",
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro build",
+    "build:www": "node scripts/build-www.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "og": "node scripts/og.mjs",

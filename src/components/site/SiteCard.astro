@@ -10,8 +10,6 @@ import { tokens } from '../../lib/tokens';
 import CardHead from '../CardHead.astro';
 import Icon from '../Icon.astro';
 import { SITE_BASE, CALL_PATH } from '../../lib/site-sections';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 
 interface Props {
   /** See CardHead: 'p' on pages with their own h1. */
@@ -21,9 +19,9 @@ const { nameAs = 'h1' } = Astro.props;
 const { intro } = site;
 const accents = tokens.accent as Record<string, string>;
 const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
-// Resume and email (second opinion, Nov 11). The resume row shows only once the PDF is in
-// public/ at its URL, so the link can't go out broken or point at an out-of-date file.
-const contact = intro.contact.filter((c) => c.url.startsWith('mailto:') || existsSync(join(process.cwd(), 'public', c.url)));
+// Resume and email live on About (Andy, Nov 11). Here, email is the quiet button beside the call
+// to action, so it's in two places on the site.
+const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
 ---
 
 <section class="card site-card area-hero" aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
@@ -57,23 +55,6 @@ const contact = intro.contact.filter((c) => c.url.startsWith('mailto:') || exist
               </li>
             ))
           }
-          {
-            contact.map((c) => (
-              <li>
-                <a class="frow" href={c.url} {...(c.url.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noopener noreferrer' })}>
-                  <Icon name={c.icon} class="frow-icon" />
-                  <span class="frow-label">{c.label}</span>
-                  <span class="frow-note frow-note-plain">{c.note}</span>
-                  <span class="arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17 17 7M9 7h8v8" />
-                    </svg>
-                  </span>
-                  {!c.url.startsWith('mailto:') && <span class="sr-only">(opens in a new tab)</span>}
-                </a>
-              </li>
-            ))
-          }
         </ul>
 
         <!-- Display settings: opens the dialog (DisplaySettings.astro, rendered once per page beside the Pill).
@@ -92,7 +73,7 @@ const contact = intro.contact.filter((c) => c.url.startsWith('mailto:') || exist
         </button>
 
         <div class="cta-row">
-          <p class="status"><span class="dot" aria-hidden="true"></span>{intro.status}</p>
+          <a class="btn btn-quiet" href={email.url}>{intro.emailCta}</a>
           <a class="btn" href={CALL_PATH} target="_blank" rel="noopener noreferrer">
             {intro.cta.label}
             <span class="sr-only">(opens in a new tab)</span>
@@ -194,15 +175,6 @@ const contact = intro.contact.filter((c) => c.url.startsWith('mailto:') || exist
     text-transform: uppercase;
     color: var(--color-text-muted);
   }
-  /* An email address or file type: as written, and allowed to shrink. */
-  .frow-note-plain {
-    text-transform: none;
-    letter-spacing: 0;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
   /* Keyboard focus only: underline the label and fill the arrow (site.css). */
   .frow:focus-visible .frow-label {
     text-decoration: underline;
@@ -238,40 +210,18 @@ const contact = intro.contact.filter((c) => c.url.startsWith('mailto:') || exist
   }
 
   /* ── Call to action ─────────────────────────────────── */
-  /* One row (Andy): the status beside the button. Where the hero is too narrow for both on one
-     line, the status folds onto two short lines rather than dropping under the button. */
+  /* One row (Andy): a quiet Email me button, then Schedule a call. They share the row's width,
+     and stack only if the hero is too narrow for both. */
   .cta-row {
     margin-top: auto;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-  }
-  .cta-row .btn {
-    flex: none;
-  }
-  .status {
-    margin: 0;
-    min-width: 0;
-    display: inline-flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-    line-height: 1.35;
-    text-wrap: balance;
-    font-family: var(--font-mono);
-    font-size: calc(12px * var(--text-scale, 1));
-    font-weight: var(--weight-mono);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: var(--color-text-muted);
   }
-  .dot {
-    flex: none;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--taos-light-verde-600);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--taos-light-verde-600) 22%, transparent);
+  .cta-row .btn {
+    flex: 1 1 auto;
+    justify-content: center;
   }
 
   @media (prefers-reduced-motion: reduce) {

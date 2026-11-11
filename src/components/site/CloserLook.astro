@@ -22,7 +22,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import JsonLd from '../JsonLd.astro';
 import { article, breadcrumbs, graph, person, website } from '../../lib/schema';
-import { SITE_BASE, SITE_ORIGIN } from '../../lib/site-sections';
+import { SITE_BASE, SITE_LIVE, SITE_ORIGIN } from '../../lib/site-sections';
 
 interface Props {
   title: string;
@@ -58,7 +58,7 @@ const schema =
     : graph(person(), website());
 ---
 
-<Base title={pageTitle} description={description} preset={defaultPreset} origin={SITE_ORIGIN} ogType={kind === 'article' ? 'article' : 'website'} image={image} noindex>
+<Base title={pageTitle} description={description} preset={defaultPreset} origin={SITE_ORIGIN} ogType={kind === 'article' ? 'article' : 'website'} image={image} noindex={!SITE_LIVE}>
   <Fragment slot="head">
     <SiteHead />
     <JsonLd data={schema} />
