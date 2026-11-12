@@ -80,7 +80,9 @@
       return;
     }
     pill.textContent = text;
-    pill.style.setProperty('--pill-bg', top.dataset.accent ?? '#fff');
+    // No accent: the neutral fill from global.css.
+    if (top.dataset.accent) pill.style.setProperty('--pill-bg', top.dataset.accent);
+    else pill.style.removeProperty('--pill-bg');
     if (!pill.classList.contains('is-on')) {
       x = tx;
       y = ty;

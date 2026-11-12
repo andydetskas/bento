@@ -826,7 +826,7 @@
 
 /* ── Skip link ───────────────────────────────────────── */
 /* First stop for keyboard and screen-reader users: past the name, links and settings to the
-   content. Off-screen until it has focus. */
+   content. Hidden until it has focus. */
 .skip {
   position: fixed;
   top: var(--gutter);
@@ -838,10 +838,18 @@
   color: var(--color-card);
   font-weight: var(--weight-medium);
   text-decoration: none;
-  transform: translateY(-200%);
+}
+/* Until it has focus it takes no space and paints nothing (it used to sit just above the top
+   edge, where a few pixels could show). */
+.skip:not(:focus) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .skip:focus {
-  transform: none;
   outline: 2px solid var(--color-focus);
   outline-offset: 3px;
 }
