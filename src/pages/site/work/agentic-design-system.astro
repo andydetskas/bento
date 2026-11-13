@@ -112,10 +112,15 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <li>
         <p class="look-num" aria-hidden="true">04</p>
         <h3>Let it compound</h3>
-        <p>Once the system lived where design-shaped work actually happens, the results compounded. Non-designers started producing on-system work, from town hall decks to dashboards and marketing pieces, with just the skills and no design oversight. Prototyping skills built on the repo produced repeatable, shippable prototypes with shareable links, and prompt-based workflows let us move in every direction: code to Figma, Figma to code, and on to decks and docs.</p>
+        <p>Once the system lived where design-shaped work actually happens, the results compounded. Non-designers started producing on-system work, from town hall decks to dashboards and marketing pieces, with just the skills and no design oversight. A colleague in marketing built the weekly community report with the skills and presented it at the company town hall. In all, people outside design made 10 to 15 on-system reports, decks and images. Prototyping skills built on the repo produced repeatable, shippable prototypes with shareable links, and prompt-based workflows let us move in every direction: code to Figma, Figma to code, and on to decks and docs.</p>
         <figure class="look-fig">
           <img src={img('with-and-without')} width="1561" height="1139" alt="The same dashboard request made without and with the Capsule skills: a plain gray layout, then an on-brand one with colored KPI cards, filled with dummy numbers" loading="lazy" decoding="async" />
           <figcaption>The same request, without and with the skills (dummy numbers).</figcaption>
+        </figure>
+        <p>It held up in one pass, too. From a single prompt, I generated 14 on-system screens for a new account-linking flow, error and edge states included.</p>
+        <figure class="look-fig">
+          <img src={img('one-pass')} width="1561" height="1139" alt="Seven phone screens from an account-linking flow, all in the Capsule style: a timed-out session, a benefit activating, two success states, an already-connected conflict, an app store fallback and a connection error" loading="lazy" decoding="async" />
+          <figcaption>Seven of the 14 screens generated in one pass.</figcaption>
         </figure>
       </li>
     </ol>
