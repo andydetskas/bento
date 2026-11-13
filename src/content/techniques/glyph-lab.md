@@ -21,6 +21,11 @@ The engine is plain TypeScript and Three.js, with no framework inside. You hand 
 - **Ridgeline:** layered ridges in slow parallax
 - **Petal:** soft gradient forms
 
+<figure>
+  <img src="/site/techniques/glyph-lab/lab-ridgeline.webp" width="1600" height="1000" alt="The lab with the Ridgeline family selected: layered orange and purple ridges behind the link card, and the control panel on the right" loading="lazy" decoding="async" />
+  <figcaption>The Ridgeline family in the lab, with the same card and the same tokens.</figcaption>
+</figure>
+
 It’s built to be polite. It never blocks the page from reading, caps the pixel density, pauses when the tab is hidden, and holds still when a visitor asks for less motion, or turns it off in Display settings.
 
 ## The lab: where settings become themes
@@ -29,6 +34,11 @@ The lab puts the real card over the live scene, with a panel of controls:
 - the shape family and the layout (scattered, grid or checkerboard)
 - count, size, extrusion depth, tumble, light angle, tilt and speed
 - 15 palettes, light and dark, and any face color you want to swap
+
+<figure>
+  <img src="/site/techniques/glyph-lab/lab-glyphs.webp" width="1600" height="1000" alt="The lab with the Glyphs family: extruded Taos icons tumbling behind the link card, and a panel of 15 palettes with editable face and side colors" loading="lazy" decoding="async" />
+  <figcaption>The lab: the real card over the live scene, with palettes and face colors in the panel.</figcaption>
+</figure>
 
 **Snapshot** saves a PNG for decks and social posts. **Copy preset** copies the settings as JSON, and that’s the point: a concept I like in the lab and a theme the site ships are the same thing. There’s no handoff and no redraw.
 

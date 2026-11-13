@@ -30,3 +30,7 @@ Once the wireframes capture the intended user journey, I move into high-fidelity
 </figure>
 
 Vibeframing has been a meaningful shift in how I work. The upfront effort of refining the PRD and crafting a strong prompt consistently pays off, since the initial outputs from Magic Patterns are often surprisingly close on the first pass. By the time I open Figma, there is very little guesswork left. None of this replaces the creativity or judgment of a human designer. If anything, it amplifies it. I spend less time pushing pixels on empty artboards and more time thinking, shaping, and telling the right product story. Vibeframing sits right at that intersection, blending human intent with AI speed to help designs land faster without losing their soul.
+
+## What I use now
+
+The steps above still hold; the tools have changed. I now pressure-test the PRD with Claude instead of ChatGPT. For the first pass I often go straight to real code: I prototype in Cursor, or hand the spec to Devin and review what comes back, with the design system packaged as skills so the output starts on-system. Figma is where I refine and align, and it stays in sync with the code through tokens.
