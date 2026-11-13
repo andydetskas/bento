@@ -4,7 +4,7 @@ subtitle: "Design methods for trust, safety, inclusion, and integrity"
 description: "A workshop that brings inclusion, privacy and safety into a product team’s work before launch, with a free FigJam template."
 icon: "integrity-compass"
 hero: "/site/techniques/integrity-compass.webp"
-order: 3
+order: 4
 ---
 
 In the dynamic landscape of product development, there’s a saying by Paul Virilio that has come to have deep meaning for me: “When you invent the ship, you invent the shipwreck.” Maintaining an ethical compass can be challenging yet crucial when we are encouraged to grow, scale, and move fast. The Integrity Compass workshop, conceived by myself and a design colleague at Strava, is designed to guide teams in starting projects with an integrity-first mindset, ensuring that inclusion, privacy, and safety are at the forefront of their craftsmanship. Let’s delve into what makes this workshop a great tool for product teams to start their work with. [To jump right in, you can grab the FigJam template here](https://www.figma.com/community/file/1425852332442927463/the-integrity-compass).

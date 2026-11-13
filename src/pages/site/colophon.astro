@@ -1,0 +1,26 @@
+---
+// Colophon (/site/colophon/): how the site is made. The copy is Andy's, in
+// src/content/colophon.md; edit it there. Linked from the footer line (SiteFoot).
+import CloserLook from '../../components/site/CloserLook.astro';
+import { Content, frontmatter as fm } from '../../content/colophon.md';
+import { tokens } from '../../lib/tokens';
+import { SITE_BASE } from '../../lib/site-sections';
+const accent = (tokens.accent as Record<string, string>).about;
+---
+
+<CloserLook
+  title={fm.title}
+  subtitle={fm.subtitle}
+  eyebrow="This site"
+  kind="page"
+  pageTitle={`${fm.title} · Andy Detskas`}
+  description={fm.description}
+  accent={accent}
+  backHref={SITE_BASE}
+  backLabel="Home"
+>
+  <div class="look-text look-article">
+    <Content />
+  </div>
+  <p class="look-back"><a href={SITE_BASE}>← Home</a></p>
+</CloserLook>

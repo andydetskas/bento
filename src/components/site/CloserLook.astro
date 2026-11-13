@@ -16,6 +16,7 @@ import Pill from '../Pill.astro';
 import DisplaySettings from './DisplaySettings.astro';
 import ShapeField from '../ShapeField.astro';
 import SiteCard from './SiteCard.astro';
+import SiteFoot from './SiteFoot.astro';
 import SiteHead from './SiteHead.astro';
 import { defaultPreset } from '../../lib/presets';
 import { existsSync } from 'node:fs';
@@ -89,6 +90,7 @@ const schema =
       </div>
     </article>
   </main>
+  <SiteFoot />
 
   <Pill />
   <DisplaySettings />

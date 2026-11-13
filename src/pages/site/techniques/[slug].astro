@@ -47,9 +47,12 @@ const accent = (tokens.accent as Record<string, string>).techniques;
   backLabel="Techniques"
   markdown={`${SITE_BASE}techniques/${Astro.params.slug}.md`}
 >
-  <figure class="look-fig">
-    <img src={fm.hero} width="800" height="448" alt="" loading="eager" decoding="async" />
-  </figure>
+  {/* A draft may not have its title card yet. */}
+  {fm.hero && (
+    <figure class="look-fig">
+      <img src={fm.hero} width="800" height="448" alt="" loading="eager" decoding="async" />
+    </figure>
+  )}
 
   <div class="look-text look-article">
     <Content />

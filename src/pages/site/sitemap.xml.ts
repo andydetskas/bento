@@ -11,6 +11,7 @@ export const GET: APIRoute = () => {
     ...sections.map(sectionPath),
     ...site.work.flatMap((w) => ('look' in w && w.look ? [w.look] : [])),
     ...publishedTechniques.map((t) => t.path),
+    `${SITE_BASE}colophon/`,
   ];
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${paths.map((p) => `  <url><loc>${absUrl(p)}</loc></url>`).join('\n')}\n</urlset>\n`;
   return new Response(xml, { headers: { 'Content-Type': 'application/xml; charset=utf-8' } });

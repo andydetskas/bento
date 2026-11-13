@@ -345,6 +345,13 @@
         "image": "/site/techniques/display-settings.webp"
       },
       {
+        "title": "One Record",
+        "note": "A single source of truth for my career, and every surface built from it",
+        "url": "/site/techniques/one-record/",
+        "icon": "feather",
+        "image": "/site/techniques/one-record.webp"
+      },
+      {
         "title": "Integrity Compass",
         "note": "Design methods for trust, safety, inclusion, and integrity",
         "url": "/site/techniques/integrity-compass/",

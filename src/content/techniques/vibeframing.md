@@ -4,7 +4,7 @@ subtitle: "Speeding up product definition and prototyping"
 description: "How I use generative AI to turn a PRD into interactive wireframes fast, then move to high fidelity with the design system."
 icon: "vibeframing"
 hero: "/site/techniques/vibeframing.webp"
-order: 4
+order: 5
 ---
 
 *In an era where speed and creativity go hand in hand, I am using ChatGPT and Magic Patterns to “vibeframe,” leveraging AI to wireframe complex, multi-screen designs.*
