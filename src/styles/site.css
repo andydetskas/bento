@@ -957,6 +957,20 @@
   gap: var(--space-4);
   max-width: 40em;
 }
+/* Wide screens: the column is wider than a 40em line at body size, which left a gutter on the right
+   and ran about 80 characters a line. One type step up fills the column at about 70 (Andy, Nov 13). */
+@media (min-width: 1200px) {
+  .look-text {
+    font-size: var(--step-1);
+    max-width: 36em;
+  }
+  .look-article h3 {
+    font-size: var(--step-2);
+  }
+  .look-article h2 {
+    font-size: var(--step-3);
+  }
+}
 .look-text p,
 .look-steps p:not(.look-num) {
   margin: 0;

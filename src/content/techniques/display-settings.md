@@ -9,6 +9,11 @@ order: 2
 
 Under my links on this site there’s a row called Display settings. It lets you change the theme, text size, typeface, spacing, contrast, link and focus highlighting, motion, and the animated background. Here’s why it looks the way it does, and what it deliberately doesn’t do.
 
+<figure>
+  <img src="/site/techniques/display-settings/panel.webp" width="1600" height="1000" alt="The Display settings dialog open over the home page: four presets, then Theme, Text size, Typeface and Text spacing choices" loading="lazy" decoding="async" />
+  <figcaption>Display settings, opened from the row under my links.</figcaption>
+</figure>
+
 ## Why not an overlay
 
 Accessibility overlays promise to make any site compliant with one script tag. They can’t, and the FTC ordered one of the best known, accessiBe, to pay $1 million and stop claiming its widget could make any website WCAG-compliant. Many overlays also add their own screen-reader mode and keyboard shortcuts, which fight the assistive technology people already use and know.
@@ -26,9 +31,19 @@ So the bar is the site itself: semantic HTML, real contrast, visible focus, and 
 - **Motion:** it follows your device’s reduced-motion setting by default, and Off here stops it on this site regardless.
 - **Background:** Animated, Paused or Off. The 3D background moves for longer than five seconds, so WCAG 2.2.2 asks for a way to pause it. This is that way.
 
+<figure>
+  <img src="/site/techniques/display-settings/dark.webp" width="1600" height="1000" alt="The same dialog with the Dark theme chosen: dark cards and a dark background behind it" loading="lazy" decoding="async" />
+  <figcaption>Dark uses the Taos dark palette for the cards and the scene.</figcaption>
+</figure>
+
 ## Presets are starting points
 
 Four presets (Low vision, Dyslexia-friendly, Motion sensitive and Fewer distractions) each set a few options at once, and every option stays adjustable. Press a preset again to undo it. They’re shortcuts, not modes, and not diagnoses.
+
+<figure>
+  <img src="/site/techniques/display-settings/preset-low-vision.webp" width="1600" height="1000" alt="The Low vision preset pressed: text is larger, contrast is higher, and a status line reads Low vision on, saved on this device" loading="lazy" decoding="async" />
+  <figcaption>The Low vision preset sets larger text, high contrast and highlighted links at once. Each stays adjustable.</figcaption>
+</figure>
 
 ## What it leaves out on purpose
 
