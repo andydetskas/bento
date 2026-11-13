@@ -83,6 +83,23 @@ for (const f of walk(OUT)) {
 lines.push('', '# The prototype lived under /site/.', '/site / 301', '/site/* /:splat 301');
 writeFileSync(join(OUT, '_redirects'), lines.join('\n') + '\n');
 
+// 4b. Write _headers: response headers for every page and asset (Cloudflare static assets read this
+//     file). HSTS starts at one week with no includeSubDomains or preload, so it's easy to back out;
+//     raise it once it has run clean. Nothing frames the site, so framing is same-origin only.
+writeFileSync(
+  join(OUT, '_headers'),
+  [
+    '# Written by scripts/build-www.mjs.',
+    '/*',
+    '  Strict-Transport-Security: max-age=604800',
+    '  X-Content-Type-Options: nosniff',
+    '  Referrer-Policy: strict-origin-when-cross-origin',
+    '  X-Frame-Options: SAMEORIGIN',
+    '  Permissions-Policy: camera=(), microphone=(), geolocation=()',
+    '',
+  ].join('\n'),
+);
+
 // 5. Checks
 const problems = [];
 const redirected = new Set(legacy.flatMap(([from]) => [`/${from}`, `/${from}/`]));
@@ -108,7 +125,7 @@ for (const f of html) {
     if (!resolves(path)) problems.push(`${page} → ${path} (missing)`);
   }
 }
-for (const need of ['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt', '_redirects']) {
+for (const need of ['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'llms.txt', '_redirects', '_headers']) {
   if (!existsSync(join(OUT, need))) problems.push(`missing ${need}`);
 }
 for (const f of ['sitemap.xml', 'robots.txt', 'llms.txt']) {
