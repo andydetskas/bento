@@ -14,6 +14,7 @@ import DisplaySettings from './DisplaySettings.astro';
 import ShapeField from '../ShapeField.astro';
 import SectionCard from './SectionCard.astro';
 import SiteCard from './SiteCard.astro';
+import SiteFoot from './SiteFoot.astro';
 import SiteHead from './SiteHead.astro';
 import Signature from './Signature.astro';
 import WorkStack from './WorkStack.astro';
@@ -243,6 +244,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
       </Fragment>
     </SectionCard>
   </main>
+  <SiteFoot />
 
   <Pill />
   <DisplaySettings />

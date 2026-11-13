@@ -1,0 +1,69 @@
+---
+// The site's footer line (Andy, Nov 12): the copyright with the year in Roman numerals, and the
+// way to the colophon. It's a bar on the card surface under the right two columns (the full
+// width on phones), so it stays readable over the moving scene. The year is the build's, so it rolls over on its own.
+import { SITE_BASE } from '../../lib/site-sections';
+
+const roman = (n: number) =>
+  ([[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']] as const).reduce(
+    (out, [v, s]) => {
+      while (n >= v) { out += s; n -= v; }
+      return out;
+    },
+    '',
+  );
+const year = new Date().getFullYear();
+const here = Astro.url.pathname === `${SITE_BASE}colophon/`;
+---
+
+<footer class="site-foot">
+  <p>
+    <span>© Andy Detskas <abbr title={String(year)}>{roman(year)}</abbr></span>
+    <a href={`${SITE_BASE}colophon/`} aria-current={here ? 'page' : undefined}>Colophon</a>
+  </p>
+</footer>
+
+<style>
+  .site-foot {
+    position: relative;
+    z-index: 1;
+    /* main.site ends with a gutter of padding; pull up so the bar sits one card gap below. */
+    margin-top: calc(var(--site-gap) - var(--gutter));
+    padding: 0 var(--gutter) var(--gutter);
+  }
+  @media (min-width: 760px) {
+    .site-foot {
+      padding-left: calc(var(--gutter) + var(--site-col) + var(--site-gap));
+    }
+  }
+  .site-foot p {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--space-4);
+    margin: 0;
+    padding: var(--space-1) clamp(20px, round(2.6vw, 4px), 36px);
+    min-height: 44px;
+    background: var(--color-card);
+    color: var(--color-text-secondary);
+    border-radius: var(--card-radius);
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.03),
+      0 40px 90px -50px rgb(20 20 30 / 0.45);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .site-foot abbr {
+    text-decoration: none;
+  }
+  .site-foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-text-primary);
+    text-underline-offset: 3px;
+  }
+</style>

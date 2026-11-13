@@ -43,6 +43,7 @@ export const GET: APIRoute = () => {
     '',
     `- [Selected work](${absUrl(sectionPath(sectionById('portfolio')))}): all case studies in one place`,
     `- [Techniques](${absUrl(sectionPath(sectionById('techniques')))}): all articles in one place`,
+    `- [Colophon](${absUrl(`${SITE_BASE}colophon/`)}): how this site is designed, built and checked`,
     `- [Home](${absUrl(SITE_BASE)})`,
     '',
   ];
