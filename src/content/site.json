@@ -79,7 +79,7 @@
           },
           {
             "org": "SuppCo",
-            "text": "Designed StackScore myself, from the first framing through a year of iteration; after launch, an update prompt raised score updates by about a quarter.",
+            "text": "Designed StackScore, from the first framing through a year of iteration; after launch, an update prompt raised score updates by about a quarter.",
             "href": "/site/work/stackscore/",
             "link": "StackScore"
           }
@@ -145,6 +145,42 @@
     "quote": {
       "text": "As a manager he really paid attention to how I worked and always brought helpful advice, mentorship, and coaching.",
       "by": "A senior product designer on my team at SRAM"
+    },
+    "photos": {
+      "eyebrow": "In the room and on the call",
+      "caption": "A Strava team offsite, a Strava team call, an impact–effort session at SRAM, a SRAM UX standup, and field research at Sea Otter.",
+      "items": [
+        {
+          "src": "/site/leadership/offsite.webp",
+          "width": 800,
+          "height": 600,
+          "alt": "A Strava team offsite: teammates seated in a circle in a lodge with a stone fireplace while one person talks"
+        },
+        {
+          "src": "/site/leadership/strava-call.webp",
+          "width": 480,
+          "height": 360,
+          "alt": "A Strava team video call, about fifteen people in a grid"
+        },
+        {
+          "src": "/site/leadership/impact-effort.webp",
+          "width": 480,
+          "height": 360,
+          "alt": "A SRAM working session: sticky notes sorted on an impact and effort grid on a whiteboard"
+        },
+        {
+          "src": "/site/leadership/ux-standup.webp",
+          "width": 480,
+          "height": 360,
+          "alt": "A SRAM UX standup on a video call, four teammates in headphones"
+        },
+        {
+          "src": "/site/leadership/sea-otter.webp",
+          "width": 480,
+          "height": 360,
+          "alt": "Field research at Sea Otter: a rider talks with the SRAM team in a tent"
+        }
+      ]
     }
   },
   "work": [

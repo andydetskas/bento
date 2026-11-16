@@ -122,6 +122,19 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
           </blockquote>
           <figcaption>{leadership.quote.by}</figcaption>
         </figure>
+        {/* The teams, in the room and on the call: a lead photo and four smaller ones. Name labels in the
+            call grids are blurred in the images themselves. */}
+        <figure class="lead-photos">
+          <p class="eyebrow">{leadership.photos.eyebrow}</p>
+          <ul class="lead-photos-grid" role="list">
+            {leadership.photos.items.map((p) => (
+              <li>
+                <img src={p.src} width={p.width} height={p.height} alt={p.alt} loading="lazy" decoding="async" />
+              </li>
+            ))}
+          </ul>
+          <figcaption>{leadership.photos.caption}</figcaption>
+        </figure>
         {/* Each practice with its evidence: the work that shows it, by company, linked to the case study or
             technique where there is one. (The jobs themselves are listed once, on About.) */}
         <div class="groups practices">

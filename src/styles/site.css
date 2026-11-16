@@ -824,6 +824,55 @@
   color: var(--color-text-muted);
 }
 
+/* ── The teams, in photos (Leadership panel) ────────── */
+/* Phones: the lead photo full width, then a 2×2. Wider panels: the lead photo spans two columns
+   and two rows of a four-column grid. */
+.lead-photos {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.lead-photos-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+.lead-photos-grid li:first-child {
+  grid-column: 1 / -1;
+}
+.lead-photos-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--space-2);
+  background: var(--color-page);
+}
+@container (min-width: 640px) {
+  .lead-photos-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .lead-photos-grid li:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .lead-photos-grid li:first-child img {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+.lead-photos figcaption {
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
 /* ── Skip link ───────────────────────────────────────── */
 /* First stop for keyboard and screen-reader users: past the name, links and settings to the
    content. Hidden until it has focus. */
