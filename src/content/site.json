@@ -148,13 +148,13 @@
     },
     "photos": {
       "eyebrow": "In the room and on the call",
-      "caption": "A Strava team offsite, a Strava team call, an impact–effort session at SRAM, a SRAM UX standup, and field research at Sea Otter.",
+      "caption": "A team offsite, a Strava team call, an impact–effort session at SRAM, a SRAM UX standup, and field research at Sea Otter.",
       "items": [
         {
           "src": "/site/leadership/offsite.webp",
           "width": 800,
           "height": 600,
-          "alt": "A Strava team offsite: teammates seated in a circle in a lodge with a stone fireplace while one person talks"
+          "alt": "A team offsite: teammates seated in a circle in a lodge with a stone fireplace while one person talks"
         },
         {
           "src": "/site/leadership/strava-call.webp",
