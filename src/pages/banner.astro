@@ -1,0 +1,28 @@
+---
+// LinkedIn banner template: the Glyph scene alone, laid out at exactly 1584×396 (LinkedIn's
+// background-photo size). Capture it at 2x with headless Chrome, the same way scripts/og.mjs
+// captures /og, with --window-size=1584,396 and ?settle=6.
+import Base from '../layouts/Base.astro';
+import ShapeField from '../components/ShapeField.astro';
+import { defaultPreset } from '../lib/presets';
+
+// The glyph field is built for 16:10. At LinkedIn's 4:1 it runs out at the edges, so zoom in
+// until the field spans the full width (scale), and shrink the glyphs back down (size).
+const scale = 1.9;
+const size = 1.1;
+const preset = { ...defaultPreset, params: { ...defaultPreset.params, scale, size } };
+---
+
+<Base title="LinkedIn banner · Andy Detskas" description="Template for the LinkedIn banner" preset={preset} noindex>
+  <ShapeField preset={preset} />
+</Base>
+
+<script>
+  // Keep the scene centered: the site's focus rule shifts it right on wide screens, and the zoomed
+  // field only just covers the banner's width. This listener runs after the site's resize handler.
+  document.addEventListener('shapefield:ready', (e) => {
+    const center = () => e.detail.field.setFocus(0, 0);
+    center();
+    window.addEventListener('resize', center, { passive: true });
+  });
+</script>
