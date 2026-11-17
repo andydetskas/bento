@@ -240,7 +240,7 @@
         "300"
       ],
       "summary": "Redesigned Strava’s privacy controls so athletes could understand, and choose, exactly what they share.",
-      "role": "Hands-on design lead",
+      "role": "Designer",
       "roleShort": "Designer",
       "outcome": "After launch, more than a quarter of active athletes reviewed the new controls, and 27% of them changed a setting.",
       "image": {
@@ -263,7 +263,7 @@
         "300"
       ],
       "summary": "A strategic redesign of Strava’s information architecture and navigation, for clarity, scale and growth.",
-      "role": "Facilitator and design leader",
+      "role": "Facilitator, design, and prototyping",
       "roleShort": "Facilitator, design, and prototyping",
       "outcome": "I facilitated the sprint. 84% of subscribers said they understood what had changed, and the experiment showed a net gain in bookings after counting downgrades.",
       "image": {
@@ -286,7 +286,7 @@
         "200"
       ],
       "summary": "Redesigned SuppCo’s signature score into a hub that explains itself and tells members what to do next.",
-      "role": "Designer (product and engineering owned the scoring logic)",
+      "role": "Hands-on design lead (product and engineering owned the scoring logic)",
       "roleShort": "Hands-on design lead",
       "outcome": "I designed a score-update prompt; after launch, score updates rose by about a quarter for both free and Pro members.",
       "image": {
