@@ -1,8 +1,8 @@
 ---
 // Hover affordances shared by every page:
 //   [data-pill="text"]   a cursor pill with that text follows the pointer (mouse and pen only)
-//   [data-accent="#hex"] tints the scene toward that color while hovered or keyboard-focused,
-//                        and colors the pill
+//   [data-accent="#hex"] colors the pill while hovered or keyboard-focused. (It used to tint
+//                        the scene too; the scene now keeps one color sitewide, see ShapeField.)
 // Nested targets work: entering a row inside a box shows the row's pill, leaving it brings the
 // box's back. Touch gets neither: a tap is a click, not a hover.
 // Change data-pill at any time and dispatch `pill:refresh` to update a pill that's showing.

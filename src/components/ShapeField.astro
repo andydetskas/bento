@@ -96,7 +96,9 @@ const { preset, eager = false } = Astro.props;
         field.advance(settleFor);
         canvas.classList.add('is-live');
       }
-      document.addEventListener('bento:accent', (e) => field.setAccent(e.detail.hex));
+      // The scene keeps one color sitewide: hovering a link no longer tints it toward the link's
+      // accent (Andy, Nov 16). Pill.astro still sends bento:accent and still colors the pill with it;
+      // field.setAccent stays in the engine, unused, in case a preset lab wants it back.
       document.addEventListener('bento:preset', (e) => field.setPreset(e.detail.preset));
       document.dispatchEvent(new CustomEvent('shapefield:ready', { detail: { field } }));
     };
