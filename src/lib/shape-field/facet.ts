@@ -56,6 +56,7 @@ const fragmentShader = /* glsl */ `
   uniform float uAccentAmt;
   uniform float uPrimaryLocal;
   uniform vec3 uBg;
+  uniform float uOpacity;
   varying vec3 vNWorld;
   varying vec3 vNLocal;
   varying float vSet;
@@ -73,6 +74,14 @@ const fragmentShader = /* glsl */ `
 
     vec3 col = mix(side, top, smoothstep(0.55, 0.72, primary));
     col = mix(uBg, col, vFade);
+    // Opacity mixes toward the background too. Over a flat background that looks like
+    // transparency, without real blending (which would show walls through the faces). It mixes
+    // in display (sRGB) values, the way Figma and CSS opacity do, so 50% here matches a 50% layer.
+    if (uOpacity < 1.0) {
+      vec3 b = sRGBTransferOETF(vec4(uBg, 1.0)).rgb;
+      vec3 c = sRGBTransferOETF(vec4(col, 1.0)).rgb;
+      col = sRGBTransferEOTF(vec4(mix(b, c, uOpacity), 1.0)).rgb;
+    }
     gl_FragColor = vec4(col, 1.0);
     #include <colorspace_fragment>
   }
@@ -104,6 +113,7 @@ export class Facet {
         uAccentAmt: shared.uAccentAmt,
         uBg: shared.uBg,
         uFade: shared.uFade,
+        uOpacity: shared.uOpacity,
       },
     });
     // Meshes without an aSet attribute read 0 (no alternate color).

@@ -15,6 +15,8 @@ export interface SharedUniforms {
    * edge mixes toward uBg, reaching it at the edge. band 0 = off. Set by families that wrap.
    */
   uFade: THREE.IUniform<THREE.Vector3>;
+  /** params.opacity: 1 = full color; lower mixes every form toward uBg. */
+  uOpacity: THREE.IUniform<number>;
 }
 
 export interface FamilyContext {

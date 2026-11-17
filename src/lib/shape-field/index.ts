@@ -79,6 +79,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
     uTime: { value: 0 },
     uBg: { value: bg.value },
     uFade: { value: new THREE.Vector3() },
+    uOpacity: { value: preset.params.opacity ?? 1 },
   };
   let accentTarget = 0;
 
@@ -267,6 +268,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
       preset = structuredClone(next);
       bg.set(preset.palette.bg);
       setLight();
+      shared.uOpacity.value = preset.params.opacity ?? 1;
       const rebuild =
         prev.family !== preset.family ||
         REBUILD_KEYS.some((key) => prev.params[key] !== preset.params[key]) ||
@@ -286,6 +288,7 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
       preset.params[key] = value;
       if (REBUILD_KEYS.includes(key)) build();
       if (key === 'light') setLight();
+      if (key === 'opacity') shared.uOpacity.value = Number(value ?? 1);
       if (key === 'tint' && accentTarget > 0) accentTarget = Number(value);
       dirty = Math.max(dirty, 30);
     },

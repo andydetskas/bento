@@ -43,6 +43,11 @@ export interface SceneParams {
   /** 0–1. Shade difference between the lit and shaded side walls. */
   contrast?: number;
   /**
+   * 0–1. How strongly the forms show: 1 = full color, lower fades every form toward the
+   * background color (as if see-through over it). Live. Missing = 1.
+   */
+  opacity?: number;
+  /**
    * Glyph arrangement. Rebuilds.
    * scatter: loose, each glyph drifts at its own speed (the field loosens over time).
    * grid: even rows and columns. checker: alternate squares, so neighbours sit on the diagonals.
@@ -104,6 +109,7 @@ export const GLYPH_DEFAULTS: SceneParams = {
   spread: 1,
   tumble: 1,
   contrast: 0.35,
+  opacity: 1,
   layout: 'scatter',
   jitter: 0,
 };

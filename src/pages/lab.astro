@@ -41,6 +41,7 @@ const shapeSliders: Slider[] = [
   { key: 'spread', label: 'Depth spread', min: 0, max: 3, step: 0.05, only: 'glyphs', rebuild: true },
   { key: 'tumble', label: 'Tumble', min: 0, max: 2, step: 0.01, only: 'glyphs' },
   { key: 'contrast', label: 'Side contrast', min: 0, max: 1, step: 0.01, only: 'glyphs' },
+  { key: 'opacity', label: 'Opacity', min: 0, max: 1, step: 0.01, only: 'glyphs' },
 ];
 const motionSliders: Slider[] = [
   { key: 'speed', label: 'Speed', min: 0, max: 2, step: 0.05 },
@@ -737,6 +738,7 @@ const steps = ['600', '500', '400', '300', '200'] as const;
       input.value = String(v);
       let text = `${v.toFixed(input.step.includes('.') ? 2 : 0)}${input.dataset.unit}`;
       if (key === 'density' && isGlyphs) text = `${glyphCount(v, layout)} glyphs`;
+      if (key === 'opacity') text = `${Math.round(v * 100)}%`;
       q(`[data-out="${key}"]`).textContent = text;
     });
     const gv = state.gutter ?? Math.round(parseFloat(getComputedStyle(document.querySelector('.frame')!).paddingLeft));
