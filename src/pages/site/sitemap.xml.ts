@@ -1,4 +1,4 @@
-// sitemap.xml for the site: home, the four sections, every closer look and every published
+// sitemap.xml for the site: home (Selected work), the three other sections, every closer look and every published
 // Techniques article. No lastmod (no dates on Andy's surfaces). Moves to /sitemap.xml at cutover.
 import type { APIRoute } from 'astro';
 import site from '../../content/site.json';
@@ -8,7 +8,7 @@ import { publishedTechniques } from '../../lib/techniques';
 export const GET: APIRoute = () => {
   const paths = [
     SITE_BASE,
-    ...sections.map(sectionPath),
+    ...sections.filter((s) => s.id !== 'portfolio').map(sectionPath),
     ...site.work.flatMap((w) => ('look' in w && w.look ? [w.look] : [])),
     ...publishedTechniques.map((t) => t.path),
     `${SITE_BASE}colophon/`,

@@ -1,0 +1,164 @@
+---
+// The logo ticker from the Framer home, back under the work (Andy, Nov 16). The live ticker (framer/CHANGELOG, 2026-09-18) ran SuppCo, Function, Strava, SRAM,
+// United, Allstate, Intuit, Arity, Pivotal Labs; the companies already in the work above are out
+// (Andy), and so is Function, which acquired SuppCo (the same job, not earlier work). What's left
+// is the Pivotal and Punchkick years, labeled "Earlier work" as the Master Profile plans (§5:
+// "Pivotal and earlier get a single 'Earlier work' line or logo strip"). The label is plain text:
+// nothing here links anywhere. The artwork is the Figma "2026 Portfolio" Brand Assets set
+// (Current Brand Asset Source), exported as SVG into public/site/work/home/logos/. Each logo is a
+// CSS mask filled with the muted text color, so it follows light and dark mode.
+// The list runs twice so the loop is seamless; the copy is hidden from assistive tech. Hover
+// pauses it; with reduced motion it stands still and wraps.
+interface Logo {
+  id: string;
+  name: string;
+  /** The SVG's own size, for its aspect ratio. */
+  w: number;
+  h: number;
+  /** Optical size: the wordmarks differ in weight and proportion. 1 = the base height. */
+  size: number;
+}
+const logos: Logo[] = [
+  { id: 'united', name: 'United Airlines', w: 247, h: 43, size: 0.95 },
+  { id: 'allstate', name: 'Allstate', w: 196, h: 42, size: 1 },
+  { id: 'intuit', name: 'Intuit', w: 153, h: 45, size: 1 },
+  { id: 'arity', name: 'Arity', w: 126, h: 53, size: 1.1 },
+  { id: 'pivotal-labs', name: 'Pivotal Labs', w: 187, h: 44, size: 1.05 },
+];
+const style = (l: Logo) => `--ar:${l.w}/${l.h};--s:${l.size};--src:url(/site/work/home/logos/${l.id}.svg)`;
+---
+
+<section class="ticker" aria-labelledby="ticker-label">
+  <p class="ticker-label" id="ticker-label">Earlier work</p>
+  <div class="ticker-window">
+    <div class="ticker-track">
+      <ul class="ticker-list" role="list">
+        {logos.map((l) => (
+          <li>
+            <span class="ticker-logo" role="img" aria-label={l.name} style={style(l)} />
+          </li>
+        ))}
+      </ul>
+      <ul class="ticker-list ticker-copy" role="list" aria-hidden="true">
+        {logos.map((l) => (
+          <li>
+            <span class="ticker-logo" style={style(l)} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ticker {
+    --logo-h: 26px;
+    --logo-gap: 72px;
+    display: flex;
+    align-items: center;
+    /* It closes the work's white page: a line above, no card of its own. */
+    margin-top: var(--pad);
+    padding-top: var(--pad);
+    border-top: 1px solid var(--color-line);
+    overflow: hidden;
+  }
+  /* The label holds still on the left; the logos pass to its right. */
+  .ticker-label {
+    flex: none;
+    margin: 0;
+    padding: 0 var(--space-5) 0 0;
+    font-family: var(--font-mono);
+    font-size: calc(12px * var(--text-scale, 1));
+    font-weight: var(--weight-mono);
+    letter-spacing: var(--tracking-eyebrow);
+    line-height: 16px;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+  }
+  /* The ends fade, so logos slide in and out rather than being cut. */
+  .ticker-window {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 45s linear infinite;
+  }
+  @media (hover: hover) {
+    .ticker:hover .ticker-track {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes ticker {
+    to {
+      translate: -50% 0;
+    }
+  }
+  .ticker-list {
+    display: flex;
+    align-items: center;
+    gap: var(--logo-gap);
+    margin: 0;
+    padding: 0 var(--logo-gap) 0 0;
+    list-style: none;
+  }
+  .ticker-logo {
+    display: block;
+    height: calc(var(--logo-h) * var(--s));
+    aspect-ratio: var(--ar);
+    background: var(--color-text-muted);
+    mask: var(--src) center / contain no-repeat;
+  }
+  /* Phones: the label sits above the logos. */
+  @media (max-width: 759px) {
+    .ticker {
+      --logo-h: 22px;
+      --logo-gap: 48px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-4);
+    }
+    .ticker-label {
+      padding: 0;
+    }
+  }
+  /* Motion off (the system setting, or Display settings): the logos stand still and wrap. */
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+      width: auto;
+    }
+    .ticker-window {
+      mask-image: none;
+    }
+    .ticker-list {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: var(--space-5);
+      padding: 0 var(--space-6);
+    }
+    .ticker-copy {
+      display: none;
+    }
+  }
+  :global(html[data-motion='reduced']) .ticker-track {
+    animation: none;
+    width: auto;
+  }
+  :global(html[data-motion='reduced']) .ticker-window {
+    mask-image: none;
+  }
+  :global(html[data-motion='reduced']) .ticker-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: var(--space-5);
+    padding: 0 var(--space-6);
+  }
+  :global(html[data-motion='reduced']) .ticker-copy {
+    display: none;
+  }
+</style>

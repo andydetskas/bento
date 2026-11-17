@@ -24,7 +24,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
   pageTitle="Agentic Design System · SuppCo · Andy Detskas"
   description="How I made SuppCo’s design system AI-native, so designers, engineers, PMs and coding agents could all build on-system from one source of truth."
   accent={accent}
-  backHref={`${SITE_BASE}work/`}
+  backHref={SITE_BASE}
   backLabel="Selected work"
 >
   <p class="panel-lede">I made Capsule, SuppCo’s design system, AI-native, so designers, engineers, PMs and coding agents could all build on-system work from one source of truth.</p>
@@ -153,5 +153,5 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
     </a>
   </aside>
 
-  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+  <p class="look-back"><a href={SITE_BASE}>← All selected work</a></p>
 </CloserLook>

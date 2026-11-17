@@ -24,7 +24,7 @@ const img = (name: string) => `/site/work/buying-club/${name}.webp`;
   pageTitle="Buying Club · SuppCo · Andy Detskas"
   description="SuppCo’s Buying Club, a members’ club that pays back credits instead of discounting, which I co-designed with the Head of Product, and what its alpha taught us."
   accent={accent}
-  backHref={`${SITE_BASE}work/`}
+  backHref={SITE_BASE}
   backLabel="Selected work"
 >
   <p class="panel-lede">SuppCo’s members trusted it to tell them what to take. The Head of Product and I designed how SuppCo would sell to them without spending that trust: a members’ club that pays back credits instead of discounting.</p>
@@ -95,5 +95,5 @@ const img = (name: string) => `/site/work/buying-club/${name}.webp`;
     </a>
   </aside>
 
-  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+  <p class="look-back"><a href={SITE_BASE}>← All selected work</a></p>
 </CloserLook>

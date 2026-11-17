@@ -1,0 +1,518 @@
+/*
+  The work-first home and the closer looks' full screen (Andy, Nov 16; tried out as a demo on the
+  `demo/work-first` branch, then shipped).
+
+  1. Work-first home (/site/), after luzcas.com and jessicagracia.com: the hero keeps the left
+     column and is the site's menu (HeroMenu.astro); Selected work fills the right two columns as a
+     masonry of big tiles on one white page (WorkGrid.astro). How I lead, Techniques and About open
+     from the menu onto that stage (SitePage's takeover).
+  2. Full screen on scroll (closer looks), after luzcas.com/batch: once the visitor scrolls, the
+     hero steps out and the case-study card widens to the whole screen. The text column holds
+     still (it's indented by exactly what the card gained) and the figures grow.
+*/
+
+/* ── 1. Work-first home ─────────────────────────────── */
+
+.work-grid {
+  min-width: 0;
+  container-type: inline-size;
+  /* The work sits on one white page, like an open section's card (Andy), so the moving 3D icons
+     don't show between the tiles and compete with the tiles' own motion (tickers, video). Same
+     padding as a card (global.css .card). */
+  --pad: clamp(20px, round(2.6vw, 4px), 36px);
+  padding: var(--pad);
+  background: var(--color-card);
+  border-radius: var(--card-radius);
+  /* Between pages it's the case study card's other self (both box-portfolio, as the old Selected
+     work card was): opening a closer look morphs this page into its card, and Back morphs it home,
+     so the page never pops in under the fading card (Andy). */
+  view-transition-name: box-portfolio;
+  view-transition-class: box;
+  box-shadow:
+    0 1px 0 rgb(0 0 0 / 0.03),
+    0 40px 90px -50px rgb(20 20 30 / 0.45);
+}
+
+/* The three section cards only show when opened from the menu; while one is open, the work steps
+   out at every width, so on phones the section sits right under the hero. */
+.site.work-first > .is-takeover:not(.is-open) {
+  display: none;
+}
+.site.work-first.has-open > .wf-top > .work-grid {
+  display: none;
+}
+/* The hero and the work share a wrapper, so the sticky hero lets go where the work ends. Below
+   desktop it steps aside and they're the page grid's own items. */
+.wf-top {
+  display: contents;
+}
+@media (min-width: 760px) {
+  .work-grid {
+    grid-area: work;
+  }
+  .site.work-first .area-hero {
+    align-self: start;
+  }
+  /* A card open: the hero holds while the panel scrolls. */
+  .site.work-first.has-open > .wf-top > .area-hero {
+    position: sticky;
+    top: min(var(--gutter), calc(100svh - var(--hero-h, 0px) - var(--gutter)));
+  }
+  /* Tablet: hero beside the work. */
+  .site.work-first:not(.has-open) {
+    grid-template-columns: var(--site-col) minmax(0, 1fr);
+    grid-template-areas: 'hero work';
+    grid-template-rows: auto;
+    align-items: start;
+  }
+}
+@media (min-width: 1100px) {
+  /* Desktop: hero | work work. The hero stays put while the work scrolls (Lucas Luz's left
+     column) and lets go when the work ends: a sticky element is held inside its parent, so the
+     hero and the work get a row of their own (.wf-top, a subgrid on the page's columns). */
+  .site.work-first:not(.has-open) {
+    grid-template-columns: var(--site-col) repeat(2, minmax(0, 1fr));
+    grid-template-areas: 'top top top';
+    align-items: stretch;
+  }
+  .site.work-first:not(.has-open) > .wf-top {
+    grid-area: top;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: start;
+  }
+  .site.work-first:not(.has-open) > .wf-top > .area-hero {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: min(var(--gutter), calc(100svh - var(--hero-h, 0px) - var(--gutter)));
+  }
+  .site.work-first:not(.has-open) > .wf-top > .work-grid {
+    grid-column: 2 / -1;
+    grid-row: 1;
+  }
+}
+
+/* ── The tiles ── */
+/* Masonry (Jessica Gracia): two columns of tall and half-height tiles. A tall tile is as tall as
+   the hero beside it, and two half tiles with the gap between them make one tall one. Which tiles
+   are tall and the order are Andy's call (WorkGrid.astro); the grid's own placement fills the
+   columns, and with these they end level, so the sticky hero lets go on a clean line:
+     1 half | 2 tall
+     3 tall | 2 tall
+     3 tall | 4 half
+     5 half | 6 half
+   On a narrow work column the tall tiles stop at a tall portrait (1:2), so they don't turn into
+   slivers. One column (tablets, phones): tall tiles 4:5, the rest 16:10. */
+.wg {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--site-gap);
+}
+.wt {
+  --ar: 16 / 10;
+  min-width: 0;
+  view-transition-class: wt;
+}
+.wt.is-tall {
+  --ar: 4 / 5;
+}
+.wt:nth-child(1) { view-transition-name: wt-1; }
+.wt:nth-child(2) { view-transition-name: wt-2; }
+.wt:nth-child(3) { view-transition-name: wt-3; }
+.wt:nth-child(4) { view-transition-name: wt-4; }
+.wt:nth-child(5) { view-transition-name: wt-5; }
+.wt:nth-child(6) { view-transition-name: wt-6; }
+@container (min-width: 520px) {
+  .wg {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* --hero-open-h: the height the hero opens to (WorkGrid's script), so the tiles don't grow
+       with it during the entrance. */
+    --tall-h: min(var(--hero-open-h, var(--hero-h, 560px)), calc((100cqw - var(--site-gap)) / 2 / 0.5));
+    grid-auto-rows: calc((var(--tall-h) - var(--site-gap)) / 2);
+  }
+  .wt.is-tall {
+    grid-row: span 2;
+  }
+  .wt-art {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 0;
+  }
+}
+
+.wt-link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  outline: none;
+}
+.wt-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+/* The art box is a size container, so cq units below are the tile's own. Nested in the white
+   page: a smaller corner, and no shadow (the tint carries the edge). */
+.wt-art {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--ar);
+  container-type: size;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--alt-bg, var(--tint));
+}
+.wt-art img {
+  position: absolute;
+  transition: scale var(--motion-settle) var(--motion-ease-settle);
+}
+/* A tile without art of its own falls back to its 16:10 thumbnail, floating on its tint (the
+   inset trims the export's white corners). */
+.wt-art .wt-img {
+  left: 50%;
+  top: 50%;
+  width: min(100cqw, 160cqh);
+  height: auto;
+  translate: -50% -50%;
+  clip-path: inset(1.4%);
+}
+.wt.has-alt-art .wt-img {
+  display: none;
+}
+/* A whole phone (or modal), standing in the middle of the tile with tint around it. */
+.wt-art .wt-alt--phone {
+  --ph: min(86cqh, calc(78cqw / var(--alt-ar)));
+  left: 50%;
+  top: 50%;
+  width: auto;
+  height: var(--ph);
+  translate: -50% -50%;
+  filter: drop-shadow(0 28px 36px rgb(20 20 30 / 0.28));
+}
+/* A bare screen keeps its own rounded corners (24px on a 671px-tall screen, scaled with it); the
+   soft shadow follows the rounded shape. */
+.wt-art .wt-alt--screen {
+  border-radius: calc(var(--ph) * 24 / 671);
+}
+/* A 16:10 thumbnail lifted off its tile color, sized like the thumbnails. */
+.wt-art .wt-alt--thumb {
+  left: 50%;
+  top: 50%;
+  width: min(100cqw, 160cqh);
+  height: auto;
+  translate: -50% -50%;
+}
+/* A single wide UI piece (the SRAM battery card), centered, with the phones' soft shadow. */
+.wt-art .wt-alt--card {
+  left: 50%;
+  top: 50%;
+  width: min(86cqw, calc(56cqh * var(--alt-ar)));
+  height: auto;
+  translate: -50% -50%;
+  filter: drop-shadow(0 28px 36px rgb(20 20 30 / 0.28));
+}
+/* A picture shown whole on its own background color (the code and skills panel). */
+.wt-art .wt-alt--panel {
+  /* Clear of the company chip at the top; left-aligned like an editor. */
+  inset: calc(var(--space-4) + 28px + var(--space-4)) var(--space-6) var(--space-5);
+  width: calc(100% - 2 * var(--space-6));
+  height: calc(100% - var(--space-4) - 28px - var(--space-4) - var(--space-5));
+  object-fit: contain;
+  object-position: 0 50%;
+}
+@media (hover: hover) {
+  .wt-link:hover .wt-img,
+  .wt-link:hover :is(.wt-alt--phone, .wt-alt--panel, .wt-alt--thumb, .wt-alt--card) {
+    scale: 1.04;
+  }
+}
+
+/* A background video under the art (the SRAM tile: a short loop from SRAM's Rival AXS film). */
+.wt-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Strava-orange banners behind the Strava phones (Andy): a few diagonal bands, each a ticker of
+   the Strava logo and the feature's name, alternating direction. Decorative. Their speed matches
+   the nutrient pills' drift (WorkGrid's script sets each one's duration from its length). */
+.wt-banners {
+  position: absolute;
+  inset: -40% -70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  rotate: var(--banner-angle, -18deg);
+  pointer-events: none;
+}
+.wt-banner {
+  display: flex;
+  align-items: center;
+  /* Sized from the tile's width: 15px type on a desktop tile. */
+  font-size: clamp(12px, 3.5cqw, 15px);
+  height: 2.8em;
+  overflow: hidden;
+  background: #fc4c02;
+  color: #fff;
+  box-shadow: 0 10px 20px -12px rgb(120 40 0 / 0.55);
+}
+/* A short tile gets three bands, so they don't crowd. */
+.wt:not(.is-tall) .wt-banner:nth-child(n + 4) {
+  display: none;
+}
+.wt-banner-track {
+  display: flex;
+  flex: none;
+  width: max-content;
+  animation: wt-banner 300s linear infinite;
+}
+.wt-banner:nth-child(even) .wt-banner-track {
+  animation-direction: reverse;
+}
+.wt-banner-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65em;
+  padding: 0 1.45em;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.wt-banner-logo {
+  width: 5.45em;
+  height: 1.15em;
+  background: currentColor;
+  mask: url(/site/work/home/logos/strava.svg) center / contain no-repeat;
+}
+@keyframes wt-banner {
+  to {
+    translate: -50% 0;
+  }
+}
+
+/* SuppCo's nutrient pills behind the StackScore phone (Andy), as on the SuppCo home page: white
+   pills, gray medium text, rows drifting in opposite directions. Re-drawn here, not SuppCo's
+   code. Shaded back so they don't compete with the screenshot. */
+.wt-pills {
+  position: absolute;
+  inset: -4% -40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.65em;
+  font-size: clamp(11px, 3.5cqw, 15px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.wt-pill-row {
+  display: flex;
+  gap: 0.65em;
+  white-space: nowrap;
+  animation: wt-pill-drift 7s ease-in-out infinite alternate;
+}
+.wt-pill-row:nth-child(even) {
+  animation-direction: alternate-reverse;
+}
+.wt-pill {
+  padding: 0.55em 1.05em;
+  border-radius: 0.55em;
+  background: #fff;
+  color: #687280;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+@keyframes wt-pill-drift {
+  from {
+    translate: -20px 0;
+  }
+  to {
+    translate: 20px 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wt-banner-track,
+  .wt-pill-row {
+    animation: none;
+  }
+}
+
+/* The company, in a chip on the art (Andy). The case study and my role are in the cursor pill, and
+   in the tile's caption for screen readers. */
+.wt-co {
+  position: absolute;
+  z-index: 1;
+  left: var(--space-4);
+  top: var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-card);
+  color: var(--color-text-primary);
+  font-family: var(--font-mono);
+  font-size: calc(12px * var(--text-scale, 1));
+  font-weight: var(--weight-mono);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  box-shadow: 0 6px 18px -10px rgb(20 20 30 / 0.4);
+}
+
+/* Entrance: the white page lands with the hero, then the tiles land on it, one after another. */
+html.js:not(.is-landing) :is(.work-grid, .wt) {
+  opacity: 0;
+}
+html.js.is-landing .work-grid {
+  animation: box-land 900ms var(--motion-ease-settle) backwards;
+  animation-delay: 220ms;
+}
+html.js.is-landing .wt {
+  animation: box-land 900ms var(--motion-ease-settle) backwards;
+  animation-delay: calc(var(--i) * 70ms + 300ms);
+}
+html.from-site.is-landing :is(.work-grid, .wt) {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js:not(.is-landing) :is(.work-grid, .wt) {
+    opacity: 1;
+  }
+  html.js.is-landing :is(.work-grid, .wt) {
+    animation: none;
+  }
+}
+::view-transition-group(*.wt) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--motion-ease-settle);
+}
+
+/* ── 2. Full screen on scroll (closer looks) ────────── */
+
+@property --look-indent {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* Back and the full-screen switch share one sticky bar at the top of the card. */
+.look-bar {
+  position: sticky;
+  top: var(--gutter);
+  z-index: 2;
+  align-self: flex-start;
+  display: flex;
+  gap: var(--space-2);
+}
+.box .look-bar a.backlink {
+  position: relative;
+  top: auto;
+}
+.look-full {
+  display: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-line);
+  background: var(--color-card);
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background-color var(--motion-quick) var(--motion-ease-standard),
+    border-color var(--motion-quick) var(--motion-ease-standard),
+    color var(--motion-quick) var(--motion-ease-standard);
+}
+.look-full svg {
+  width: 18px;
+  height: 18px;
+}
+.look-full .i-shrink,
+.site.is-full .look-full .i-grow {
+  display: none;
+}
+.site.is-full .look-full .i-shrink {
+  display: block;
+}
+.look-full:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .look-full:hover {
+    background: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    color: var(--color-card);
+  }
+}
+
+@media (min-width: 760px) {
+  .look-full {
+    display: grid;
+  }
+  .site.can-full {
+    transition:
+      grid-template-columns 700ms var(--motion-ease-settle),
+      column-gap 700ms var(--motion-ease-settle),
+      --look-indent 700ms var(--motion-ease-settle);
+  }
+  /* The hero keeps its width while its column closes, so it slides out rather than squeezing. */
+  .site.can-full > .area-hero {
+    width: var(--site-col);
+    transition:
+      opacity 360ms var(--motion-ease-standard),
+      translate 700ms var(--motion-ease-settle),
+      visibility 0s linear 0s;
+  }
+  .site.can-full.is-full {
+    grid-template-columns: 0px minmax(0, 1fr);
+    column-gap: 0px;
+    --look-indent: calc(var(--site-col) + var(--site-gap));
+  }
+  .site.can-full.is-full > .area-hero {
+    opacity: 0;
+    translate: -48px 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 360ms var(--motion-ease-standard),
+      translate 700ms var(--motion-ease-settle),
+      visibility 0s linear 700ms;
+  }
+  /* Text holds its place; figures take the full width. */
+  .site.can-full .look > .box-top,
+  .site.can-full .look > .look-head,
+  .site.can-full .look-body > :not(.look-fig, .look-section),
+  .site.can-full .look-section > :not(.look-fig, .look-steps),
+  .site.can-full .look-steps > li > :not(.look-fig) {
+    margin-left: var(--look-indent);
+  }
+}
+@media (min-width: 1100px) {
+  .site.can-full.is-full {
+    grid-template-columns: 0px repeat(2, minmax(0, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site.can-full,
+  .site.can-full > .area-hero {
+    transition: none;
+  }
+}

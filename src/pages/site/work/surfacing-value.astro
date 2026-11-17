@@ -24,7 +24,7 @@ const img = (name: string) => `/site/work/surfacing-value/${name}.webp`;
   pageTitle="Surfacing Value · Strava · Andy Detskas"
   description="How I facilitated the cross-functional sprint that redesigned Strava’s navigation around what athletes came to do, without breaking what already worked."
   accent={accent}
-  backHref={`${SITE_BASE}work/`}
+  backHref={SITE_BASE}
   backLabel="Selected work"
 >
   <p class="panel-lede">I facilitated the cross-functional sprint that redesigned Strava’s navigation, so athletes could find what they came for, including the features worth paying for.</p>
@@ -149,5 +149,5 @@ const img = (name: string) => `/site/work/surfacing-value/${name}.webp`;
     </a>
   </aside>
 
-  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+  <p class="look-back"><a href={SITE_BASE}>← All selected work</a></p>
 </CloserLook>

@@ -26,7 +26,7 @@ const img = (name: string) => `/site/work/crushing-the-basics/${name}.webp`;
   pageTitle="Crushing the Basics · SRAM · Andy Detskas"
   description="How I built a product design and research function at SRAM, and used it to re-center the AXS app on battery, firmware and connection."
   accent={accent}
-  backHref={`${SITE_BASE}work/`}
+  backHref={SITE_BASE}
   backLabel="Selected work"
 >
   <p class="panel-lede">At SRAM, I turned a UX team into a product design and research function, then used what we learned to re-center the AXS app on the basics riders needed most: battery, firmware and connection.</p>
@@ -162,5 +162,5 @@ const img = (name: string) => `/site/work/crushing-the-basics/${name}.webp`;
     </a>
   </aside>
 
-  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+  <p class="look-back"><a href={SITE_BASE}>← All selected work</a></p>
 </CloserLook>

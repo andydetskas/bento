@@ -1,0 +1,136 @@
+---
+// The hero as the site's menu (Andy, Nov 16): Selected work, Techniques, Leadership and About are
+// rows in the hero card, and the right side is a stage. On the home a row swaps the work for that
+// section in place (SitePage's takeover, so each has its own URL and Back returns to the work)
+// while the hero holds still; on other pages the rows are plain links. Display settings is the
+// last row. Rows follow the hero's rules (SiteCard): no pills, no scene tint; keyboard focus shows.
+// ("Lab" for Techniques was tried and parked: it would mean new URLs, /lab/ for /techniques/.)
+import { tokens } from '../../lib/tokens';
+import { SITE_BASE } from '../../lib/site-sections';
+
+interface Props {
+  /** The row for the page the visitor is on: work (the home and the case studies), a section, or
+   *  none (the colophon, the 404). */
+  current?: 'work' | 'techniques' | 'leadership' | 'about' | null;
+}
+const { current = 'work' } = Astro.props;
+const base = SITE_BASE;
+const accent = tokens.accent as Record<string, string>;
+const items = [
+  { id: 'work', label: 'Selected work', href: base, accent: accent.portfolio },
+  { id: 'techniques', label: 'Techniques', href: `${base}techniques/`, accent: accent.techniques },
+  { id: 'leadership', label: 'Leadership', href: `${base}leadership/`, accent: accent.leadership },
+  { id: 'about', label: 'About', href: `${base}about/`, accent: accent.about },
+];
+---
+
+<nav class="hero-menu" aria-label="Sections">
+  <ul role="list">
+    {
+      items.map((i) => (
+        <li>
+          <a class="mrow" href={i.href} data-menu={i.id} aria-current={i.id === current ? 'page' : undefined} style={`--accent:${i.accent}`}>
+            <span class="mrow-lead" aria-hidden="true">
+              <span class="mrow-dot" />
+            </span>
+            <span class="mrow-label">{i.label}</span>
+            <span class="arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+    {/* Display settings: opens the dialog (DisplaySettings.astro), like the hero's own row. Needs JS. */}
+    <li class="mrow-settings-item">
+      <button type="button" class="mrow mrow-settings" data-display-open aria-haspopup="dialog" aria-controls="display-settings">
+        <span class="mrow-lead" aria-hidden="true"></span>
+        <span class="mrow-label">Display settings</span>
+        <span class="arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+            <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
+            <circle cx="16" cy="7" r="2" />
+            <circle cx="10" cy="17" r="2" />
+          </svg>
+        </span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<style>
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
+  }
+  li + li .mrow {
+    border-top: 1px solid var(--color-line);
+  }
+  :global(html:not(.js)) .mrow-settings-item {
+    display: none;
+  }
+  .mrow {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-2) 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+  }
+  .mrow-lead {
+    display: grid;
+    place-items: center;
+  }
+  /* Where you are: a filled dot in the section's color. The others are open rings. */
+  .mrow-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-line);
+    transition:
+      background-color var(--motion-base) var(--motion-ease-standard),
+      border-color var(--motion-base) var(--motion-ease-standard);
+  }
+  .mrow[aria-current] .mrow-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .mrow-label {
+    font-size: var(--step-1);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-title);
+    white-space: nowrap;
+  }
+  .mrow .arrow {
+    width: 32px;
+    height: 32px;
+  }
+  .mrow .arrow svg {
+    width: 14px;
+    height: 14px;
+  }
+  .mrow:focus-visible .mrow-label {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.15em;
+    text-decoration-color: var(--color-focus);
+  }
+  .mrow:focus-visible .arrow {
+    background: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--accent-on);
+  }
+</style>

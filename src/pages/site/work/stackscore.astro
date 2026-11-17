@@ -24,7 +24,7 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
   pageTitle="StackScore · SuppCo · Andy Detskas"
   description="How I redesigned SuppCo’s signature score into a hub that explains itself, with four sub-scores that each lead to a next step."
   accent={accent}
-  backHref={`${SITE_BASE}work/`}
+  backHref={SITE_BASE}
   backLabel="Selected work"
 >
   <p class="panel-lede">I redesigned SuppCo’s signature score into a hub that explains itself, breaking one AI-written verdict into four sub-scores that each lead to a next step.</p>
@@ -141,5 +141,5 @@ const img = (name: string) => `/site/work/stackscore/${name}.webp`;
     </a>
   </aside>
 
-  <p class="look-back"><a href={`${SITE_BASE}work/`}>← All selected work</a></p>
+  <p class="look-back"><a href={SITE_BASE}>← All selected work</a></p>
 </CloserLook>

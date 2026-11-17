@@ -1,8 +1,9 @@
 // The Framer site's URLs (andydetskas.com, as of Nov 9) and where each lives on this site, so old
 // links, bookmarks and search results keep working at the cutover. Paths are relative to SITE_BASE.
 //
-// Already the same here, nothing to do: / · /about · /work · /techniques · /techniques/<slug> for
-// the four live articles (integrity-compass, vibeframing, the-design-dojo, making-haptics-happen).
+// Already the same here, nothing to do: / · /about · /techniques · /techniques/<slug> for the four
+// live articles (integrity-compass, vibeframing, the-design-dojo, making-haptics-happen). /work is
+// the home now (Selected work leads it, Nov 16), so it forwards there.
 // GitHub Pages adds the trailing slash itself (/about → /about/).
 //
 // Everything below gets a small page at the old path (pages/site/[...legacy].astro) that sends the
@@ -18,10 +19,11 @@ export const legacyRedirects: Record<string, string> = {
   'design-suppco-stackscore': 'work/stackscore/',
   'design-suppco-call-and-response': 'work/stackscore/#related', // folded into StackScore
   'design-suppco-buying-club': 'work/buying-club/',
-  'design-strava-streak-challenges': 'work/', // no page yet ("More work" is a later to-do)
+  'design-strava-streak-challenges': '', // no page yet ("More work" is a later to-do); the home is the work
 
   // Pages this site folds into others
-  contact: '', // the hero carries the call link and the follow links on every page
+  work: '', // Selected work is the home (Nov 16)
+  contact: '', // the hero carries the call link on every page; LinkedIn and email are on About
   'home-devin': '',
 
   // Techniques retired on Framer (its own redirects, kept)

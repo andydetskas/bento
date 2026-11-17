@@ -1,24 +1,24 @@
 ---
 // The site's hero card: the bento card, grown up. Same masthead in the same spot (top-left, one
 // gutter in, one site column wide), so the bento's exit, the card folded to its masthead, is
-// this card's first frame. Below the masthead: the positioning line, follow links and the one
-// call to action. The masthead links home (Andy). No mouseovers here (Andy): no pills, no scene
-// tint, no row dimming. Keyboard focus still shows.
+// this card's first frame. Below the masthead: the positioning line, the site's menu (HeroMenu,
+// with Display settings as its last row) and the call to action (Andy, Nov 16: the line under the
+// headline went, and LinkedIn moved to About). The masthead links home (Andy). No mouseovers here
+// (Andy): no pills, no scene tint, no row dimming. Keyboard focus still shows.
 import links from '../../content/links.json';
 import site from '../../content/site.json';
-import { tokens } from '../../lib/tokens';
 import CardHead from '../CardHead.astro';
-import Icon from '../Icon.astro';
+import HeroMenu from './HeroMenu.astro';
 import { SITE_BASE, CALL_PATH } from '../../lib/site-sections';
 
 interface Props {
   /** See CardHead: 'p' on pages with their own h1. */
   nameAs?: 'h1' | 'p';
+  /** The menu row for this page (HeroMenu). */
+  current?: 'work' | 'techniques' | 'leadership' | 'about' | null;
 }
-const { nameAs = 'h1' } = Astro.props;
+const { nameAs = 'h1', current = 'work' } = Astro.props;
 const { intro } = site;
-const accents = tokens.accent as Record<string, string>;
-const follow = intro.follow.map((id) => links.links.find((l) => l.id === id)!);
 // Resume and email live on About (Andy, Nov 11). Here, email is the quiet button beside the call
 // to action, so it's in two places on the site.
 const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
@@ -29,48 +29,7 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     <div class="card-more">
       <div class="card-more-inner">
         <p class="headline">{intro.headline}</p>
-        <p class="sub">{intro.sub}</p>
-
-        <ul class="follow" role="list">
-          {
-            follow.map((l) => (
-              <li>
-                <a
-                  class="frow"
-                  href={l.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={`--accent:${accents[l.id]}`}
-                >
-                  <Icon name={l.icon} class="frow-icon" />
-                  <span class="frow-label">{l.label}</span>
-                  <span class="frow-note">{l.eyebrow}</span>
-                  <span class="arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 17 17 7M9 7h8v8" />
-                    </svg>
-                  </span>
-                  <span class="sr-only">(opens in a new tab)</span>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-
-        <!-- Display settings: opens the dialog (DisplaySettings.astro, rendered once per page beside the Pill).
-             A control, not a link, so no note
-             and a sliders icon in place of the arrow. Needs JS, so it's hidden without it. -->
-        <button type="button" class="frow frow-settings" data-display-open aria-haspopup="dialog" aria-controls="display-settings">
-          <Icon name="eye" class="frow-icon" />
-          <span class="frow-label">Display settings</span>
-          <span class="arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-              <path d="M4 7h10M18 7h2M4 17h4M12 17h8" />
-              <circle cx="16" cy="7" r="2" />
-              <circle cx="10" cy="17" r="2" />
-            </svg>
-          </span>
-        </button>
+        <HeroMenu current={current} />
 
         <div class="cta-row">
           <a class="btn btn-quiet" href={email.url}>{intro.emailCta}</a>
@@ -94,7 +53,7 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
 
   /* Collapsed to the masthead (the hand-off's first frame) until the cards land, then it opens.
      Open, it fills the card, so when the card stretches to a taller row, the call to action
-     sits at the bottom (Andy) rather than under the follow rows with space below it. */
+     sits at the bottom (Andy) rather than under the menu with space below it. */
   .card-more {
     flex: 1 1 auto;
     display: grid;
@@ -131,84 +90,6 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     letter-spacing: var(--tracking-display);
     text-wrap: balance;
   }
-  .sub {
-    margin: calc(var(--space-6) * -0.5) 0 0;
-    font-size: var(--step-0);
-    line-height: 1.4;
-    color: var(--color-text-muted);
-    text-wrap: pretty;
-  }
-
-  /* ── Follow rows: the bento's rows, at a smaller size ── */
-  .follow {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .follow li + li .frow {
-    border-top: 1px solid var(--color-line);
-  }
-  .frow {
-    display: grid;
-    grid-template-columns: 20px auto 1fr auto;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) 0;
-    color: inherit;
-    text-decoration: none;
-    outline: none;
-  }
-  .frow :global(.frow-icon) {
-    width: 20px;
-    height: 20px;
-  }
-  .frow-label {
-    font-size: var(--step-1);
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-title);
-  }
-  .frow-note {
-    font-family: var(--font-mono);
-    font-size: calc(12px * var(--text-scale, 1));
-    font-weight: var(--weight-mono);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-  }
-  /* Keyboard focus only: underline the label and fill the arrow (site.css). */
-  .frow:focus-visible .frow-label {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.15em;
-    text-decoration-color: var(--color-focus);
-  }
-
-  /* The Display settings row: a button dressed as a follow row (same grid, a line above). */
-  .frow-settings {
-    grid-template-columns: 20px 1fr auto;
-    width: 100%;
-    margin-top: calc(var(--space-6) * -1);
-    border: 0;
-    border-top: 1px solid var(--color-line);
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-  .frow-settings .frow-label {
-    white-space: nowrap;
-  }
-  .frow-settings:focus-visible .frow-label {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.15em;
-    text-decoration-color: var(--color-focus);
-  }
-  :global(html:not(.js)) .frow-settings {
-    display: none;
-  }
-
   /* ── Call to action ─────────────────────────────────── */
   /* One row (Andy): a quiet Email me button, then Schedule a call. They share the row's width,
      and stack only if the hero is too narrow for both. */

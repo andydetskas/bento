@@ -1,16 +1,18 @@
 ---
 // A closer look at one piece of work: the public, ungated version of a case study. Techniques
 // articles use the same shell (pages/site/techniques/[slug].astro). It's a page
-// of its own (/site/work/<slug>/) in the site's shell: the hero stays on the left and the work
-// fills the right two columns, like an open card. A Back link at the top (Bohdana) returns to
-// Selected work: through history when that's where the visitor came from (scroll and state come
-// back as they were), otherwise as a plain link. Escape does the same.
-// Arriving from Selected work shows the page at once and keeps the scene running (SiteHead), and
-// the open Selected work card morphs into this one (shared view-transition name box-portfolio).
+// of its own (/site/work/<slug>/) in the site's shell: the hero (with the site's menu) stays on the
+// left and the work fills the right two columns, like an open card. A Back link at the top
+// (Bohdana) returns to Selected work, the home: through history when that's where the visitor came
+// from (scroll and state come back as they were), otherwise as a plain link. Escape does the same.
+// Arriving from the home shows the page at once and keeps the scene running (SiteHead), and the
+// home's white work page morphs into this card (shared view-transition name box-portfolio).
+// Case studies go full screen as the visitor scrolls (styles/home.css).
 // What belongs on these pages: the problem in public terms, my role, the key decisions with their
 // artifacts, what shipped and what I learned, plus at most the one public-safe result line from
 // the facts sheet. Call-only numbers, internal tools and colleagues' details stay off.
 import '../../styles/site.css';
+import '../../styles/home.css';
 import Base from '../../layouts/Base.astro';
 import Pill from '../Pill.astro';
 import DisplaySettings from './DisplaySettings.astro';
@@ -47,6 +49,11 @@ interface Props {
   backLabel: string;
 }
 const { title, subtitle, company, eyebrow = `${company} · A closer look`, transition = 'box-portfolio', pageTitle, description, accent, backHref, backLabel, kind = 'article', markdown } = Astro.props;
+// Case studies go full screen as the visitor scrolls (Andy, Nov 16; after luzcas.com/batch).
+const canFull = kind === 'article' && transition === 'box-portfolio';
+// The hero menu's current row: Selected work for case studies, Techniques for articles, none for
+// plain pages (the colophon, the 404).
+const menuCurrent = kind !== 'article' ? null : transition === 'box-techniques' ? 'techniques' : 'work';
 
 // Share image: public/site/og/<section>-<slug>.jpg, made by `npm run og:pages`; the default if none.
 const path = Astro.url.pathname;
@@ -69,15 +76,27 @@ const schema =
   <a class="skip" href="#content">Skip to content</a>
   <ShapeField preset={defaultPreset} eager />
 
-  <main class="site has-open is-inner">
-    <SiteCard nameAs="p" />
+  <main class:list={['site has-open is-inner', { 'can-full': canFull }]}>
+    <SiteCard nameAs="p" current={menuCurrent} />
     <article class="card box is-open is-takeover look" id="content" tabindex="-1" style={`--accent:${accent};--b:0;view-transition-name:${transition}`} aria-labelledby="look-title">
-      <a class="backlink" href={backHref} data-back aria-label={`Back to ${backLabel}`}>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M19 12H5M11 6l-6 6 6 6" />
-        </svg>
-        Back
-      </a>
+      <div class="look-bar">
+        <a class="backlink" href={backHref} data-back aria-label={`Back to ${backLabel}`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M11 6l-6 6 6 6" />
+          </svg>
+          Back
+        </a>
+        {canFull && (
+          <button class="look-full" type="button" aria-pressed="false" aria-label="Full screen" data-full-toggle>
+            <svg class="i-grow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+            </svg>
+            <svg class="i-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" />
+            </svg>
+          </button>
+        )}
+      </div>
       <div class="box-top">
         <p class="eyebrow">{eyebrow}</p>
       </div>
@@ -124,4 +143,43 @@ const schema =
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') goBack();
   });
+
+  // ── Full screen on scroll (after luzcas.com/batch) ──
+  // Past the first few pixels of scroll the hero steps out and the card takes the whole width;
+  // back at the top it returns. The switch beside Back overrides it until the visitor scrolls
+  // back to the top. Tablet and up, case studies only.
+  const site = document.querySelector<HTMLElement>('.site.can-full');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-full-toggle]');
+  if (site && toggle) {
+    const wide = matchMedia('(min-width: 760px)');
+    const ENTER = 48;
+    const TOP = 4;
+    let manual: boolean | null = null;
+    const enabled = () => wide.matches;
+    const set = (on: boolean) => {
+      if (site.classList.contains('is-full') === on) return;
+      site.classList.toggle('is-full', on);
+      toggle.setAttribute('aria-pressed', String(on));
+      toggle.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+      document.dispatchEvent(new CustomEvent('pill:clear'));
+    };
+    const update = () => {
+      if (!enabled()) return set(false);
+      const y = window.scrollY;
+      if (y <= TOP && manual !== true) manual = null;
+      const auto = site.classList.contains('is-full') ? y > TOP : y > ENTER;
+      set(manual ?? auto);
+    };
+    toggle.addEventListener('click', () => {
+      manual = !site.classList.contains('is-full');
+      set(manual);
+    });
+    addEventListener('scroll', () => {
+      if (manual === true && window.scrollY > TOP) return;
+      if (manual !== null && window.scrollY <= TOP) manual = null;
+      update();
+    }, { passive: true });
+    wide.addEventListener('change', update);
+    update();
+  }
 </script>

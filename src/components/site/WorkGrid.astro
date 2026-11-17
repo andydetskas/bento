@@ -1,0 +1,196 @@
+---
+// Selected work, as the home page's lead (Andy, Nov 16): big tiles in the right two columns, after
+// Lucas Luz (luzcas.com: the left column keeps the hero) and Jessica Gracia (jessicagracia.com:
+// masonry). Each tile links to its closer look. Styles in styles/home.css.
+// Each tile has art made for its shape (in public/site/work/home/, cut from the case studies'
+// slides and screens), the company in a chip on the art, and the case study and my role in the
+// cursor pill (and in the caption, for screen readers). Under the tiles, the Earlier work ticker.
+import site from '../../content/site.json';
+import { tokens } from '../../lib/tokens';
+import LogoTicker from './LogoTicker.astro';
+
+/** The tall tiles (as tall as the hero); the rest are half height. Andy: Designing for Trust's
+ *  Privacy Controls "looks very good" tall; StackScore "should definitely be" tall. */
+const TALL = new Set(['designing-for-trust', 'stackscore']);
+/** Andy's order. The grid places them so the left column runs Agentic Design System, Designing for
+ *  Trust, Buying Club, and the right runs StackScore, Crushing the Basics, Surfacing Value. */
+const ORDER = ['agentic-design-system', 'stackscore', 'designing-for-trust', 'crushing-the-basics', 'buying-club', 'surfacing-value'];
+const ART = '/site/work/home';
+/** Each tile's art. `phone`: a whole phone (or modal), standing in the middle of the tile.
+ *  `panel`: a picture shown whole on its own background color. `thumb`: a 16:10 thumbnail lifted
+ *  off its tile color. `card`: a single wide UI piece. `bg` replaces the tile's tint. */
+const tileArt: Record<string, { src: string; width: number; height: number; fit: 'phone' | 'panel' | 'thumb' | 'card'; alt?: string; bg?: string; screen?: boolean; banners?: string; bannerAngle?: number; pills?: boolean; video?: { src: string; poster: string } }> = {
+  // The screen alone, with its own rounded corners and the phones' soft shadow; behind it,
+  // Strava-orange banners, each a ticker of the Strava logo and PRIVACY SETTINGS (Andy).
+  'designing-for-trust': { src: `${ART}/designing-for-trust-screen.webp`, width: 310, height: 671, fit: 'phone', screen: true, banners: 'Privacy settings', alt: 'Strava’s Privacy Controls screen on iPhone' },
+  // On SuppCo's light blue (#EDFAFD, its home page's Manifesto and TrustScore cards), with its home
+  // page's nutrient pills behind, re-drawn and shaded back (Andy).
+  stackscore: { src: `${ART}/stackscore-phone.webp`, width: 332, height: 720, fit: 'phone', bg: '#EDFAFD', pills: true, alt: 'SuppCo’s StackScore overview on iPhone: 88, with insights about the stack' },
+  // The whole "New look, better Strava" modal (not the whole screen), with Strava banners angled the
+  // other way from Privacy Controls' (Andy).
+  'surfacing-value': { src: `${ART}/surfacing-value-modal.webp`, width: 506, height: 774, fit: 'phone', banners: 'Navigation', bannerAngle: 18, alt: 'Strava’s “New look, better Strava” welcome: the redesigned navigation bar over the home feed, and a Let’s go button' },
+  // The repo's code and agent skills (Andy).
+  'agentic-design-system': { src: `${ART}/agentic-design-system-code.webp`, width: 951, height: 634, fit: 'panel', bg: '#101929', alt: 'The Capsule design system repo: the tokens file and four agent skills that read it' },
+  // Lifted off its baked-in green, on the same light blue as StackScore, no pills (Andy).
+  'buying-club': { src: `${ART}/buying-club-cutout.webp`, width: 774, height: 484, fit: 'thumb', bg: '#EDFAFD' },
+  // The battery-status card alone, with the phones' soft shadow, over a six-second loop from SRAM's
+  // Rival AXS film (tunnel, drivetrain, road; Andy chose to host a short copy: 960×400, 2.4 MB).
+  'crushing-the-basics': { src: `${ART}/crushing-the-basics-card.webp`, width: 656, height: 160, fit: 'card', video: { src: `${ART}/rival-axs-loop.mp4`, poster: `${ART}/rival-axs-poster.webp` } },
+};
+
+/** SuppCo's home page nutrient pills ("Find the most impactful nutrients"): plain supplement names,
+ *  dealt into rows (i % rows) so each row mixes the alphabet. */
+const NUTRIENTS = ['Activated charcoal', 'Alpha-Lipoic Acid', 'Apigenin', 'Apple cider vinegar', 'Arginine', 'Ashwagandha', 'Beetroot powder', 'Berberine', 'Biotin', 'Black Seed Oil', 'Branched-Chain Amino Acids', 'Bromelain', 'Calcium', 'Chlorophyll', 'Cod liver oil', 'Coenzyme Q10', 'Collagen', 'Colostrum', 'Cordyceps', 'Cranberry', 'Creatine', 'Dandelion', 'DHEA', 'Digestive enzymes', 'DIM', 'Elderberry', 'Electrolytes', 'Evening primrose oil', 'Fenugreek', 'Fiber', 'Fish Oil', 'Flaxseed', 'Folate', 'GABA', 'Garlic', 'Ginger', 'Ginkgo Biloba', 'Glucosamine Chondroitin', 'Glutamine', 'Glutathione', 'Greens Powder', 'Inositol', 'Iron', 'Krill Oil', 'Carnitine', 'L-Theanine', 'Lutein', 'Lysine', 'Maca', 'Magnesium', 'Melatonin', 'Milk Thistle', 'Moringa', 'Multivitamin', 'N-Acetylcysteine (NAC)', 'NAD+ Precursor', 'Nattokinase', 'Niacin', 'Oregano', 'Potassium', 'Prebiotics', 'Probiotics', 'Psyllium Husk', 'Quercetin', 'Resveratrol', 'Rhodiola Rosea', 'Saffron', 'Saw Palmetto', 'Sea Moss', 'Selenium', 'Shilajit', 'Spirulina', 'Taurine', 'Tongkat Ali', 'Turmeric Curcumin', 'Valerian', 'Vitamin A', 'Vitamin B12', 'Vitamin B6', 'Vitamin C', 'Vitamin D', 'Vitamin E', 'Vitamin K', 'Zinc'];
+const PILL_ROWS = 16;
+const pillRows = Array.from({ length: PILL_ROWS }, (_, r) => NUTRIENTS.filter((_, i) => i % PILL_ROWS === r));
+
+const light = tokens.taos.light as Record<string, Record<string, string>>;
+const accents = tokens.accent as Record<string, string>;
+const ordered = [...site.work].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
+const items = ordered.map((w, i) => {
+  const look = 'look' in w ? (w.look as string) : undefined;
+  const art = tileArt[w.id];
+  const vars = [`--tint:${light[w.tint[0]][w.tint[1]]}`, `--accent:${accents[w.accent]}`, `--i:${i}`];
+  if (art) vars.push(`--alt-ar:${art.width / art.height}`);
+  if (art?.bg) vars.push(`--alt-bg:${art.bg}`);
+  if (art?.bannerAngle) vars.push(`--banner-angle:${art.bannerAngle}deg`);
+  return {
+    ...w,
+    index: i,
+    href: look ?? w.url,
+    external: !look,
+    accentHex: accents[w.accent],
+    tall: TALL.has(w.id),
+    art,
+    style: vars.join(';'),
+    // The cursor pill: the case study and my role (the company is on the art).
+    pill: `${w.title} · ${w.roleShort}`,
+  };
+});
+---
+
+<section class="work-grid is-takeover" id="card-work-grid" aria-labelledby="work-grid-title" style="--b:0">
+  <h2 class="sr-only" id="work-grid-title">Selected work</h2>
+  <ul class="wg" role="list">
+    {
+      items.map((w) => (
+        <li class:list={['wt', { 'is-tall': w.tall, 'has-alt-art': !!w.art }]} style={w.style}>
+          <a class="wt-link" href={w.href} data-pill={w.pill} data-accent={w.accentHex} {...(w.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            <span class="wt-art">
+              {w.art?.banners && (
+                <span class="wt-banners" aria-hidden="true">
+                  {[0, 1, 2, 3, 4].map(() => (
+                    <span class="wt-banner">
+                      <span class="wt-banner-track">
+                        {Array.from({ length: 12 }, () => (
+                          <span class="wt-banner-item">
+                            <span class="wt-banner-logo" />
+                            {w.art?.banners}
+                          </span>
+                        ))}
+                      </span>
+                    </span>
+                  ))}
+                </span>
+              )}
+              {w.art?.pills && (
+                <span class="wt-pills" aria-hidden="true">
+                  {pillRows.map((row) => (
+                    <span class="wt-pill-row">
+                      {row.map((n) => (
+                        <span class="wt-pill">{n}</span>
+                      ))}
+                    </span>
+                  ))}
+                </span>
+              )}
+              {w.art?.video && (
+                <video class="wt-video" src={w.art.video.src} poster={w.art.video.poster} muted loop playsinline preload="none" disablepictureinpicture aria-hidden="true" tabindex="-1" />
+              )}
+              <span class="wt-co">{w.company}</span>
+              {w.art ? (
+                <img class:list={['wt-alt', `wt-alt--${w.art.fit}`, { 'wt-alt--screen': w.art.screen }]} src={w.art.src} width={w.art.width} height={w.art.height} alt={w.art.alt ?? w.image.alt} loading={w.index < 2 ? 'eager' : 'lazy'} decoding="async" />
+              ) : (
+                <img class="wt-img" src={w.image.src} width={w.image.width} height={w.image.height} alt={w.image.alt} loading={w.index < 2 ? 'eager' : 'lazy'} decoding="async" />
+              )}
+            </span>
+            <span class="sr-only">
+              {w.title}. {w.roleShort}. {w.summary}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <LogoTicker />
+</section>
+
+<script>
+  import { motionReduced } from '../../lib/display-settings';
+
+  // The tall tiles match the hero. The hero opens during the entrance (it starts folded to its
+  // masthead), so measure the height it opens to, not the height it has right now: otherwise the
+  // tiles start tiny and grow with it.
+  const grid = document.querySelector<HTMLElement>('.site');
+  const hero = document.querySelector<HTMLElement>('.area-hero');
+  const more = hero?.querySelector<HTMLElement>('.card-more');
+  const inner = hero?.querySelector<HTMLElement>('.card-more-inner');
+  if (grid && hero && more && inner) {
+    const update = () => grid.style.setProperty('--hero-open-h', `${hero.offsetHeight - more.offsetHeight + inner.scrollHeight}px`);
+    const ro = new ResizeObserver(update);
+    ro.observe(hero);
+    ro.observe(inner);
+    update();
+  }
+
+  // The SRAM tile's video plays only while on screen, shown, and with motion on (the system setting
+  // or Display settings); otherwise it holds its poster or a still frame. It loads when first played.
+  const videos = [...document.querySelectorAll<HTMLVideoElement>('.wt-video')];
+  const onScreen = new Set<HTMLVideoElement>();
+  const sync = () => {
+    for (const v of videos) {
+      const run = onScreen.has(v) && !motionReduced() && v.offsetParent !== null;
+      if (run) v.play().catch(() => {});
+      else v.pause();
+    }
+  };
+  if (videos.length) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) onScreen.add(v);
+        else onScreen.delete(v);
+      }
+      sync();
+    });
+    videos.forEach((v) => io.observe(v));
+    // Display settings' motion switch writes data-motion on <html> (no event), so watch for it.
+    new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['data-motion'] });
+  }
+
+  // The Strava banners move at the nutrient pills' pace (Andy): the pills drift 40px each way over
+  // 7s, about 6px a second. A banner's loop is half its track, so its duration follows its length
+  // (type size follows the tile's width, and the labels differ).
+  const BANNER_SPEED = 6; // px per second
+  const tracks = [...document.querySelectorAll<HTMLElement>('.wt-banner-track')];
+  const pace = () => {
+    for (const t of tracks) {
+      const half = t.scrollWidth / 2;
+      if (half > 0) t.style.animationDuration = `${(half / BANNER_SPEED).toFixed(1)}s`;
+    }
+  };
+  if (tracks.length) {
+    pace();
+    document.fonts?.ready.then(pace);
+    const art = new Set(tracks.map((t) => t.closest<HTMLElement>('.wt-art')!));
+    let last = '';
+    const ro = new ResizeObserver(() => {
+      const sizes = [...art].map((a) => a.offsetWidth).join();
+      if (sizes !== last) {
+        last = sizes;
+        pace();
+      }
+    });
+    art.forEach((a) => ro.observe(a));
+  }
+</script>

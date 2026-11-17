@@ -1,14 +1,15 @@
 ---
-// One page per section (/site/work/, /site/leadership/, /site/techniques/, /site/about/): the
-// same grid, rendered with that card open, with its own title and description for search.
+// One page per section (/site/leadership/, /site/techniques/, /site/about/): the home, rendered with
+// that card open, with its own title and description for search. Selected work is the home itself
+// (/site/work/ redirects there: lib/legacy-urls.ts).
 import SitePage from '../../components/site/SitePage.astro';
 import { sections, type Section } from '../../lib/site-sections';
 
 export function getStaticPaths() {
-  return sections.map((s) => ({ params: { section: s.slug }, props: { id: s.id } }));
+  return sections.filter((s) => s.id !== 'portfolio').map((s) => ({ params: { section: s.slug }, props: { id: s.id } }));
 }
 
-const { id } = Astro.props as { id: Section['id'] };
+const { id } = Astro.props as { id: Exclude<Section['id'], 'portfolio'> };
 ---
 
 <SitePage open={id} />
