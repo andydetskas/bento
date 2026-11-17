@@ -85,7 +85,7 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
     {/* The hero and the work share a wrapper, so the sticky hero lets go where the work ends
         (home.css). The home's h1 is the name; a section's own page makes its card's title the h1. */}
     <div class="wf-top">
-      <SiteCard nameAs={open ? 'p' : 'h1'} current={open ?? 'work'} />
+      <SiteCard nameAs={open ? 'p' : 'h1'} current={open ?? 'work'} fold />
       <WorkGrid />
     </div>
 

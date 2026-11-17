@@ -353,8 +353,42 @@
   }
 }
 
-/* The company, in a chip on the art (Andy). The case study and my role are in the cursor pill, and
-   in the tile's caption for screen readers. */
+/* The case study and my role, in words under the art (Andy, Nov 17). Always visible: on a phone
+   and to a keyboard, not just under a mouse. It replaced the cursor pill. In two columns the art
+   flexes, so the caption takes its row from the art and the columns still end level. */
+.wt-cap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-1) 0;
+}
+.wt-title {
+  font-size: var(--step-0);
+  font-weight: var(--weight-medium);
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--motion-quick) var(--motion-ease-standard);
+}
+.wt-role {
+  font-size: var(--step--1);
+  line-height: 1.3;
+  color: var(--color-text-muted);
+}
+@media (hover: hover) {
+  .wt-link:hover .wt-title {
+    text-decoration-color: currentColor;
+  }
+}
+.wt-link:focus-visible .wt-title {
+  text-decoration-color: var(--color-focus);
+  text-decoration-thickness: 2px;
+}
+
+/* The company, in a chip on the art (Andy). */
 .wt-co {
   position: absolute;
   z-index: 1;

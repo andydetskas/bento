@@ -16,17 +16,26 @@ interface Props {
   nameAs?: 'h1' | 'p';
   /** The menu row for this page (HeroMenu). */
   current?: 'work' | 'techniques' | 'leadership' | 'about' | null;
+  /** Inner pages (closer looks, section pages): on a phone the card folds to its masthead, with a
+   *  menu button, so the page's own title is in the first screen (Andy, Nov 17). */
+  fold?: boolean;
 }
-const { nameAs = 'h1', current = 'work' } = Astro.props;
+const { nameAs = 'h1', current = 'work', fold = false } = Astro.props;
 const { intro } = site;
 // Resume and email live on About (Andy, Nov 11). Here, email is the quiet button beside the call
 // to action, so it's in two places on the site.
 const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
 ---
 
-<section class="card site-card area-hero" aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
+<section class:list={['card site-card area-hero', { 'can-fold': fold }]} aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
     <CardHead nameAs={nameAs} href={SITE_BASE} />
-    <div class="card-more">
+    {fold && (
+      <button class="menu-toggle arrow" type="button" aria-expanded="false" aria-controls="site-card-more">
+        <span class="sr-only">Menu</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+      </button>
+    )}
+    <div class="card-more" id="site-card-more">
       <div class="card-more-inner">
         <p class="headline">{intro.headline}</p>
         <HeroMenu current={current} />
@@ -105,11 +114,93 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     justify-content: center;
   }
 
+  /* ── Folded on a phone (inner pages) ────────────────── */
+  /* One column: on a closer look or section page the card stays folded to its masthead, so the
+     page's title, summary and role strip lead the first screen. The chevron opens the menu.
+     Without JS the card stays open. */
+  .menu-toggle {
+    display: none;
+  }
+  @media (max-width: 759px) {
+    :global(html.js .site.has-open) .site-card.can-fold {
+      position: relative;
+    }
+    :global(html.js .site.has-open) .can-fold .menu-toggle {
+      display: grid;
+      position: absolute;
+      top: var(--pad);
+      right: var(--pad);
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+    }
+    :global(html.js .site.has-open) .can-fold .menu-toggle svg {
+      width: 16px;
+      height: 16px;
+      transition: rotate var(--motion-base) var(--motion-ease-settle);
+    }
+    :global(html.js .site.has-open) .can-fold.is-menu-open .menu-toggle svg {
+      rotate: 180deg;
+    }
+    :global(html.js .site.has-open) .can-fold .menu-toggle:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+    /* Room for the chevron beside the masthead. */
+    :global(html.js .site.has-open) .can-fold :global(.card-head) {
+      padding-right: 48px;
+    }
+    :global(html.js .site.has-open) .site-card.can-fold:not(.is-menu-open) {
+      padding-bottom: var(--pad-end);
+    }
+    :global(html.js .site.has-open) .can-fold:not(.is-menu-open) .card-more {
+      grid-template-rows: 0fr;
+    }
+    /* Folded, the menu is out of the tab order too (visibility), not just clipped. */
+    :global(html.js .site.has-open) .can-fold:not(.is-menu-open) .card-more-inner {
+      opacity: 0;
+      visibility: hidden;
+      overflow: hidden;
+      transition:
+        opacity 200ms var(--motion-ease-standard),
+        visibility 0s linear 200ms;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .site-card,
     .card-more,
-    .card-more-inner {
+    .card-more-inner,
+    .menu-toggle svg {
       transition: none;
     }
   }
 </style>
+
+<script>
+  // The phone menu button on inner pages: opens and folds the card. While it's open, Escape folds
+  // it and stops there: the page's own Escape (back from a closer look or section) waits for the
+  // next press. Listened for on window, capture phase, so it runs before the page's handler.
+  const card = document.querySelector<HTMLElement>('.site-card.can-fold');
+  const toggle = card?.querySelector<HTMLButtonElement>('.menu-toggle');
+  if (card && toggle) {
+    const isOpen = () => card.classList.contains('is-menu-open');
+    const set = (open: boolean) => {
+      card.classList.toggle('is-menu-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+    toggle.addEventListener('click', () => set(!isOpen()));
+    window.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key !== 'Escape' || !isOpen() || getComputedStyle(toggle).display === 'none') return;
+        e.stopPropagation();
+        set(false);
+        if (card.contains(document.activeElement)) toggle.focus();
+      },
+      true,
+    );
+  }
+</script>
