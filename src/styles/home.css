@@ -7,8 +7,8 @@
      masonry of big tiles on one white page (WorkGrid.astro). How I lead, Techniques and About open
      from the menu onto that stage (SitePage's takeover).
   2. Full screen on scroll (closer looks), after luzcas.com/batch: once the visitor scrolls, the
-     hero steps out and the case-study card widens to the whole screen. The text column holds
-     still (it's indented by exactly what the card gained) and the figures grow.
+     hero steps out and the case-study card widens to the whole screen. The text column keeps its
+     width and settles in the middle of the card (Andy, Nov 17), and the figures grow.
 */
 
 /* ── 1. Work-first home ─────────────────────────────── */
@@ -481,10 +481,12 @@ html.from-site.is-landing :is(.work-grid, .wt) {
       translate 700ms var(--motion-ease-settle),
       visibility 0s linear 0s;
   }
+  /* The card gains the hero's column and gap; the text takes half of that on each side, so it
+     keeps its width and sits centered. */
   .site.can-full.is-full {
     grid-template-columns: 0px minmax(0, 1fr);
     column-gap: 0px;
-    --look-indent: calc(var(--site-col) + var(--site-gap));
+    --look-indent: calc((var(--site-col) + var(--site-gap)) / 2);
   }
   .site.can-full.is-full > .area-hero {
     opacity: 0;
@@ -496,13 +498,13 @@ html.from-site.is-landing :is(.work-grid, .wt) {
       translate 700ms var(--motion-ease-settle),
       visibility 0s linear 700ms;
   }
-  /* Text holds its place; figures take the full width. */
+  /* Text keeps its width, centered; figures take the full width. */
   .site.can-full .look > .box-top,
   .site.can-full .look > .look-head,
   .site.can-full .look-body > :not(.look-fig, .look-section),
   .site.can-full .look-section > :not(.look-fig, .look-steps),
   .site.can-full .look-steps > li > :not(.look-fig) {
-    margin-left: var(--look-indent);
+    margin-inline: var(--look-indent);
   }
 }
 @media (min-width: 1100px) {

@@ -3,6 +3,8 @@
 //   [data-pill="text"]   a cursor pill with that text follows the pointer (mouse and pen only)
 //   [data-accent="#hex"] colors the pill while hovered or keyboard-focused. (It used to tint
 //                        the scene too; the scene now keeps one color sitewide, see ShapeField.)
+//                        Pills darken a light accent so white text reads; [data-accent-exact]
+//                        keeps it at full strength (the work tiles' brand colors).
 // Nested targets work: entering a row inside a box shows the row's pill, leaving it brings the
 // box's back. Touch gets neither: a tap is a click, not a hover.
 // Change data-pill at any time and dispatch `pill:refresh` to update a pill that's showing.
@@ -83,6 +85,7 @@
     // No accent: the neutral fill from global.css.
     if (top.dataset.accent) pill.style.setProperty('--pill-bg', top.dataset.accent);
     else pill.style.removeProperty('--pill-bg');
+    pill.classList.toggle('is-exact', !!top.dataset.accent && top.dataset.accentExact !== undefined);
     if (!pill.classList.contains('is-on')) {
       x = tx;
       y = ty;

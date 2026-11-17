@@ -2,8 +2,9 @@
 // Andy's signature, drawn the way it is on the old About page. The original is a Lottie animation
 // (framerusercontent.com/assets/hTDGMFXg7mKEuGPmVn82Ehy10g.json); its three strokes and their timing
 // (frames 0–4, 4–10 and 11–40 at 30 fps) are converted here to plain SVG and CSS, so no Lottie
-// player ships. It draws once, when it scrolls into view. With reduced motion, or motion turned off in
-// Display settings, it's simply there.
+// player ships. It draws once, when it's in view and the page has finished landing, plus a beat, so
+// the visitor sees it draw (Andy, Nov 17: it used to finish during the entrance). With reduced
+// motion, or motion turned off in Display settings, it's simply there.
 interface Props {
   class?: string;
 }
@@ -53,12 +54,25 @@ const { class: cls } = Astro.props;
 </style>
 
 <script>
-  // Draw each signature the first time it's on screen (the About panel can open later).
+  // Draw each signature the first time it's on screen (the About panel can open later), once the
+  // page has landed (html.is-settled: the entrance, or a page reached from the site) and a beat
+  // after that, which also clears the view transition that opens the panel or the page.
+  const BEAT = 600; // ms
+  const root = document.documentElement;
+  const landed = new Promise<void>((resolve) => {
+    if (root.classList.contains('is-settled')) return resolve();
+    const mo = new MutationObserver(() => {
+      if (!root.classList.contains('is-settled')) return;
+      mo.disconnect();
+      resolve();
+    });
+    mo.observe(root, { attributes: true, attributeFilter: ['class'] });
+  });
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
-      e.target.classList.add('is-drawn');
       io.unobserve(e.target);
+      landed.then(() => setTimeout(() => e.target.classList.add('is-drawn'), BEAT));
     }
   }, { threshold: 0.6 });
   document.querySelectorAll('.signature').forEach((el) => io.observe(el));

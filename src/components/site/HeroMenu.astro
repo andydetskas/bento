@@ -3,7 +3,7 @@
 // rows in the hero card, and the right side is a stage. On the home a row swaps the work for that
 // section in place (SitePage's takeover, so each has its own URL and Back returns to the work)
 // while the hero holds still; on other pages the rows are plain links. Display settings is the
-// last row. Rows follow the hero's rules (SiteCard): no pills, no scene tint; keyboard focus shows.
+// last row. Rows have no pills and no scene tint; hovering one fills its arrow (Andy, Nov 17).
 // ("Lab" for Techniques was tried and parked: it would mean new URLs, /lab/ for /techniques/.)
 import { tokens } from '../../lib/tokens';
 import { SITE_BASE } from '../../lib/site-sections';
@@ -121,6 +121,18 @@ const items = [
   .mrow .arrow svg {
     width: 14px;
     height: 14px;
+  }
+  /* Hover (Andy, Nov 17): the arrow fills with the row's color and the dot takes it as an outline;
+     Display settings fills neutral. Keyboard focus does the same, plus the underline. */
+  @media (hover: hover) {
+    .mrow:hover .arrow {
+      background: var(--accent-fill);
+      border-color: var(--accent-fill);
+      color: var(--accent-on);
+    }
+    .mrow:hover .mrow-dot {
+      border-color: var(--accent, var(--color-text-primary));
+    }
   }
   .mrow:focus-visible .mrow-label {
     text-decoration: underline;

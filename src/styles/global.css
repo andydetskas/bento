@@ -212,3 +212,9 @@ html.js.is-ready .line-inner {
     --accent-on: #fff;
   }
 }
+/* A pill that keeps its accent at full strength (Pill.astro, [data-accent-exact]: the work tiles'
+   brand colors), white text. High contrast (site.css) still turns it dark on light. */
+.pill.is-exact {
+  --accent-fill: var(--pill-bg);
+  --accent-on: #fff;
+}

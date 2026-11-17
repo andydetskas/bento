@@ -44,6 +44,12 @@ const NUTRIENTS = ['Activated charcoal', 'Alpha-Lipoic Acid', 'Apigenin', 'Apple
 const PILL_ROWS = 16;
 const pillRows = Array.from({ length: PILL_ROWS }, (_, r) => NUTRIENTS.filter((_, i) => i % PILL_ROWS === r));
 
+/** The cursor pill on a tile takes the company's own brand color at full strength, white text
+ *  (Andy, Nov 17): SuppCo's blue (its web theme's primary), Strava orange, SRAM's red (sram.com's
+ *  --color-red). Full strength, so not darkened for contrast like other pills: white on Strava
+ *  orange is about 3.4:1; Display settings' high contrast still turns pills dark on light. */
+const BRAND: Record<string, string> = { SuppCo: '#0A7594', Strava: '#FC4C02', SRAM: '#E51937' };
+
 const light = tokens.taos.light as Record<string, Record<string, string>>;
 const accents = tokens.accent as Record<string, string>;
 const ordered = [...site.work].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
@@ -59,7 +65,7 @@ const items = ordered.map((w, i) => {
     index: i,
     href: look ?? w.url,
     external: !look,
-    accentHex: accents[w.accent],
+    pillColor: BRAND[w.company] ?? accents[w.accent],
     tall: TALL.has(w.id),
     art,
     style: vars.join(';'),
@@ -75,7 +81,7 @@ const items = ordered.map((w, i) => {
     {
       items.map((w) => (
         <li class:list={['wt', { 'is-tall': w.tall, 'has-alt-art': !!w.art }]} style={w.style}>
-          <a class="wt-link" href={w.href} data-pill={w.pill} data-accent={w.accentHex} {...(w.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+          <a class="wt-link" href={w.href} data-pill={w.pill} data-accent={w.pillColor} data-accent-exact {...(w.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
             <span class="wt-art">
               {w.art?.banners && (
                 <span class="wt-banners" aria-hidden="true">
