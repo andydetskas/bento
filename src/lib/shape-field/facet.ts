@@ -20,19 +20,28 @@ export interface FacetOptions {
 
 const vertexShader = /* glsl */ `
   attribute float aSet;
+  uniform vec3 uFade;
   varying vec3 vNWorld;
   varying vec3 vNLocal;
   varying float vSet;
+  varying float vFade;
   void main() {
     vec4 p = vec4(position, 1.0);
     vec3 n = normal;
+    vec4 center = vec4(0.0, 0.0, 0.0, 1.0);
     #ifdef USE_INSTANCING
       p = instanceMatrix * p;
       n = mat3(instanceMatrix) * n;
+      center = instanceMatrix * center;
     #endif
     vNLocal = normal;
     vNWorld = normalize(mat3(modelMatrix) * n);
     vSet = aSet;
+    // Edge fade, by the form's center so the whole form fades as one.
+    float cy = (modelMatrix * center).y;
+    vFade = uFade.z > 0.0
+      ? smoothstep(uFade.x, uFade.x + uFade.z, cy) * (1.0 - smoothstep(uFade.y - uFade.z, uFade.y, cy))
+      : 1.0;
     gl_Position = projectionMatrix * modelViewMatrix * p;
   }
 `;
@@ -46,9 +55,11 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uAccent;
   uniform float uAccentAmt;
   uniform float uPrimaryLocal;
+  uniform vec3 uBg;
   varying vec3 vNWorld;
   varying vec3 vNLocal;
   varying float vSet;
+  varying float vFade;
   void main() {
     vec3 nW = normalize(vNWorld);
     float primary = uPrimaryLocal > 0.5 ? abs(normalize(vNLocal).z) : nW.y;
@@ -61,6 +72,7 @@ const fragmentShader = /* glsl */ `
     vec3 side = mix(uShade, uLit, smoothstep(-0.3, 0.3, s));
 
     vec3 col = mix(side, top, smoothstep(0.55, 0.72, primary));
+    col = mix(uBg, col, vFade);
     gl_FragColor = vec4(col, 1.0);
     #include <colorspace_fragment>
   }
@@ -90,6 +102,8 @@ export class Facet {
         uLightDir: shared.uLightDir,
         uAccent: shared.uAccent,
         uAccentAmt: shared.uAccentAmt,
+        uBg: shared.uBg,
+        uFade: shared.uFade,
       },
     });
     // Meshes without an aSet attribute read 0 (no alternate color).

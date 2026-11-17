@@ -77,6 +77,8 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
     uAccent: { value: accent.value },
     uAccentAmt: { value: 0 },
     uTime: { value: 0 },
+    uBg: { value: bg.value },
+    uFade: { value: new THREE.Vector3() },
   };
   let accentTarget = 0;
 
@@ -109,8 +111,10 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
       inst.dispose();
     }
     family = families[preset.family];
+    shared.uFade.value.set(0, 0, 0); // off unless the new family turns it on
     inst = family.build({ params: preset.params, palette: preset.palette, rng: mulberry32(preset.params.seed), shared, glyphs: preset.glyphs });
     scene.add(inst.root);
+    layoutCamera(); // tells the new field where the view is before its first update
     t = 0;
     if (reduced) {
       // Static frame: jump straight to a settled state.
@@ -154,6 +158,11 @@ export function createShapeField(canvas: HTMLCanvasElement, initial: Preset, opt
     camera.rotateZ(tilt);
     camera.setViewOffset(width, height, -focusX * width, focusY * height, width, height);
     camera.updateProjectionMatrix();
+    // The middle of what's on screen, in world space: the view offset moves it off the origin,
+    // and the roll turns that offset. A wrapping field centers its wrap here.
+    const vx = -2 * focusX * halfH * aspect;
+    const vy = -2 * focusY * halfH;
+    inst.view?.(vx * Math.cos(tilt) - vy * Math.sin(tilt), vx * Math.sin(tilt) + vy * Math.cos(tilt), camera.position);
   }
 
   function resize() {

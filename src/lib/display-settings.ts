@@ -8,8 +8,8 @@ export const DISPLAY_KEY = 'ad_display';
 
 import { defaultPreset, glyphPalettes } from './presets';
 
-/** The scene in dark mode: Adobe Night (presets.ts), the light Adobe scene's counterpart. */
-export const DARK_PALETTE = glyphPalettes.find((p) => p.id === 'adobe-night')!.palette;
+/** The scene in dark mode: Indigo Night (presets.ts), the light Indigo scene's counterpart. */
+export const DARK_PALETTE = glyphPalettes.find((p) => p.id === 'indigo-night')!.palette;
 export const LIGHT_PALETTE = defaultPreset.palette;
 
 export interface DisplaySettings {

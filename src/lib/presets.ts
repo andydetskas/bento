@@ -179,46 +179,44 @@ export const presets: Preset[] = [
     sceneAccent: false,
   },
   // ── Glyphs: extruded Taos icons. colors = face colors (any number), extrusion = side walls
-  // Andy's pick (2026-11-05, second round): Adobe palette, loose checker layout, larger glyphs,
-  // no depth spread, 16 of the 21 icons.
+  // Andy's pick (third round): the Indigo palette (Taos Indigo 600 → 300 faces, dark Indigo 300
+  // walls, on Indigo 200), checker layout, slow drift, flat lighting (contrast 0), 13 of the 21 icons.
+  // Before this: Adobe palette, speed 1, contrast 0.74, 16 icons (git history has the exact values).
   {
     id: 'glyphs-color',
-    name: 'Glyphs · Adobe',
+    name: 'Glyphs · Indigo',
     family: 'glyphs',
     tone: 'color',
-    paletteId: 'adobe',
+    paletteId: 'indigo',
     palette: {
-      bg: '#F8E5D0',
-      extrusion: '#754029',
-      colors: ['#E49065', '#D74C07', '#9D7F6B', '#836442', '#FECDCA', '#FAB469'],
+      bg: L('indigo', '200'),
+      extrusion: D('indigo', '300'),
+      colors: [L('indigo', '600'), L('indigo', '500'), L('indigo', '400'), L('indigo', '300')],
     },
     params: {
-      density: 0.63,
-      tilt: 20,
-      light: 40,
-      speed: 1,
-      scale: 1.34,
-      seed: 5,
-      tint: 0.85,
-      size: 1.44,
-      depth: 1.45,
+      density: 0.65,
+      tilt: 30,
+      light: 100,
+      speed: 0.35,
+      scale: 1.13,
+      seed: 156,
+      tint: 0,
+      size: 1.29,
+      depth: 1.7,
       spread: 0,
-      tumble: 1,
-      contrast: 0.74,
+      tumble: 1.19,
+      contrast: 0,
       layout: 'checker',
-      jitter: 0.79,
+      jitter: 0.5,
     },
     card: { mode: 'light', radius: 32 },
     sceneAccent: true,
     glyphs: [
-      'alpenglow',
       'cactus',
       'cloud',
       'compass',
       'crown',
       'eye',
-      'feather',
-      'fox',
       'hank',
       'ladder',
       'lightning',
@@ -281,8 +279,7 @@ export const glyphPalettes: NamedPalette[] = [
   { id: 'earth', name: 'Earth', kind: 'earth', mode: 'light', palette: { bg: L('saddle', '300'), extrusion: D('fire', '200'), colors: [L('saddle', '600'), L('fire', '500'), D('alpenglow', '400'), D('fire', '300'), D('verde', '400'), D('sun', '500')] } },
   { id: 'adobe', name: 'Adobe', kind: 'earth', mode: 'light', palette: { bg: L('alpenglow', '200'), extrusion: D('fire', '300'), colors: [L('fire', '400'), L('fire', '600'), L('saddle', '600'), D('alpenglow', '300'), L('coral', '600'), L('alpenglow', '500')] } },
   { id: 'sage', name: 'Sage & Clay', kind: 'earth', mode: 'light', palette: { bg: L('saddle', '200'), extrusion: D('verde', '200'), colors: [L('verde', '500'), D('verde', '400'), L('saddle', '500'), L('fire', '400'), D('sun', '400')] } },
-  // The site's dark theme (Display settings → Theme): Adobe's warm glyphs on True Black, behind the
-  // Style Guide's dark card (Shadow 600).
+  // The light scene's dark counterpart, from Adobe's days as the default; Indigo Night replaced it.
   { id: 'adobe-night', name: 'Adobe Night', kind: 'earth', mode: 'dark', palette: { bg: D('black', '300'), extrusion: D('black', '500'), colors: [D('fire', '600'), D('alpenglow', '600'), D('alpenglow', '400'), D('fire', '400'), D('coral', '500'), D('saddle', '600')] } },
   { id: 'mesa', name: 'Mesa Night', kind: 'earth', mode: 'light', palette: { bg: D('fire', '200'), extrusion: L('black', '600'), colors: [L('sun', '400'), L('alpenglow', '600'), L('fire', '500'), L('saddle', '400'), L('verde', '300')] } },
   // Mono
@@ -291,6 +288,10 @@ export const glyphPalettes: NamedPalette[] = [
   { id: 'ink', name: 'Ink', kind: 'mono', mode: 'dark', palette: { bg: D('black', '300'), extrusion: D('black', '500'), colors: [L('saddle', '200'), L('shadow', '300'), L('shadow', '500')] } },
   { id: 'fire', name: 'Fire', kind: 'mono', mode: 'light', palette: { bg: L('fire', '200'), extrusion: D('fire', '300'), colors: [L('fire', '600'), L('fire', '500'), L('fire', '400'), L('fire', '300')] } },
   { id: 'indigo', name: 'Indigo', kind: 'mono', mode: 'light', palette: { bg: L('indigo', '200'), extrusion: D('indigo', '300'), colors: [L('indigo', '600'), L('indigo', '500'), L('indigo', '400'), L('indigo', '300')] } },
+  // The site's dark theme (Display settings → Theme), the Indigo scene at night: the same four
+  // faces, on the dark page color (True Black 300) with near-black walls, behind the Style Guide's
+  // dark card (Shadow 600).
+  { id: 'indigo-night', name: 'Indigo Night', kind: 'mono', mode: 'dark', palette: { bg: D('black', '300'), extrusion: D('black', '500'), colors: [L('indigo', '600'), L('indigo', '500'), L('indigo', '400'), L('indigo', '300')] } },
   { id: 'verde', name: 'Verde', kind: 'mono', mode: 'light', palette: { bg: L('verde', '200'), extrusion: D('verde', '200'), colors: [L('verde', '600'), L('verde', '500'), L('verde', '400'), L('verde', '300')] } },
   { id: 'lavender', name: 'Lavender', kind: 'mono', mode: 'light', palette: { bg: L('lavender', '200'), extrusion: D('lavender', '300'), colors: [L('lavender', '600'), L('lavender', '500'), L('lavender', '400'), L('lavender', '300')] } },
 ];

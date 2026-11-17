@@ -13,6 +13,9 @@ const H = 4.2; // half-height of the field
 const W = H * 1.9; // half-width (covers 16:10 plus the composition shift)
 const MAX_FACES = 8;
 const SLOTS = 840; // divisible by 1–8, so slot % colors.length stays evenly spread
+/** Radians. How far a glyph's face may turn from the viewer: freely to the knee, easing to the max. */
+const FACE_KNEE = 0.75; // ~43°
+const FACE_MAX = 1.05; // ~60°
 
 export const GLYPH_NAMES = iconNames;
 
@@ -142,8 +145,9 @@ export const glyphs: Family = {
       return mesh;
     };
 
-    // A glyph that drifts above `top` drops back by `span`.
-    let top = H + 1.2;
+    // The field is periodic in y: a glyph that drifts past the top of the wrap window drops back
+    // by `span`. The window is centered on the middle of the view (view(), from the engine), not on
+    // the origin, since the composition shift and the roll move the view off it.
     let span = 2 * (H + 1.2);
 
     if (layout === 'scatter') {
@@ -175,7 +179,6 @@ export const glyphs: Family = {
       const checker = layout === 'checker';
       const { sx, sy, cols, rows } = lattice(layout, count);
       span = rows * sy;
-      top = span / 2;
       const nColors = Math.min(pal.colors.length, MAX_FACES);
       const taken = new Map<string, { name: string; color: number }>();
       const key = (c: number, r: number) => `${c},${((r % rows) + rows) % rows}`;
@@ -218,12 +221,44 @@ export const glyphs: Family = {
     }
     assign();
 
+    // Wrap window [lo, lo + span] and the fade at its edges: a glyph fades into the background
+    // over the last `band` before the seam and fades back in after it, so none pops in or out
+    // where the seam crosses a corner of the view (the bottom left, at a 30° roll).
+    const band = Math.min(1.2, Math.max(0.8, span * 0.1));
+    let lo = -span / 2;
+    const wrap = (y: number) => lo + ((((y - lo) % span) + span) % span);
+    const setWindow = (center: number) => {
+      lo = center - span / 2;
+      shared.uFade.value.set(lo, lo + span, band);
+    };
+    setWindow(0);
+
     // Rotation is a pure function of time; the drift and the grow-in are integrated in update().
+    // Readability: the tumble can swing a glyph ±90° and more, and a glyph near the edge of the view
+    // is already seen up to ~30° off-axis, so some turned edge-on (only the side wall showing) or
+    // showed their mirrored back. Measured against the real line of sight to the camera, a face turns
+    // freely up to FACE_KNEE, then eases toward FACE_MAX and never past it.
+    const eye = new THREE.Vector3(0, 0, 10);
+    const normal = new THREE.Vector3();
+    const toEye = new THREE.Vector3();
+    const axis = new THREE.Vector3();
+    const turn = new THREE.Quaternion();
+    const ease = (a: number) => (a <= FACE_KNEE ? a : FACE_KNEE + (FACE_MAX - FACE_KNEE) * Math.tanh((a - FACE_KNEE) / (FACE_MAX - FACE_KNEE)));
     const pose = (it: (typeof items)[number], t: number, tumble: number) => {
       const m = it.mesh;
-      m.rotation.y = it.baseRot * tumble + Math.sin(t * it.spin + it.phase) * 0.9 * tumble;
-      m.rotation.x = Math.sin(t * it.wob + it.phase) * 0.35 * tumble;
-      m.rotation.z = Math.sin(t * 0.13 + it.phase) * 0.12 * tumble;
+      m.rotation.set(
+        Math.sin(t * it.wob + it.phase) * 0.35 * tumble,
+        it.baseRot * tumble + Math.sin(t * it.spin + it.phase) * 0.9 * tumble,
+        Math.sin(t * 0.13 + it.phase) * 0.12 * tumble,
+      );
+      normal.set(0, 0, 1).applyQuaternion(m.quaternion);
+      toEye.subVectors(eye, m.position).normalize();
+      const a = normal.angleTo(toEye);
+      if (a <= FACE_KNEE) return;
+      axis.crossVectors(normal, toEye);
+      if (axis.lengthSq() < 1e-10) axis.set(0, 1, 0); // facing straight away: turn about the vertical
+      turn.setFromAxisAngle(axis.normalize(), a - ease(a));
+      m.quaternion.premultiply(turn);
     };
 
     return {
@@ -241,9 +276,8 @@ export const glyphs: Family = {
           // Grow in after a stagger; when the scene is paused (speed 0), size changes apply at once.
           if (dt === 0) m.scale.setScalar(goal);
           else if (t > it.delay) m.scale.setScalar(m.scale.x + (goal - m.scale.x) * k);
+          m.position.y = wrap(m.position.y + dt * it.rise);
           pose(it, t, tumble);
-          m.position.y += dt * it.rise;
-          if (m.position.y > top) m.position.y -= span;
         }
         const c = live.contrast ?? 0.35;
         if (c !== contrast) {
@@ -261,10 +295,16 @@ export const glyphs: Family = {
           const m = it.mesh;
           const goal = it.size * sizeMul;
           m.scale.setScalar(t > it.delay ? goal - (goal - 0.001) * Math.exp(-3.5 * (t - it.delay)) : 0.001);
-          const y = it.y0 + t * it.rise;
-          m.position.y = y > top ? y - span * Math.ceil((y - top) / span) : y;
+          m.position.y = wrap(it.y0 + t * it.rise);
           pose(it, t, tumble);
         }
+      },
+      view(_x, y, camera) {
+        if (camera) eye.copy(camera);
+        if (Math.abs(y - (lo + span / 2)) < 1e-4) return;
+        setWindow(y);
+        // Re-wrap now, so a resize doesn't leave a frame with the old window.
+        for (const it of items) it.mesh.position.y = wrap(it.mesh.position.y);
       },
       setPalette(p) {
         pal = p;

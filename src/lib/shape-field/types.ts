@@ -8,6 +8,13 @@ export interface SharedUniforms {
   uAccent: THREE.IUniform<THREE.Color>;
   uAccentAmt: THREE.IUniform<number>;
   uTime: THREE.IUniform<number>;
+  /** The scene background (the same tweened color), so forms can fade into it. */
+  uBg: THREE.IUniform<THREE.Color>;
+  /**
+   * Edge fade in world y: (bottom, top, band). A form whose center is within `band` of either
+   * edge mixes toward uBg, reaching it at the edge. band 0 = off. Set by families that wrap.
+   */
+  uFade: THREE.IUniform<THREE.Vector3>;
 }
 
 export interface FamilyContext {
@@ -32,6 +39,13 @@ export interface FamilyInstance {
   update(t: number, dt: number, dtReal: number, params: SceneParams): void;
   /** Optional: jump straight to scene time t (as if update() had run from 0). Without it the engine steps there. */
   seek?(t: number, params: SceneParams): void;
+  /**
+   * Optional: where the middle of the visible area sits in world space (x, y at z = 0), and where
+   * the camera is. The middle moves with the composition shift (setFocus), the roll and the aspect.
+   * A field that wraps centers its wrap here, so the seam stays off screen; glyphs use the camera
+   * to keep their faces readable.
+   */
+  view?(x: number, y: number, camera?: THREE.Vector3): void;
   setPalette(palette: ScenePalette): void;
   dispose(): void;
 }
