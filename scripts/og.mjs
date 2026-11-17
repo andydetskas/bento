@@ -3,7 +3,7 @@
 //   npm run og
 //   OG_URL=http://localhost:4321/og CHROME=/path/to/chrome npm run og
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -12,6 +12,7 @@ const url = new URL(process.env.OG_URL ?? 'http://localhost:4321/og');
 url.searchParams.set('settle', '6'); // render a finished frame, no intro animation
 const out = resolve('public/og.png');
 const profile = mkdtempSync(join(tmpdir(), 'og-chrome-'));
+const before = existsSync(out) ? statSync(out).mtimeMs : 0;
 
 try {
   execFileSync(
@@ -34,4 +35,9 @@ try {
   rmSync(profile, { recursive: true, force: true });
 }
 
+// Chrome exits 0 even when the page doesn't load (dev server down), so check the file changed.
+if (!existsSync(out) || statSync(out).mtimeMs === before) {
+  console.error(`No new capture: is the server running at ${url.origin}? (public/og.png is unchanged)`);
+  process.exit(1);
+}
 console.log(`Wrote ${out} (${Math.round(statSync(out).size / 1024)} KB) from ${url.href}`);

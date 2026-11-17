@@ -23,7 +23,7 @@ import { DARK_PALETTE, DISPLAY_KEY } from '../../lib/display-settings';
   } catch {}
   // Theme: light unless the visitor chose Dark, or chose to follow a device that's dark. The tokens follow
   // data-mode; the page behind the cards and the scene (window.__scenePalette, read by
-  // ShapeField when it boots) switch to Indigo Night, so nothing paints light first.
+  // ShapeField when it boots) switch to Adobe Night, so nothing paints light first.
   try {
     const t = root.dataset.theme;
     if (t === 'dark' || (t === 'system' && matchMedia('(prefers-color-scheme: dark)').matches)) {
