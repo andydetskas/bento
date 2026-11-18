@@ -38,7 +38,10 @@
       "text-muted":    { "$value": "{taos.light.shadow.500}" },
       "line":          { "$value": "#34384021" },
       "focus":         { "$value": "{taos.light.indigo.600}" },
-      "pill-text":     { "$value": "{taos.light.black.600}", "$description": "Text on an accent fill (hover pill, filled arrow). Black is the only choice that clears 4.5:1 on every accent; the lowest is 4.9:1 on fire.600." }
+      "pill-text":     { "$value": "{taos.light.black.600}", "$description": "Text on an accent fill (hover pill, filled arrow). Black is the only choice that clears 4.5:1 on every accent; the lowest is 4.9:1 on fire.600." },
+      "link":          { "$value": "{taos.dark.fire.500}", "$description": "About's links (Andy, Nov 18: option A, Fire). 5.35:1 on the card; fire.600 itself is 4.26:1, just short of AA." },
+      "link-underline": { "$value": "{taos.light.fire.600}", "$description": "The underline under a link: the scene's Fire 600, decorative (the text carries the contrast)." },
+      "link-strong":   { "$value": "{taos.dark.fire.300}", "$description": "Links under Display settings → High contrast: the glyph walls' rust, 8.33:1." }
     },
     "dark": {
       "page":          { "$value": "{taos.dark.black.300}" },
@@ -47,7 +50,10 @@
       "text-muted":    { "$value": "{taos.dark.shadow.300}" },
       "line":          { "$value": "#F8F5F31F" },
       "focus":         { "$value": "{taos.light.lavender.600}" },
-      "pill-text":     { "$value": "{taos.light.black.600}", "$description": "Text on an accent fill (hover pill, filled arrow). Black is the only choice that clears 4.5:1 on every accent; the lowest is 4.9:1 on fire.600." }
+      "pill-text":     { "$value": "{taos.light.black.600}", "$description": "Text on an accent fill (hover pill, filled arrow). Black is the only choice that clears 4.5:1 on every accent; the lowest is 4.9:1 on fire.600." },
+      "link":          { "$value": "{taos.light.fire.400}", "$description": "4.75:1 on the dark card." },
+      "link-underline": { "$value": "{taos.light.fire.500}" },
+      "link-strong":   { "$value": "{taos.light.coral.600}", "$description": "High contrast: 8.29:1 on the dark card." }
     }
   },
   "accent": {

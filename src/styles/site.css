@@ -736,6 +736,25 @@
   flex-direction: column;
   gap: var(--space-4);
 }
+/* About's links in the Adobe glyph palette's Fire (Andy, Nov 18, option A): burnt orange text that
+   clears AA on both cards, over the scene's Fire 600 underline. High contrast swaps in the glyph
+   walls' rust (light) or coral (dark), both above 8:1. Display settings' link highlight still wins. */
+.about-text a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-color: var(--color-link-underline);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+@media (hover: hover) {
+  .about-text a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+html[data-contrast='high'] .about-text a {
+  color: var(--color-link-strong);
+  text-decoration-color: currentColor;
+}
 .about-intro .about-photo {
   max-width: 320px;
   aspect-ratio: 760 / 1009;

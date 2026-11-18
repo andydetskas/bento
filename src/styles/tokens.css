@@ -127,6 +127,9 @@
   --color-line: #34384021;
   --color-focus: #5897C8;
   --color-pill-text: #000000;
+  --color-link: #B64813;
+  --color-link-underline: #D74C07;
+  --color-link-strong: #754029;
   --accent-linkedin: #5897C8;
   --accent-portfolio: #D74C07;
   --accent-figma: #A99AFB;
@@ -193,5 +196,8 @@
   --color-line: #F8F5F31F;
   --color-focus: #A99AFB;
   --color-pill-text: #000000;
+  --color-link: #E49065;
+  --color-link-underline: #DE6E37;
+  --color-link-strong: #FECDCA;
   color-scheme: dark;
 }
