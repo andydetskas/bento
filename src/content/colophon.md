@@ -16,4 +16,4 @@ description: "How Andy Detskas's site is designed, built and checked: the Taos d
 
 **Made with.** I designed and built this site hands-on with Claude Code. I made the decisions and reviewed and approved the copy; the agent wrote code, drafted copy and checked my work against the record.
 
-**Sources.** Every claim about my work traces to real documents saved over the years of my career. How that works is its own article: [One Record](/site/techniques/one-record/).
+**Sources.** Every claim about my work traces to real documents saved over the years of my career.

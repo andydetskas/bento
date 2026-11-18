@@ -29,6 +29,8 @@ export const legacyRedirects: Record<string, string> = {
   // Techniques retired on Framer (its own redirects, kept)
   'techniques/the-group-critique': 'techniques/the-design-dojo/',
   'techniques/the-designed-alliance': 'techniques/',
+  // Pulled from this site (Andy, Nov 18)
+  'techniques/one-record': 'techniques/',
   // Older posts, drafted on Framer Nov 7 (they 404 there now; old links land on Techniques instead)
   'techniques/expanding-your-range-a-designer-s-secret-weapon': 'techniques/',
   'techniques/navigating-ambiguity-when-in-person-collaboration-is-key-in-product-design': 'techniques/',

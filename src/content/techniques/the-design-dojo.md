@@ -4,10 +4,10 @@ subtitle: "Creating space to learn and grow in your design team"
 description: "A recurring space for a design team to raise its craft: demos, case studies and critique, with a free Figma template."
 icon: "design-dojo"
 hero: "/site/techniques/design-dojo.webp"
-order: 6
+order: 2
 ---
 
-As Lead, Staff, or Principal designers, part of our role is to raise the level of craft, quality, and execution across teams. Carving out a weekly, fortnightly, or quarterly space to level up is critical, and The Design Dojo is a fantastic approach I was introduced to at Pivotal Labs, where we had just that. Sessions can range from how-to demos, to in-depth case studies, to more casual "fireside" chats about the industry or how the team executes design. The format we ran most often was the group critique.
+As design leaders, part of our role is to raise the level of craft, quality, and execution across teams. Carving out a weekly, fortnightly, or quarterly space to level up is critical, and The Design Dojo is a fantastic approach I was introduced to at Pivotal Labs, where we had just that. Sessions can range from how-to demos, to in-depth case studies, to more casual "fireside" chats about the industry or how the team executes design. The format we ran most often was the group critique.
 
 Read below about how to set up an ongoing Design Dojo in your org, or skip directly to the Figma templates: [The Design Dojo](https://www.figma.com/community/file/1435728416071290266/the-design-dojo) and [The Group Critique](https://www.figma.com/community/file/1435727465845582232/the-group-critique).
 

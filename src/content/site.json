@@ -178,7 +178,7 @@
           "src": "/site/leadership/sea-otter.webp",
           "width": 480,
           "height": 360,
-          "alt": "Field research at Sea Otter: a rider reads from a clipboard at a table in the SRAM tent"
+          "alt": "Field research at Sea Otter: in the SRAM tent, a teammate interviews a rider, who reads from a clipboard"
         }
       ]
     }
@@ -366,6 +366,27 @@
     "lede": "My creative process involves pixels and people. These are the approaches you can expect when we work together.",
     "posts": [
       {
+        "title": "Integrity Compass",
+        "note": "Design methods for trust, safety, inclusion, and integrity",
+        "url": "/site/techniques/integrity-compass/",
+        "icon": "integrity-compass",
+        "image": "/site/techniques/integrity-compass.webp"
+      },
+      {
+        "title": "Design Dojo",
+        "note": "Creating space to learn and grow in your design team",
+        "url": "/site/techniques/the-design-dojo/",
+        "icon": "design-dojo",
+        "image": "/site/techniques/design-dojo.webp"
+      },
+      {
+        "title": "Vibeframing",
+        "note": "Speeding up product definition and prototyping",
+        "url": "/site/techniques/vibeframing/",
+        "icon": "vibeframing",
+        "image": "/site/techniques/vibeframing.webp"
+      },
+      {
         "title": "Glyph lab",
         "note": "Turning a brand system into a generative 3D background",
         "url": "/site/techniques/glyph-lab/",
@@ -378,34 +399,6 @@
         "url": "/site/techniques/display-settings/",
         "icon": "eye",
         "image": "/site/techniques/display-settings.webp"
-      },
-      {
-        "title": "One Record",
-        "note": "A single source of truth for my career, and every surface built from it",
-        "url": "/site/techniques/one-record/",
-        "icon": "feather",
-        "image": "/site/techniques/one-record.webp"
-      },
-      {
-        "title": "Integrity Compass",
-        "note": "Design methods for trust, safety, inclusion, and integrity",
-        "url": "/site/techniques/integrity-compass/",
-        "icon": "integrity-compass",
-        "image": "/site/techniques/integrity-compass.webp"
-      },
-      {
-        "title": "Vibeframing",
-        "note": "Speeding up product definition and prototyping",
-        "url": "/site/techniques/vibeframing/",
-        "icon": "vibeframing",
-        "image": "/site/techniques/vibeframing.webp"
-      },
-      {
-        "title": "Design Dojo",
-        "note": "Creating space to learn and grow in your design team",
-        "url": "/site/techniques/the-design-dojo/",
-        "icon": "design-dojo",
-        "image": "/site/techniques/design-dojo.webp"
       },
       {
         "title": "Haptic patterns",
