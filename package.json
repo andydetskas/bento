@@ -3,7 +3,8 @@
   "type": "module",
   "version": "2.0.0",
   "private": true,
-  "description": "links.andydetskas.com: link card over a generative 3D background. First build of the Taos design system.",
+  "license": "MIT",
+  "description": "andydetskas.com and links.andydetskas.com: a portfolio and a link card over a generative 3D background, built on the Taos design system.",
   "scripts": {
     "tokens": "node scripts/build-tokens.mjs",
     "dev": "npm run tokens && astro dev",

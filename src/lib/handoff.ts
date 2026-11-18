@@ -10,7 +10,7 @@
 //   3. The exit covers the network: the card collapses to its masthead and slides to the
 //      top-left, which is exactly where the site's card starts.
 
-/** Where the main site lives. Local two-origin testing sets PUBLIC_MAIN_URL (see README). */
+/** Where the main site lives. Local two-origin testing sets PUBLIC_MAIN_URL (see docs/build-notes.md). */
 export const MAIN_URL: string = import.meta.env.PUBLIC_MAIN_URL || 'https://www.andydetskas.com/';
 
 export const HANDOFF_COOKIE = 'ad_handoff';
