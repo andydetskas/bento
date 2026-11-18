@@ -10,7 +10,7 @@ description: "How Andy Detskas's site is designed, built and checked: the Taos d
 
 **Background.** The moving background is the icon doodles I originally drew, vectorized and then extruded into 3D with Three.js. It loads after the page does, and you can pause it or turn it off. [Glyph lab](/site/techniques/glyph-lab/) tells that story.
 
-**Build.** Static pages made with Astro and hosted on Cloudflare. No cookies, no ad trackers, and analytics that don’t follow you between sites.
+**Build.** Static pages made with Astro and hosted on Cloudflare. No tracking cookies, no ad trackers, and analytics that don’t follow you between sites.
 
 **Accessibility.** Semantic HTML, checked contrast, visible focus and respect for your motion settings. Each release is scanned with axe and tested at phone size on a slowed-down connection. [Display settings](/site/techniques/display-settings/) is a courtesy on top of that, not a substitute for it.
 
