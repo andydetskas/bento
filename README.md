@@ -35,7 +35,7 @@ npm run dev
 ```
 
 - http://localhost:4321/ is the link card, `/lab` the lab and `/site/` the portfolio.
-- `npm run build` builds the link card for GitHub Pages. `npm run build:www` builds the portfolio for www.
+- `npm run build` builds the link card for GitHub Pages. `npm run build:www` builds the portfolio for [www.andydetskas.com](https://www.andydetskas.com).
 - `npm run perf` runs the phone check above. Run `npm run build && npm run preview` first.
 
 How each part works, and why, is in [docs/build-notes.md](docs/build-notes.md).
