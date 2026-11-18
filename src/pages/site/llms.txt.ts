@@ -36,6 +36,7 @@ export const GET: APIRoute = () => {
     '',
     `- [${site.intro.cta.label}](${site.intro.cta.url}): a 30-minute call`,
     `- [LinkedIn](${url('linkedin')})`,
+    '- [GitHub](https://github.com/andydetskas)',
     `- [Figma community](${url('figma')})`,
     `- [All links](https://links.andydetskas.com/)`,
     '',

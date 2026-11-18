@@ -39,6 +39,8 @@ const { leadership, work, kit, techniques, about } = site;
 const accent = tokens.accent as Record<string, string>;
 // LinkedIn lives on About (Andy, Nov 16), in the contact line, not in the hero.
 const linkedin = links.links.find((l) => l.id === 'linkedin')!;
+// GitHub sits beside it (Andy, Nov 18). Not in links.json, which also drives the links page.
+const github = { label: 'GitHub', url: 'https://github.com/andydetskas' };
 const kitLabel = kit.title.replace(/\.$/, ''); // "My working kit"
 const card = (id: Section['id']) => {
   const s = sectionById(id);
@@ -221,10 +223,9 @@ const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([
                   </>
                 ))}
                 {' · '}
-                <a href={linkedin.url} target="_blank" rel="noopener noreferrer">
-                  {linkedin.label}
-                  <span class="sr-only"> (opens in a new tab)</span>
-                </a>
+                <a href={linkedin.url} target="_blank" rel="noopener noreferrer">{linkedin.label}<span class="sr-only"> (opens in a new tab)</span></a>
+                {' · '}
+                <a href={github.url} target="_blank" rel="noopener noreferrer">{github.label}<span class="sr-only"> (opens in a new tab)</span></a>
               </p>
               <Signature class="about-signature" />
             </div>
