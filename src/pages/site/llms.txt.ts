@@ -7,10 +7,12 @@ import links from '../../content/links.json';
 import site from '../../content/site.json';
 import { SITE_BASE, absUrl, sectionById, sectionPath } from '../../lib/site-sections';
 import { publishedTechniques } from '../../lib/techniques';
+import { orderedWork } from '../../lib/work-order';
 
 export const GET: APIRoute = () => {
   const url = (id: string) => links.links.find((l) => l.id === id)?.url;
-  const work = site.work.filter((w) => 'look' in w && w.look);
+  // In the home's order (lib/work-order.ts), so agents read the work the way visitors see it.
+  const work = orderedWork.filter((w) => 'look' in w && w.look);
   const lines = [
     `# ${links.profile.name}`,
     '',

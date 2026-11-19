@@ -7,16 +7,14 @@
 // under the art (Andy, Nov 17: always visible, on phones and keyboards too; it replaced the cursor
 // pill, since hiring managers read hover gimmicks as a miss). Under the tiles, the Earlier work
 // ticker.
-import site from '../../content/site.json';
 import { tokens } from '../../lib/tokens';
+import { orderedWork } from '../../lib/work-order';
 import LogoTicker from './LogoTicker.astro';
 
 /** The tall tiles (as tall as the hero); the rest are half height. Andy: Designing for Trust's
  *  Privacy Controls "looks very good" tall; StackScore "should definitely be" tall. */
 const TALL = new Set(['designing-for-trust', 'stackscore']);
-/** Andy's order. The grid places them so the left column runs Agentic Design System, Designing for
- *  Trust, Buying Club, and the right runs StackScore, Crushing the Basics, Surfacing Value. */
-const ORDER = ['agentic-design-system', 'stackscore', 'designing-for-trust', 'crushing-the-basics', 'buying-club', 'surfacing-value'];
+// Andy's order lives in lib/work-order.ts, shared with the structured data and llms.txt.
 const ART = '/site/work/home';
 /** Each tile's art. `phone`: a whole phone (or modal), standing in the middle of the tile.
  *  `panel`: a picture shown whole on its own background color. `thumb`: a 16:10 thumbnail lifted
@@ -48,7 +46,7 @@ const pillRows = Array.from({ length: PILL_ROWS }, (_, r) => NUTRIENTS.filter((_
 
 const light = tokens.taos.light as Record<string, Record<string, string>>;
 const accents = tokens.accent as Record<string, string>;
-const ordered = [...site.work].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id));
+const ordered = orderedWork;
 const items = ordered.map((w, i) => {
   const look = 'look' in w ? (w.look as string) : undefined;
   const art = tileArt[w.id];

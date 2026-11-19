@@ -21,6 +21,7 @@ import WorkGrid from './WorkGrid.astro';
 import site from '../../content/site.json';
 import links from '../../content/links.json';
 import { defaultPreset } from '../../lib/presets';
+import { orderedWork } from '../../lib/work-order';
 import { SITE_BASE, SITE_DESCRIPTION, SITE_LIVE, SITE_ORIGIN, SITE_TITLE, absUrl, sectionById, sectionPath, type Section } from '../../lib/site-sections';
 import JsonLd from '../JsonLd.astro';
 import { PERSON_ID, breadcrumbs, graph, itemList, person, website } from '../../lib/schema';
@@ -35,7 +36,7 @@ interface Props {
 const { open } = Astro.props;
 const current = open ? sectionById(open) : undefined;
 
-const { leadership, work, kit, techniques, about } = site;
+const { leadership, kit, techniques, about } = site;
 const accent = tokens.accent as Record<string, string>;
 // LinkedIn lives on About (Andy, Nov 16), in the contact line, not in the hero.
 const linkedin = links.links.find((l) => l.id === 'linkedin')!;
@@ -67,7 +68,7 @@ const pageNode = (() => {
     case 'leadership':
       return { '@type': 'WebPage', ...base, about: { '@id': PERSON_ID } };
     default:
-      return { '@type': 'CollectionPage', ...base, about: { '@id': PERSON_ID }, mainEntity: itemList(work.map((w) => ({ name: w.title, path: ('look' in w && w.look) || '', description: `${w.summary} My role: ${w.role}.` })).filter((w) => w.path)) };
+      return { '@type': 'CollectionPage', ...base, about: { '@id': PERSON_ID }, mainEntity: itemList(orderedWork.map((w) => ({ name: w.title, path: ('look' in w && w.look) || '', description: `${w.summary} My role: ${w.role}.` })).filter((w) => w.path)) };
   }
 })();
 const schema = graph(person(), website(), pageNode, ...(current ? [breadcrumbs([{ name: current.title.replace(/ · Andy Detskas$/, '') }])] : []));
