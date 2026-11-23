@@ -1,6 +1,7 @@
 ---
 title: "Design Dojo"
 subtitle: "Creating space to learn and grow in your design team"
+builtWith: "Figma · FigJam"
 description: "A recurring space for a design team to raise its craft: demos, case studies and critique, with a free Figma template."
 icon: "design-dojo"
 hero: "/site/techniques/design-dojo.webp"

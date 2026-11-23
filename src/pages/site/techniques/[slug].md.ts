@@ -14,6 +14,7 @@ export const GET: APIRoute = ({ params }) => {
     /<figure>\s*<img src="([^"]+)"[^>]*?alt="([^"]*)"[^>]*\/>(?:\s*<figcaption>([\s\S]*?)<\/figcaption>)?\s*<\/figure>/g,
     (_m, src: string, alt: string, cap?: string) => `![${alt}](${absUrl(src)})${cap ? `\n\n*${cap.trim()}*` : ''}`,
   );
-  const md = `# ${t.title}\n\n*${t.subtitle}*\n\nBy Andy Detskas · ${absUrl(t.path)}\n\n${body.trim()}\n`;
+  const built = t.builtWith ? `Built with: ${t.builtWith}\n\n` : '';
+  const md = `# ${t.title}\n\n*${t.subtitle}*\n\n${built}By Andy Detskas · ${absUrl(t.path)}\n\n${body.trim()}\n`;
   return new Response(md, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
 };

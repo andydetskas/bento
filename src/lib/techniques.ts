@@ -5,6 +5,7 @@ import { SITE_BASE } from './site-sections';
 export interface TechniqueMeta {
   title: string;
   subtitle: string;
+  builtWith?: string;
   description: string;
   icon: string;
   hero: string;

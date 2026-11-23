@@ -41,6 +41,14 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <dt>What I did</dt>
       <dd>Brought Figma and code into parity, wrote the decisions down as skills, and put the system where the work happens</dd>
     </div>
+    <div>
+      <dt>People</dt>
+      <dd>{work.people}</dd>
+    </div>
+    <div>
+      <dt>Built with</dt>
+      <dd>{work.builtWith}</dd>
+    </div>
   </dl>
   <p class="outcome">I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills in its own repo, which engineers and coding agents built from, at a company where coding agents wrote a large share of the code.</p>
   <figure class="look-fig">
@@ -112,7 +120,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <li>
         <p class="look-num" aria-hidden="true">04</p>
         <h3>Let it compound</h3>
-        <p>Once the system lived where design-shaped work actually happens, the results compounded. Non-designers started producing on-system work, from town hall decks to dashboards and marketing pieces, with just the skills and no design oversight. A colleague in marketing built the weekly community report with the skills and presented it at the company town hall. In all, people outside design made 10 to 15 on-system reports, decks and images. Prototyping skills built on the repo produced repeatable, shippable prototypes with shareable links, and prompt-based workflows let us move in every direction: code to Figma, Figma to code, and on to decks and docs.</p>
+        <p>Once the system lived where design-shaped work actually happens, the results compounded. Non-designers started producing on-system work, from town hall decks to dashboards and marketing pieces, with just the skills. A colleague in marketing built the weekly community report with the skills and presented it at the company town hall. In all, people outside design made 10 to 15 on-system reports, decks and images. Prototyping skills built on the repo produced repeatable, shippable prototypes with shareable links, and prompt-based workflows let us move in every direction: code to Figma, Figma to code, and on to decks and docs.</p>
         <figure class="look-fig">
           <img src={img('with-and-without')} width="1561" height="1139" alt="The same dashboard request made without and with the Capsule skills: a plain gray order dashboard, then an on-brand Buying Club weekly review with colored KPI cards, its numbers blurred" loading="lazy" decoding="async" />
           <figcaption>The same request, without and with the skills (numbers blurred).</figcaption>
@@ -124,6 +132,14 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
         </figure>
       </li>
     </ol>
+  </section>
+
+  <section class="look-section" aria-labelledby="ai-stopped">
+    <h2 id="ai-stopped">Where the AI stopped</h2>
+    <div class="look-text">
+      <p>AI is great at the first draft and the hundredth repetition. The calls about what the system should be stayed with me.</p>
+      <p>Our coding agent fixed a contrast problem by darkening three grays across the whole system. It passed the accessibility check and broke parity with Figma. I reverted it, fixed contrast in the components that actually failed, and wrote the rule into the agents’ knowledge file: fix contrast at the component, never the primitive.</p>
+    </div>
   </section>
 
   <section class="look-section" aria-labelledby="changed">
@@ -141,7 +157,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <li>Measure who ships on-system without you.</li>
     </ul>
     <div class="look-text">
-      <p>AI is great at the first draft and the hundredth repetition. It isn’t great at taste. An agentic design system is a way of writing your taste down clearly enough that it travels without you. Judgment is the job; the system is how it scales.</p>
+      <p>AI isn’t great at taste. An agentic design system is a way of writing your taste down clearly enough that it travels without you. Judgment is the job; the system is how it scales.</p>
     </div>
   </section>
 

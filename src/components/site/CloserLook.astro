@@ -31,6 +31,9 @@ interface Props {
   title: string;
   /** Shown under the title. */
   subtitle: string;
+  /** Techniques articles: the tools it was made with, shown under the subtitle. Case studies carry
+   *  theirs as a "Built with" row in the facts block instead. */
+  builtWith?: string;
   /** Company name; the eyebrow reads "<company> · A closer look". */
   company?: string;
   /** Overrides the eyebrow (Techniques articles: "Techniques"). */
@@ -48,7 +51,7 @@ interface Props {
   backHref: string;
   backLabel: string;
 }
-const { title, subtitle, company, eyebrow = `${company} · A closer look`, transition = 'box-portfolio', pageTitle, description, accent, backHref, backLabel, kind = 'article', markdown } = Astro.props;
+const { title, subtitle, builtWith, company, eyebrow = `${company} · A closer look`, transition = 'box-portfolio', pageTitle, description, accent, backHref, backLabel, kind = 'article', markdown } = Astro.props;
 // Case studies go full screen as the visitor scrolls (Andy, Nov 16; after luzcas.com/batch).
 const canFull = kind === 'article' && transition === 'box-portfolio';
 // The hero menu's current row: Selected work for case studies, Techniques for articles, none for
@@ -103,6 +106,7 @@ const schema =
       <header class="look-head">
         <h1 class="box-title" id="look-title">{title}</h1>
         <p class="look-sub">{subtitle}</p>
+        {builtWith && <p class="look-built"><span class="look-built-label">Built with</span> {builtWith}</p>}
       </header>
       <div class="look-body">
         <slot />

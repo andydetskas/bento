@@ -1,6 +1,7 @@
 ---
 title: "Integrity Compass"
 subtitle: "Design methods for trust, safety, inclusion, and integrity"
+builtWith: "FigJam"
 description: "A workshop that brings inclusion, privacy and safety into a product team’s work before launch, with a free FigJam template."
 icon: "integrity-compass"
 hero: "/site/techniques/integrity-compass.webp"

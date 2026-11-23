@@ -1,6 +1,7 @@
 ---
 title: "Vibeframing"
 subtitle: "Speeding up product definition and prototyping"
+builtWith: "ChatGPT · Magic Patterns · Figma"
 description: "How I use generative AI to turn a PRD into interactive wireframes fast, then move to high fidelity with the design system."
 icon: "vibeframing"
 hero: "/site/techniques/vibeframing.webp"

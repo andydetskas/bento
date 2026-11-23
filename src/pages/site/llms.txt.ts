@@ -28,11 +28,14 @@ export const GET: APIRoute = () => {
     '',
     '## Case studies',
     '',
-    ...work.map((w) => `- [${w.title}](${absUrl((w as { look: string }).look)}) (${w.company}): ${w.summary} My role: ${w.role}. Result: ${w.outcome}`),
+    ...work.map((w) => {
+      const x = w as { people?: string; builtWith?: string };
+      return `- [${w.title}](${absUrl((w as { look: string }).look)}) (${w.company}): ${w.summary} My role: ${w.role}. Result: ${w.outcome}${x.people ? ` People: ${x.people}` : ''}${x.builtWith ? ` Built with: ${x.builtWith}.` : ''}`;
+    }),
     '',
     '## Techniques',
     '',
-    ...publishedTechniques.map((t) => `- [${t.title}](${absUrl(t.path)}) ([Markdown](${absUrl(t.markdown)})): ${t.description}`),
+    ...publishedTechniques.map((t) => `- [${t.title}](${absUrl(t.path)}) ([Markdown](${absUrl(t.markdown)})): ${t.description}${t.builtWith ? ` Built with: ${t.builtWith}.` : ''}`),
     '',
     '## Contact',
     '',

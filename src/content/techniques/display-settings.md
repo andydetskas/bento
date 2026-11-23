@@ -1,6 +1,7 @@
 ---
 title: "Display settings"
 subtitle: "Accessibility settings without the overlay"
+builtWith: "Claude Code · Astro"
 description: "Why this site has a Display settings panel instead of an accessibility overlay: what each setting does, the WCAG criteria behind it, and what it deliberately leaves out."
 icon: "eye"
 hero: "/site/techniques/display-settings.webp"

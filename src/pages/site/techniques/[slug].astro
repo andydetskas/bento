@@ -14,6 +14,8 @@ import { tokens } from '../../../lib/tokens';
 interface Frontmatter {
   title: string;
   subtitle: string;
+  /** The tools it was made with, in plain text, middots between (market scan §5, Nov 23). */
+  builtWith?: string;
   description: string;
   icon: string;
   hero: string;
@@ -38,6 +40,7 @@ const accent = (tokens.accent as Record<string, string>).techniques;
 <CloserLook
   title={fm.title}
   subtitle={fm.subtitle}
+  builtWith={fm.builtWith}
   eyebrow={fm.draft ? 'Techniques · Draft' : 'Techniques'}
   transition="box-techniques"
   pageTitle={`${fm.title} · Techniques · Andy Detskas`}

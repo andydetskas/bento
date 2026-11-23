@@ -1,6 +1,7 @@
 ---
 title: "Haptic patterns"
 subtitle: "Quick ways and custom ways to design with haptic patterns"
+builtWith: "Play · Haptic Labs Studio · Core Haptics"
 description: "How to bring haptics into your designs: stock patterns on iOS, Android and the web, how to demo them to engineers, and how to author your own."
 icon: "haptics"
 hero: "/site/techniques/haptics.webp"

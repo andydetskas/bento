@@ -40,6 +40,26 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
         <p class="headline">{intro.headline}</p>
         <HeroMenu current={current} />
 
+        {/* Lately (Andy, Nov 23): three or four shipped things, no years and no contribution grid
+            (market scan §5, Eric Greene's pattern). Under the menu, so the site's rows stay first. */}
+        <section class="lately" aria-labelledby="lately-title">
+          <h2 class="lately-title" id="lately-title">Lately</h2>
+          <ul role="list">
+            {intro.lately.map((l) => {
+              const external = /^https?:/.test(l.url);
+              return (
+                <li>
+                  <a href={l.url} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
+                    <span class="lately-name">{l.label}</span>
+                    <span class="lately-note">{l.note}</span>
+                    {external && <span class="sr-only">(opens in a new tab)</span>}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
         <div class="cta-row">
           <a class="btn btn-quiet" href={email.url}>{intro.emailCta}</a>
           <a class="btn" href={CALL_PATH} target="_blank" rel="noopener noreferrer">
@@ -99,6 +119,52 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     letter-spacing: var(--tracking-display);
     text-wrap: balance;
   }
+  /* ── Lately ─────────────────────────────────────────── */
+  /* A compact list: the name, then a one-line note in the muted color. Every word is visible text
+     (no hover-only content); hover and focus underline the name. */
+  .lately {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .lately-title {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: calc(12px * var(--text-scale, 1));
+    font-weight: var(--weight-mono);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .lately ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .lately a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    font-size: var(--step--1);
+    line-height: 1.35;
+    text-wrap: pretty;
+  }
+  .lately-name {
+    margin-right: 0.35em;
+    font-weight: var(--weight-medium);
+  }
+  .lately-note {
+    color: var(--color-text-muted);
+  }
+  .lately a:hover .lately-name,
+  .lately a:focus-visible .lately-name {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
   /* ── Call to action ─────────────────────────────────── */
   /* One row (Andy): a quiet Email me button, then Schedule a call. They share the row's width,
      and stack only if the hero is too narrow for both. */

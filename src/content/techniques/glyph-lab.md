@@ -1,6 +1,7 @@
 ---
 title: "Glyph lab"
 subtitle: "Turning a brand system into a generative 3D background"
+builtWith: "Claude Code · Astro · Three.js · TypeScript"
 description: "How I turned my Taos icons and design tokens into a 3D background engine, and built a lab to tune it, where every setting I like becomes a theme the site ships."
 icon: "spiral"
 hero: "/site/techniques/glyph-lab.webp"
