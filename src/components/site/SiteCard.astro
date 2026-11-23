@@ -3,7 +3,9 @@
 // gutter in, one site column wide), so the bento's exit, the card folded to its masthead, is
 // this card's first frame. Below the masthead: the positioning line, the site's menu (HeroMenu,
 // with Display settings as its last row) and the call to action (Andy, Nov 16: the line under the
-// headline went, and LinkedIn moved to About). The masthead links home (Andy). No pills, scene tint
+// headline went, and LinkedIn moved to About). Nov 23 (Andy): the role line left the masthead to
+// become the headline, in place of "Hands-on design leadership…" (still the meta description), and
+// the name grew into its space. The masthead links home (Andy). No pills, scene tint
 // or row dimming here (Andy); the menu rows have a hover of their own (Nov 17). Keyboard focus shows.
 import links from '../../content/links.json';
 import site from '../../content/site.json';
@@ -28,7 +30,7 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
 ---
 
 <section class:list={['card site-card area-hero', { 'can-fold': fold }]} aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
-    <CardHead nameAs={nameAs} href={SITE_BASE} />
+    <CardHead nameAs={nameAs} href={SITE_BASE} showRole={false} />
     {fold && (
       <button class="menu-toggle arrow" type="button" aria-expanded="false" aria-controls="site-card-more">
         <span class="sr-only">Menu</span>
@@ -37,7 +39,7 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     )}
     <div class="card-more" id="site-card-more">
       <div class="card-more-inner">
-        <p class="headline">{intro.headline}</p>
+        <p class="headline">{intro.heroTitle}</p>
         <HeroMenu current={current} />
 
         <div class="cta-row">

@@ -1036,6 +1036,9 @@ a.chip:focus-visible {
 /* The Team row spans every column under the role facts (Andy, Nov 23). */
 .look-facts .look-facts-wide {
   grid-column: 1 / -1;
+  /* A rule under it too, closing the facts block (Andy, Nov 23). */
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-line);
 }
 .look .outcome {
   max-width: 40em;
