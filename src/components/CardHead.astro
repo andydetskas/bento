@@ -30,8 +30,9 @@ const { profile } = data;
   .card-head {
     --name-cap: round(var(--type-title) * var(--cap-sans), var(--bl));
     --role-cap: 8px;
-    /* One pixel more than the 8px step between name and role (Andy, Nov 23). */
-    --who-gap: calc(var(--space-2) + 1px);
+    /* 12px between name and role (Andy, Nov 23: 8px read tight). The letters themselves sit
+       about 10.5px apart, since the name's round letters dip below its baseline. */
+    --who-gap: var(--space-3);
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
@@ -86,11 +87,25 @@ const { profile } = data;
 </style>
 
 <script>
-  // Globe height = name cap height → role baseline, re-measured if the role wraps.
+  // Globe height = name cap height → role baseline, re-measured if the role wraps. The baseline
+  // is measured, not taken from the trimmed box: the trim approximates the font's descent and
+  // leaves the box bottom about a pixel under the real baseline, which put the globe's right foot
+  // below "EXECUTION" (Andy, Nov 23). A zero-size probe after the role's inline-block sits on its
+  // last line's baseline; it's outside the sliding .line-inner, so the entrance doesn't move it.
   const who = document.querySelector<HTMLElement>('.card-head .who');
   const mark = document.querySelector<HTMLElement>('.card-head .mark');
+  const roleText = who?.querySelector<HTMLElement>('.role');
   if (who && mark) {
-    const fitMark = () => (mark.style.height = `${who.getBoundingClientRect().height}px`);
+    const baseline = () => {
+      if (!roleText) return who.getBoundingClientRect().bottom;
+      const probe = document.createElement('span');
+      probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+      roleText.appendChild(probe);
+      const y = probe.getBoundingClientRect().top;
+      probe.remove();
+      return y;
+    };
+    const fitMark = () => (mark.style.height = `${baseline() - who.getBoundingClientRect().top}px`);
     fitMark();
     document.fonts?.ready.then(fitMark);
     window.addEventListener('resize', fitMark, { passive: true });
