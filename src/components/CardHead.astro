@@ -11,19 +11,16 @@ interface Props {
   /** Make the masthead a link (the site's hero links home). The link wraps only the name and
       stretches over the globe and role, so the layout, and the bento's pixels, don't change. */
   href?: string;
-  /** Show the role line under the name. The site's hero turns it off (Andy, Nov 23): the role
-      becomes its headline, and the name grows to fill the masthead. The bento keeps it. */
-  showRole?: boolean;
 }
-const { nameAs: Name = 'h1', href, showRole = true } = Astro.props;
+const { nameAs: Name = 'h1', href } = Astro.props;
 const { profile } = data;
 ---
 
-<header class:list={['card-head', { 'is-link': !!href, 'no-role': !showRole }]}>
+<header class:list={['card-head', { 'is-link': !!href }]}>
   <Icon name={profile.mark} class="mark" />
   <div class="who">
     <Name class="name line trim-sans"><span class="line-inner" style="--i:0">{href ? <a class="head-link" href={href} aria-label={`${profile.name}, home`}>{profile.name}</a> : profile.name}</span></Name>
-    {showRole && <p class="role line trim-mono"><span class="line-inner" style="--i:1">{profile.role}</span></p>}
+    <p class="role line trim-mono"><span class="line-inner" style="--i:1">{profile.role}</span></p>
   </div>
 </header>
 
@@ -37,12 +34,6 @@ const { profile } = data;
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
-  }
-  /* No role line (the site's hero): the name grows into the space the role line held, still
-     snapped to the 4px grid. --name-scale is the knob. */
-  .card-head.no-role {
-    --name-scale: 1.5;
-    --name-cap: round(var(--type-title) * var(--cap-sans) * var(--name-scale), var(--bl));
   }
   /* The globe runs from the name's cap height to the role's baseline. The script below
      re-measures if the role wraps onto a second line. */

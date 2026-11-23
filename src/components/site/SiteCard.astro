@@ -1,11 +1,11 @@
 ---
 // The site's hero card: the bento card, grown up. Same masthead in the same spot (top-left, one
 // gutter in, one site column wide), so the bento's exit, the card folded to its masthead, is
-// this card's first frame. Below the masthead: the positioning line, the site's menu (HeroMenu,
+// this card's first frame. Below the masthead: the site's menu (HeroMenu,
 // with Display settings as its last row) and the call to action (Andy, Nov 16: the line under the
-// headline went, and LinkedIn moved to About). Nov 23 (Andy): the role line left the masthead to
-// become the headline, in place of "Hands-on design leadership…" (still the meta description), and
-// the name grew into its space. The masthead links home (Andy). No pills, scene tint
+// headline went, and LinkedIn moved to About). Nov 23 (Andy): no headline either; the masthead's
+// name and role line carry it, as on the bento ("Hands-on design leadership…" stays the meta
+// description). The masthead links home (Andy). No pills, scene tint
 // or row dimming here (Andy); the menu rows have a hover of their own (Nov 17). Keyboard focus shows.
 import links from '../../content/links.json';
 import site from '../../content/site.json';
@@ -30,7 +30,7 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
 ---
 
 <section class:list={['card site-card area-hero', { 'can-fold': fold }]} aria-label={`${links.profile.name}, about`} style="view-transition-name:box-hero">
-    <CardHead nameAs={nameAs} href={SITE_BASE} showRole={false} />
+    <CardHead nameAs={nameAs} href={SITE_BASE} />
     {fold && (
       <button class="menu-toggle arrow" type="button" aria-expanded="false" aria-controls="site-card-more">
         <span class="sr-only">Menu</span>
@@ -39,7 +39,6 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     )}
     <div class="card-more" id="site-card-more">
       <div class="card-more-inner">
-        <p class="headline">{intro.heroTitle}</p>
         <HeroMenu current={current} />
 
         <div class="cta-row">
@@ -93,14 +92,6 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     overflow: visible;
   }
 
-  .headline {
-    margin: 0;
-    font-size: min(var(--step-3), 4.6svh);
-    line-height: 1.08;
-    font-weight: var(--weight-medium);
-    letter-spacing: var(--tracking-display);
-    text-wrap: balance;
-  }
   /* ── Call to action ─────────────────────────────────── */
   /* One row (Andy): a quiet Email me button, then Schedule a call. They share the row's width,
      and stack only if the hero is too narrow for both. */
