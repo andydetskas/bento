@@ -20,6 +20,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
 <CloserLook
   title={work.title}
   subtitle="A design system that people and coding agents can both follow"
+  builtWith={work.builtWith}
   company={work.company}
   pageTitle="Agentic Design System · SuppCo · Andy Detskas"
   description="How I made SuppCo’s design system AI-native, so designers, engineers, PMs and coding agents could all build on-system from one source of truth."
@@ -41,13 +42,9 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <dt>What I did</dt>
       <dd>Brought Figma and code into parity, wrote the decisions down as skills, and put the system where the work happens</dd>
     </div>
-    <div>
+    <div class="look-facts-wide">
       <dt>People</dt>
       <dd>{work.people}</dd>
-    </div>
-    <div>
-      <dt>Built with</dt>
-      <dd>{work.builtWith}</dd>
     </div>
   </dl>
   <p class="outcome">I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills in its own repo, which engineers and coding agents built from, at a company where coding agents wrote a large share of the code.</p>

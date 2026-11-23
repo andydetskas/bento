@@ -10,6 +10,9 @@
 import { tokens } from '../../lib/tokens';
 import { orderedWork } from '../../lib/work-order';
 import LogoTicker from './LogoTicker.astro';
+import site from '../../content/site.json';
+
+const lately = site.intro.lately.map((l) => ({ ...l, external: /^https?:/.test(l.url) }));
 
 /** The tall tiles (as tall as the hero); the rest are half height. Andy: Designing for Trust's
  *  Privacy Controls "looks very good" tall; StackScore "should definitely be" tall. */
@@ -122,6 +125,37 @@ const items = ordered.map((w, i) => {
       ))
     }
   </ul>
+
+  {/* DEMO (Nov 23): two of the three Lately variants (see SiteCard). "strip": a full-width card
+      under the tiles, names and notes, so the masonry stays level. "pair": a row of chips in the
+      Earlier work ticker's style, so the page closes on Lately, then Earlier work. */}
+  <section class="lately-strip" data-lately-variant="strip" aria-labelledby="lately-strip-title">
+    <h2 class="lately-label" id="lately-strip-title">Lately</h2>
+    <ul class="lately-items" role="list">
+      {lately.map((l) => (
+        <li>
+          <a class="lately-item" href={l.url} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener noreferrer' : undefined}>
+            <span class="lately-name">{l.label}</span>
+            <span class="lately-note">{l.note}</span>
+            {l.external && <span class="sr-only">(opens in a new tab)</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+  <section class="lately-pair" data-lately-variant="pair" aria-labelledby="lately-pair-title">
+    <h2 class="lately-label" id="lately-pair-title">Lately</h2>
+    <ul class="chips" role="list">
+      {lately.map((l) => (
+        <li>
+          <a class="chip" href={l.url} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener noreferrer' : undefined}>
+            {l.label}
+            {l.external && <span class="sr-only"> (opens in a new tab)</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
   <LogoTicker />
 </section>
 

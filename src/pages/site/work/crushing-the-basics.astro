@@ -22,6 +22,7 @@ const img = (name: string) => `/site/work/crushing-the-basics/${name}.webp`;
 <CloserLook
   title={work.title}
   subtitle="Building a design function inside a hardware company, and re-centering the app on what riders needed most"
+  builtWith={work.builtWith}
   company={work.company}
   pageTitle="Crushing the Basics · SRAM · Andy Detskas"
   description="How I built a product design and research function at SRAM, and used it to re-center the AXS app on battery, firmware and connection."
@@ -43,13 +44,9 @@ const img = (name: string) => `/site/work/crushing-the-basics/${name}.webp`;
       <dt>What I did</dt>
       <dd>Grew the team and its research practice, ran the strategy workshops, and proposed the app’s mission and primary KPI to leadership</dd>
     </div>
-    <div>
+    <div class="look-facts-wide">
       <dt>People</dt>
       <dd>{work.people}</dd>
-    </div>
-    <div>
-      <dt>Built with</dt>
-      <dd>{work.builtWith}</dd>
     </div>
   </dl>
   <p class="outcome">I re-centered the app strategy on reliability (battery, firmware and connection) built on SRAM’s annual rider survey, community vote data and support tickets, and sharpened through 25 stakeholder interviews. It became the Digital Product Group’s plan for the year.</p>

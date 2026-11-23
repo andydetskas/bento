@@ -31,8 +31,8 @@ interface Props {
   title: string;
   /** Shown under the title. */
   subtitle: string;
-  /** Techniques articles: the tools it was made with, shown under the subtitle. Case studies carry
-   *  theirs as a "Built with" row in the facts block instead. */
+  /** The tools it was made with, as chips under the subtitle, on case studies and Techniques
+   *  articles alike (Andy, Nov 23). Middots between tools in the source string. */
   builtWith?: string;
   /** Company name; the eyebrow reads "<company> · A closer look". */
   company?: string;
@@ -106,7 +106,14 @@ const schema =
       <header class="look-head">
         <h1 class="box-title" id="look-title">{title}</h1>
         <p class="look-sub">{subtitle}</p>
-        {builtWith && <p class="look-built"><span class="look-built-label">Built with</span> {builtWith}</p>}
+        {builtWith && (
+          <div class="look-built">
+            <p class="look-built-label" id="look-built-label">Built with</p>
+            <ul class="chips" role="list" aria-labelledby="look-built-label">
+              {builtWith.split(' · ').map((tool) => <li class="chip">{tool}</li>)}
+            </ul>
+          </div>
+        )}
       </header>
       <div class="look-body">
         <slot />

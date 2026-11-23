@@ -20,6 +20,7 @@ const img = (name: string) => `/site/work/buying-club/${name}.webp`;
 <CloserLook
   title={work.title}
   subtitle="SuppCo’s first commerce product: a members’ club that sells without discounting"
+  builtWith={work.builtWith}
   company={work.company}
   pageTitle="Buying Club · SuppCo · Andy Detskas"
   description="SuppCo’s Buying Club, a members’ club that pays back credits instead of discounting, which I co-designed with the Head of Product, and what its alpha taught us."
@@ -41,13 +42,9 @@ const img = (name: string) => `/site/work/buying-club/${name}.webp`;
       <dt>What I designed</dt>
       <dd>Onboarding, the club hub, credits on the product page, orders and subscriptions, and one membership language across Pro and the club</dd>
     </div>
-    <div>
+    <div class="look-facts-wide">
       <dt>People</dt>
       <dd>{work.people}</dd>
-    </div>
-    <div>
-      <dt>Built with</dt>
-      <dd>{work.builtWith}</dd>
     </div>
   </dl>
   <p class="outcome">Alpha told us the checkout worked and the catalog was the constraint.</p>

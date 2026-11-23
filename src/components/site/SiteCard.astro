@@ -40,19 +40,25 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
         <p class="headline">{intro.headline}</p>
         <HeroMenu current={current} />
 
-        {/* Lately (Andy, Nov 23): three or four shipped things, no years and no contribution grid
-            (market scan §5, Eric Greene's pattern). Under the menu, so the site's rows stay first. */}
-        <section class="lately" aria-labelledby="lately-title">
-          <h2 class="lately-title" id="lately-title">Lately</h2>
-          <ul role="list">
+        {/* DEMO (Nov 23): Lately has three variants to compare, picked with ?lately=strip|hero|pair
+            (default strip). This is the "hero" one: names only, as chips under the menu. The
+            "strip" and "pair" variants are in WorkGrid. Remove the two Andy doesn't pick. */}
+        <script is:inline>
+          (function () {
+            var v = new URLSearchParams(location.search).get('lately');
+            document.documentElement.dataset.lately = /^(strip|hero|pair)$/.test(v || '') ? v : 'strip';
+          })();
+        </script>
+        <section class="lately-hero" data-lately-variant="hero" aria-labelledby="lately-hero-title">
+          <h2 class="lately-title" id="lately-hero-title">Lately</h2>
+          <ul class="chips" role="list">
             {intro.lately.map((l) => {
               const external = /^https?:/.test(l.url);
               return (
                 <li>
-                  <a href={l.url} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
-                    <span class="lately-name">{l.label}</span>
-                    <span class="lately-note">{l.note}</span>
-                    {external && <span class="sr-only">(opens in a new tab)</span>}
+                  <a class="chip" href={l.url} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
+                    {l.label}
+                    {external && <span class="sr-only"> (opens in a new tab)</span>}
                   </a>
                 </li>
               );
@@ -119,10 +125,9 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     letter-spacing: var(--tracking-display);
     text-wrap: balance;
   }
-  /* ── Lately ─────────────────────────────────────────── */
-  /* A compact list: the name, then a one-line note in the muted color. Every word is visible text
-     (no hover-only content); hover and focus underline the name. */
-  .lately {
+  /* ── Lately, the hero variant (DEMO) ─────────────────── */
+  /* A label and four chips: names only, so it stays one or two short rows. */
+  .lately-hero {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
@@ -135,34 +140,6 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     letter-spacing: var(--tracking-eyebrow);
     text-transform: uppercase;
     color: var(--color-text-muted);
-  }
-  .lately ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-  .lately a {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    font-size: var(--step--1);
-    line-height: 1.35;
-    text-wrap: pretty;
-  }
-  .lately-name {
-    margin-right: 0.35em;
-    font-weight: var(--weight-medium);
-  }
-  .lately-note {
-    color: var(--color-text-muted);
-  }
-  .lately a:hover .lately-name,
-  .lately a:focus-visible .lately-name {
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
   }
 
   /* ── Call to action ─────────────────────────────────── */
