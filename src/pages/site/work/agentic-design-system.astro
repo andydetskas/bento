@@ -138,7 +138,7 @@ const img = (name: string) => `/site/work/agentic-design-system/${name}.webp`;
       <p>Our coding agent fixed a contrast problem by darkening three grays across the whole system. It passed the accessibility check and broke parity with Figma. I reverted it, fixed contrast in the components that actually failed, and wrote the rule into the agents’ knowledge file: fix contrast at the component, never the primitive.</p>
     </div>
     <figure class="look-fig">
-      <img src={img('ai-stopped')} width="1561" height="1139" alt="Two gray swatches. The agent’s fix: darken the primitive. My call: fix the component. Below them, the rule written into the agents’ knowledge file: fix contrast at the component, never the primitive." loading="lazy" decoding="async" />
+      <img src={img('ai-stopped')} width="1561" height="1139" alt="529 uses of content-gray-light on white, traced to 18 master components. One component before and after, option captions: in content-gray-light the caption fails AA at 2.5:1; in content-gray-default it passes at 4.9:1. The agent’s approach was to darken the primitive, which shifts every gray built on it. The rule, now in the agents’ knowledge file: fix contrast at the component, never the primitive." loading="lazy" decoding="async" />
     </figure>
   </section>
 
