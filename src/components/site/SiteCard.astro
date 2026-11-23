@@ -40,32 +40,6 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
         <p class="headline">{intro.headline}</p>
         <HeroMenu current={current} />
 
-        {/* DEMO (Nov 23): Lately has three variants to compare, picked with ?lately=strip|hero|pair
-            (default strip). This is the "hero" one: names only, as chips under the menu. The
-            "strip" and "pair" variants are in WorkGrid. Remove the two Andy doesn't pick. */}
-        <script is:inline>
-          (function () {
-            var v = new URLSearchParams(location.search).get('lately');
-            document.documentElement.dataset.lately = /^(strip|hero|pair)$/.test(v || '') ? v : 'strip';
-          })();
-        </script>
-        <section class="lately-hero" data-lately-variant="hero" aria-labelledby="lately-hero-title">
-          <h2 class="lately-title" id="lately-hero-title">Lately</h2>
-          <ul class="chips" role="list">
-            {intro.lately.map((l) => {
-              const external = /^https?:/.test(l.url);
-              return (
-                <li>
-                  <a class="chip" href={l.url} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>
-                    {l.label}
-                    {external && <span class="sr-only"> (opens in a new tab)</span>}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-
         <div class="cta-row">
           <a class="btn btn-quiet" href={email.url}>{intro.emailCta}</a>
           <a class="btn" href={CALL_PATH} target="_blank" rel="noopener noreferrer">
@@ -125,23 +99,6 @@ const email = intro.contact.find((c) => c.url.startsWith('mailto:'))!;
     letter-spacing: var(--tracking-display);
     text-wrap: balance;
   }
-  /* ── Lately, the hero variant (DEMO) ─────────────────── */
-  /* A label and four chips: names only, so it stays one or two short rows. */
-  .lately-hero {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-  .lately-title {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: calc(12px * var(--text-scale, 1));
-    font-weight: var(--weight-mono);
-    letter-spacing: var(--tracking-eyebrow);
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-  }
-
   /* ── Call to action ─────────────────────────────────── */
   /* One row (Andy): a quiet Email me button, then Schedule a call. They share the row's width,
      and stack only if the hero is too narrow for both. */

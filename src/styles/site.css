@@ -1033,7 +1033,7 @@ a.chip:focus-visible {
   font-weight: var(--weight-medium);
   text-wrap: pretty;
 }
-/* The People row spans every column under the role facts (Andy, Nov 23). */
+/* The Team row spans every column under the role facts (Andy, Nov 23). */
 .look-facts .look-facts-wide {
   grid-column: 1 / -1;
 }

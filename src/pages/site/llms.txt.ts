@@ -29,8 +29,8 @@ export const GET: APIRoute = () => {
     '## Case studies',
     '',
     ...work.map((w) => {
-      const x = w as { people?: string; builtWith?: string };
-      return `- [${w.title}](${absUrl((w as { look: string }).look)}) (${w.company}): ${w.summary} My role: ${w.role}. Result: ${w.outcome}${x.people ? ` People: ${x.people}` : ''}${x.builtWith ? ` Built with: ${x.builtWith}.` : ''}`;
+      const x = w as { team?: string; builtWith?: string };
+      return `- [${w.title}](${absUrl((w as { look: string }).look)}) (${w.company}): ${w.summary} My role: ${w.role}. Result: ${w.outcome}${x.team ? ` Team: ${x.team}` : ''}${x.builtWith ? ` Built with: ${x.builtWith}.` : ''}`;
     }),
     '',
     '## Techniques',

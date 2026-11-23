@@ -126,24 +126,11 @@ const items = ordered.map((w, i) => {
     }
   </ul>
 
-  {/* DEMO (Nov 23): two of the three Lately variants (see SiteCard). "strip": a full-width card
-      under the tiles, names and notes, so the masonry stays level. "pair": a row of chips in the
-      Earlier work ticker's style, so the page closes on Lately, then Earlier work. */}
-  <section class="lately-strip" data-lately-variant="strip" aria-labelledby="lately-strip-title">
-    <h2 class="lately-label" id="lately-strip-title">Lately</h2>
-    <ul class="lately-items" role="list">
-      {lately.map((l) => (
-        <li>
-          <a class="lately-item" href={l.url} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener noreferrer' : undefined}>
-            <span class="lately-name">{l.label}</span>
-            <span class="lately-note">{l.note}</span>
-            {l.external && <span class="sr-only">(opens in a new tab)</span>}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-  <section class="lately-pair" data-lately-variant="pair" aria-labelledby="lately-pair-title">
+  {/* Lately (Andy, Nov 23): three or four shipped things, no years and no contribution grid
+      (market scan §5). A label and name chips in the Earlier work row's style, right above it, so
+      the work closes on Lately, then Earlier work. Kept off the hero and out of the masonry, so
+      neither changes shape. */}
+  <section class="lately-pair" aria-labelledby="lately-pair-title">
     <h2 class="lately-label" id="lately-pair-title">Lately</h2>
     <ul class="chips" role="list">
       {lately.map((l) => (

@@ -6,22 +6,18 @@
     "lately": [
       {
         "label": "This site",
-        "note": "Designed and built in Astro and Three.js with Claude Code. The code is public.",
         "url": "https://github.com/andydetskas/bento"
       },
       {
         "label": "Glyph lab",
-        "note": "A 3D background engine made from my Taos icons, with a lab to tune it.",
         "url": "https://links.andydetskas.com/lab/"
       },
       {
         "label": "Display settings",
-        "note": "Accessibility settings without an overlay.",
         "url": "/site/techniques/display-settings/"
       },
       {
         "label": "GPX Merge",
-        "note": "Merge one ride recorded on two devices, right in the browser.",
         "url": "https://andydetskas.github.io/gpx-merge/"
       }
     ],
@@ -219,7 +215,7 @@
       "role": "Strategy lead and facilitator",
       "roleShort": "Strategy lead and facilitator",
       "outcome": "I built it on SRAM’s annual rider survey, community votes and support tickets, and sharpened it through 25 stakeholder interviews. It became the product group’s plan for the year.",
-      "people": "Hired three designers in my first six months and promoted designers within the first year; two designers on my team designed the battery status that shipped after I left.",
+      "team": "Hired three designers in my first six months and promoted designers within the first year; two designers on my team designed the battery status that shipped after I left.",
       "builtWith": "Mural · Dovetail · Figma · Confluence",
       "image": {
         "src": "/site/work/thumbs/tile-crushing-the-basics.webp",
@@ -244,7 +240,7 @@
       "role": "Hands-on owner",
       "roleShort": "Hands-on owner",
       "outcome": "I raised Figma-to-code token parity from 50% to 97% in eight weeks, and packaged the system as agent skills in its own repo.",
-      "people": "A marketing colleague built the weekly community report with the system’s skills and presented it at the company town hall; people outside design made 10 to 15 on-system pieces.",
+      "team": "A marketing colleague built the weekly community report with the system’s skills and presented it at the company town hall; people outside design made 10 to 15 on-system pieces.",
       "builtWith": "Figma · Figma Console MCP · Claude Code · Devin · GitHub · Storybook",
       "image": {
         "src": "/site/work/thumbs/tile-agentic-design-system.webp",
@@ -292,7 +288,7 @@
       "role": "Facilitator, design, and prototyping",
       "roleShort": "Facilitator, design, and prototyping",
       "outcome": "I facilitated the sprint. 84% of subscribers said they understood what had changed, and the experiment showed a net gain in bookings after counting downgrades.",
-      "people": "A designer on my team went on to lead a Settings overhaul built on the sprint’s thinking.",
+      "team": "A designer on my team went on to lead a Settings overhaul built on the sprint’s thinking.",
       "builtWith": "Figma · Optimal Workshop",
       "image": {
         "src": "/site/work/thumbs/tile-surfacing-value.webp",
@@ -317,7 +313,7 @@
       "role": "Hands-on design lead (product and engineering owned the scoring logic)",
       "roleShort": "Hands-on design lead",
       "outcome": "I designed a score-update prompt; after launch, score updates rose by about a quarter for both free and Pro members.",
-      "people": "Next, I coached my designer through a score wheel inside the change toast. I pushed and coached; my designer designed it. It was still a prototype when I left.",
+      "team": "Next, I coached my designer through a score wheel inside the change toast. I pushed and coached; my designer designed it. It was still a prototype when I left.",
       "builtWith": "Figma · Claude",
       "image": {
         "src": "/site/work/thumbs/tile-stackscore.webp",
@@ -342,7 +338,7 @@
       "role": "Shared design ownership with the Head of Product",
       "roleShort": "Shared design ownership",
       "outcome": "Alpha told us the checkout worked and the catalog was the constraint.",
-      "people": "The team took the club from beta to full launch after I left.",
+      "team": "The team took the club from beta to full launch after I left.",
       "builtWith": "Figma · Claude",
       "image": {
         "src": "/site/work/thumbs/tile-buying-club.webp",

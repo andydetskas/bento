@@ -553,13 +553,7 @@ html.from-site.is-landing :is(.work-grid, .wt) {
   }
 }
 
-/* ── Lately (DEMO, Nov 23): the "strip" and "pair" variants ── */
-/* ?lately=strip|hero|pair shows one variant; the others are hidden. Remove with the losers. */
-html:not([data-lately='strip']) [data-lately-variant='strip'],
-html:not([data-lately='hero']) [data-lately-variant='hero'],
-html:not([data-lately='pair']) [data-lately-variant='pair'] {
-  display: none !important;
-}
+/* ── Lately (Andy, Nov 23) ── */
 .lately-label {
   flex: none;
   margin: 0;
@@ -572,47 +566,6 @@ html:not([data-lately='pair']) [data-lately-variant='pair'] {
   color: var(--color-text-muted);
   white-space: nowrap;
 }
-/* Strip: as wide as the work, on its white page under a rule like the ticker's; the label on top,
-   four items in a row (two, then one, on narrower screens). Names and one-line notes, all visible. */
-.lately-strip {
-  margin-top: var(--pad);
-  padding-top: var(--pad);
-  border-top: 1px solid var(--color-line);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-.lately-items {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
-  gap: var(--space-4) var(--space-6);
-}
-.lately-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-line);
-  color: inherit;
-  text-decoration: none;
-}
-.lately-name {
-  font-weight: var(--weight-medium);
-}
-.lately-note {
-  font-size: var(--step--1);
-  line-height: 1.35;
-  color: var(--color-text-muted);
-  text-wrap: pretty;
-}
-.lately-item:hover .lately-name,
-.lately-item:focus-visible .lately-name {
-  text-decoration: underline;
-  text-underline-offset: 0.2em;
-}
 /* Pair: the label on the left, chips to its right, on a line above Earlier work (same label,
    same rule), so the two read as a pair. */
 .lately-pair {
@@ -624,7 +577,6 @@ html:not([data-lately='pair']) [data-lately-variant='pair'] {
   padding-top: var(--pad);
   border-top: 1px solid var(--color-line);
 }
-.work-grid .lately-pair + .ticker,
-.work-grid .lately-strip + .lately-pair + .ticker {
+.work-grid .lately-pair + .ticker {
   margin-top: var(--space-5);
 }
